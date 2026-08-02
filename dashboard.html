@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Technician Dashboard | FixTrack Admin</title>
+    <meta
+      name="description"
+      content="Manage ongoing repairs, update ticket statuses, and log technician notes in real time."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Technician Dashboard | FixTrack Admin" />
+    <meta
+      property="og:description"
+      content="Internal FixTrack console for managing active repair tickets."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  </head>
+  <body>
+    <div class="flex min-h-screen bg-background">
+      <aside class="hidden w-60 shrink-0 border-r border-border bg-surface p-4 lg:block">
+        <nav class="space-y-1">
+          <button class="flex w-full items-center gap-3 rounded-lg bg-secondary px-3 py-2 text-sm font-medium text-foreground transition-colors">
+            <i data-lucide="layout-dashboard" class="h-4 w-4 shrink-0"></i>
+            <span class="flex-1 text-left">Dashboard</span>
+            <i data-lucide="chevron-right" class="h-4 w-4"></i>
+          </button>
+          <button class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/60">
+            <i data-lucide="package" class="h-4 w-4 shrink-0"></i>
+            <span class="flex-1 text-left">Inventory</span>
+          </button>
+          <button class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/60">
+            <i data-lucide="users" class="h-4 w-4 shrink-0"></i>
+            <span class="flex-1 text-left">Customers</span>
+          </button>
+          <button class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/60">
+            <i data-lucide="settings" class="h-4 w-4 shrink-0"></i>
+            <span class="flex-1 text-left">Settings</span>
+          </button>
+        </nav>
+        <a href="index.html" class="mt-6 block border-t border-border pt-4 text-xs text-muted-foreground hover:text-foreground">
+          ← Back to public site
+        </a>
+      </aside>
+
+      <div class="flex min-w-0 flex-1 flex-col">
+        <header class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-4 py-3 sm:px-6 md:grid-cols-[auto_1fr_auto]">
+          <a href="index.html" class="flex min-w-0 items-center gap-2">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground">
+              <i data-lucide="wrench" class="h-4 w-4"></i>
+            </span>
+            <span class="truncate font-display text-lg font-bold">FixTrack</span>
+          </a>
+          <div class="relative col-span-2 md:col-span-1 md:max-w-md md:justify-self-center">
+            <i data-lucide="search" class="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground"></i>
+            <input
+              id="admin-search"
+              type="text"
+              placeholder="Search tickets or customers..."
+              class="w-full rounded-lg border border-input bg-card py-2 pr-3 pl-9 text-sm outline-none focus:ring-2 focus:ring-ring"
+            />
+          </div>
+          <div class="flex items-center gap-3 justify-self-end">
+            <button
+              type="button"
+              data-theme-toggle
+              aria-label="Toggle dark mode"
+              class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+            ></button>
+            <i data-lucide="bell" class="h-4 w-4 text-muted-foreground"></i>
+            <div class="hidden text-right sm:block">
+              <p class="text-sm font-semibold">Prinz Paderes</p>
+              <p class="text-xs text-muted-foreground">Admin Technician</p>
+            </div>
+            <i data-lucide="user-circle-2" class="h-8 w-8 text-muted-foreground"></i>
+          </div>
+        </header>
+
+        <main class="min-w-0 flex-1 p-4 sm:p-8">
+          <h1 class="text-3xl font-bold sm:text-4xl">Technician Dashboard</h1>
+          <p class="mt-2 text-sm text-muted-foreground">
+            Manage ongoing repairs and update ticket statuses in real-time.
+          </p>
+
+          <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <div class="panel p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="text-sm text-muted-foreground">Total Active Repairs</p>
+                <i data-lucide="wrench" class="h-5 w-5 shrink-0 text-muted-foreground"></i>
+              </div>
+              <p class="mt-2 text-3xl font-bold">24</p>
+              <div class="mt-4 flex gap-3 border-t border-border pt-3 text-xs text-muted-foreground">
+                <span class="font-medium text-foreground">+3 this week</span>
+                <span>Repairs currently in pipeline</span>
+              </div>
+            </div>
+            <div class="panel p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="text-sm text-muted-foreground">Pending Pickup</p>
+                <i data-lucide="check-circle-2" class="h-5 w-5 shrink-0 text-muted-foreground"></i>
+              </div>
+              <p class="mt-2 text-3xl font-bold">08</p>
+              <div class="mt-4 flex gap-3 border-t border-border pt-3 text-xs text-muted-foreground">
+                <span>Devices ready for customers</span>
+              </div>
+            </div>
+            <div class="panel p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="text-sm text-muted-foreground">Avg. Turnaround</p>
+                <i data-lucide="clock" class="h-5 w-5 shrink-0 text-muted-foreground"></i>
+              </div>
+              <p class="mt-2 text-3xl font-bold">1.8 Days</p>
+              <div class="mt-4 flex gap-3 border-t border-border pt-3 text-xs text-muted-foreground">
+                <span class="font-medium text-foreground">-0.4 days</span>
+                <span>Last 30 days performance</span>
+              </div>
+            </div>
+            <div class="panel p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="text-sm text-muted-foreground">Parts Backordered</p>
+                <i data-lucide="alert-circle" class="h-5 w-5 shrink-0 text-muted-foreground"></i>
+              </div>
+              <p class="mt-2 text-3xl font-bold">05</p>
+              <div class="mt-4 flex gap-3 border-t border-border pt-3 text-xs text-muted-foreground">
+                <span class="font-medium text-foreground">+2 since yesterday</span>
+                <span>Critical parts awaiting arrival</span>
+              </div>
+            </div>
+          </div>
+
+          <section class="panel mt-8 overflow-hidden">
+            <div class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 p-5 sm:flex sm:justify-between">
+              <div class="min-w-0">
+                <h2 class="text-xl font-bold">Repair Tickets</h2>
+                <p class="truncate text-sm text-muted-foreground">
+                  Comprehensive list of all active service requests
+                </p>
+              </div>
+              <div class="flex shrink-0 flex-wrap gap-2">
+                <button class="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm transition-colors hover:bg-secondary">
+                  <i data-lucide="filter" class="h-4 w-4"></i> <span class="hidden sm:inline">Filter</span>
+                </button>
+                <button class="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm transition-colors hover:bg-secondary">
+                  <i data-lucide="download" class="h-4 w-4"></i> <span class="hidden sm:inline">Export</span>
+                </button>
+                <button class="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90">
+                  <i data-lucide="plus" class="h-4 w-4"></i> <span class="hidden sm:inline">New Ticket</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto border-t border-border">
+              <table class="w-full min-w-[860px] text-sm">
+                <thead class="bg-surface text-left text-muted-foreground">
+                  <tr>
+                    <th class="px-5 py-3 font-semibold">Ticket ID</th>
+                    <th class="px-5 py-3 font-semibold">Customer</th>
+                    <th class="px-5 py-3 font-semibold">Device Model</th>
+                    <th class="px-5 py-3 font-semibold">Status</th>
+                    <th class="px-5 py-3 font-semibold">Last Updated</th>
+                    <th class="px-5 py-3 text-right font-semibold">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="ticket-rows"></tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </div>
+
+      <!-- Update note modal -->
+      <div id="note-modal" class="fixed inset-0 z-50 hidden place-items-center bg-foreground/50 p-4 backdrop-blur-sm">
+        <div class="panel w-full max-w-lg p-6">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h2 class="text-lg font-bold">Update Ticket Notes</h2>
+              <p class="mt-1 text-sm text-muted-foreground">
+                Add technical observations or update logs for <span id="modal-ticket-id"></span>.
+              </p>
+            </div>
+            <button aria-label="Close" data-modal-close class="text-muted-foreground hover:text-foreground">
+              <i data-lucide="x" class="h-4 w-4"></i>
+            </button>
+          </div>
+
+          <div class="mt-5 rounded-lg border border-border bg-surface p-4">
+            <p class="font-mono text-[11px] tracking-widest text-muted-foreground uppercase">Previous Notes</p>
+            <ul id="modal-notes" class="mt-2 space-y-1 text-sm"></ul>
+          </div>
+
+          <label class="mt-5 block text-sm font-medium" for="observation">New Observation</label>
+          <textarea
+            id="observation"
+            rows="4"
+            placeholder="Describe current progress, parts used, or issues found..."
+            class="mt-2 w-full rounded-lg border border-input bg-background p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+          ></textarea>
+
+          <div class="mt-5 flex justify-end gap-2">
+            <button data-modal-close class="rounded-lg border border-border px-4 py-2 text-sm transition-colors hover:bg-secondary">
+              Cancel
+            </button>
+            <button id="save-note" class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90">
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ticket #1042 — iPhone 13 Screen Repair | FixTrack</title>
+    <meta
+      name="description"
+      content="Live repair status for ticket #1042: milestones, service activity log, and cost breakdown."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Ticket #1042 — Live Repair Status | FixTrack" />
+    <meta
+      property="og:description"
+      content="Follow every milestone of your iPhone 13 screen repair in real time."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  </head>
+  <body>
+    <div class="flex min-h-screen flex-col">
+      <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
+        <div
+          class="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 sm:px-6 md:grid-cols-[auto_1fr_auto]"
+        >
+          <a href="index.html" class="flex min-w-0 items-center gap-2">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground">
+              <i data-lucide="wrench" class="h-4 w-4"></i>
+            </span>
+            <span class="truncate font-display text-lg font-bold">FixTrack</span>
+          </a>
+          <nav
+            class="col-span-2 flex items-center justify-center gap-6 border-t border-border pt-3 md:col-span-1 md:border-0 md:pt-0"
+          >
+            <a href="index.html" class="text-sm text-muted-foreground transition-colors hover:text-foreground">Home</a>
+            <a href="status.html" class="text-sm font-medium text-foreground">Track</a>
+            <a href="dashboard.html" class="text-sm text-muted-foreground transition-colors hover:text-foreground">Admin Login</a>
+          </nav>
+          <div class="flex items-center justify-end gap-2">
+            <button
+              type="button"
+              data-theme-toggle
+              aria-label="Toggle dark mode"
+              class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+            ></button>
+            <a
+              href="status.html"
+              class="hidden items-center gap-1 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:inline-flex"
+            >
+              Get Started <i data-lucide="chevron-right" class="h-4 w-4"></i>
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <main class="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6">
+        <div class="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+          <span class="rounded-md border border-border px-2 py-1 font-mono">Ticket #1042</span>
+          <span class="inline-flex items-center gap-1.5">
+            <i data-lucide="clock" class="h-3.5 w-3.5"></i> Last Updated: Today, 2:15 PM
+          </span>
+        </div>
+
+        <div class="mt-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-b border-border pb-6 sm:flex sm:justify-between">
+          <h1 class="truncate text-2xl font-bold sm:text-4xl">iPhone 13 - Screen Repair</h1>
+          <div class="flex shrink-0 gap-2">
+            <button class="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm transition-colors hover:bg-secondary">
+              <i data-lucide="file-text" class="h-4 w-4"></i>
+              <span class="hidden sm:inline">Download Receipt</span>
+            </button>
+            <button class="inline-flex items-center gap-1 rounded-lg border border-border px-3 py-2 text-sm transition-colors hover:bg-secondary">
+              Support <i data-lucide="chevron-right" class="h-4 w-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <section class="panel mt-8">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-border p-5">
+            <div>
+              <h2 class="text-base font-semibold">Repair Status</h2>
+              <p class="text-sm text-muted-foreground">Real-time tracking of your service milestones</p>
+            </div>
+            <span class="rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">Active Repair</span>
+          </div>
+          <div class="overflow-x-auto p-6">
+            <ol class="flex min-w-[640px] items-start">
+              <li class="flex flex-1 flex-col items-center">
+                <div class="flex w-full items-center">
+                  <span class="h-px flex-1 opacity-0"></span>
+                  <span class="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-primary bg-primary text-primary-foreground">
+                    <i data-lucide="check" class="h-4 w-4"></i>
+                  </span>
+                  <span class="h-px flex-1 bg-primary"></span>
+                </div>
+                <span class="mt-3 max-w-24 text-center font-mono text-[11px] tracking-wide uppercase text-foreground">Device Received</span>
+              </li>
+              <li class="flex flex-1 flex-col items-center">
+                <div class="flex w-full items-center">
+                  <span class="h-px flex-1 bg-primary"></span>
+                  <span class="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-primary bg-primary text-primary-foreground">
+                    <i data-lucide="check" class="h-4 w-4"></i>
+                  </span>
+                  <span class="h-px flex-1 bg-primary"></span>
+                </div>
+                <span class="mt-3 max-w-24 text-center font-mono text-[11px] tracking-wide uppercase text-foreground">Diagnostic</span>
+              </li>
+              <li class="flex flex-1 flex-col items-center">
+                <div class="flex w-full items-center">
+                  <span class="h-px flex-1 bg-primary"></span>
+                  <span class="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-primary bg-primary text-primary-foreground">
+                    <i data-lucide="check" class="h-4 w-4"></i>
+                  </span>
+                  <span class="h-px flex-1 bg-primary"></span>
+                </div>
+                <span class="mt-3 max-w-24 text-center font-mono text-[11px] tracking-wide uppercase text-foreground">Awaiting Parts</span>
+              </li>
+              <li class="flex flex-1 flex-col items-center">
+                <div class="flex w-full items-center">
+                  <span class="h-px flex-1 bg-primary"></span>
+                  <span class="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-accent bg-accent text-accent-foreground">
+                    <span class="h-2 w-2 rounded-full bg-current"></span>
+                  </span>
+                  <span class="h-px flex-1 bg-border"></span>
+                </div>
+                <span class="mt-3 max-w-24 text-center font-mono text-[11px] tracking-wide uppercase text-foreground">Active Repair</span>
+              </li>
+              <li class="flex flex-1 flex-col items-center">
+                <div class="flex w-full items-center">
+                  <span class="h-px flex-1 bg-border"></span>
+                  <span class="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-border bg-muted text-muted-foreground"></span>
+                  <span class="h-px flex-1 bg-border"></span>
+                </div>
+                <span class="mt-3 max-w-24 text-center font-mono text-[11px] tracking-wide uppercase text-muted-foreground">Quality Check</span>
+              </li>
+              <li class="flex flex-1 flex-col items-center">
+                <div class="flex w-full items-center">
+                  <span class="h-px flex-1 bg-border"></span>
+                  <span class="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-border bg-muted text-muted-foreground"></span>
+                  <span class="h-px flex-1 opacity-0"></span>
+                </div>
+                <span class="mt-3 max-w-24 text-center font-mono text-[11px] tracking-wide uppercase text-muted-foreground">Ready for Pickup</span>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <div class="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+          <div>
+            <div class="panel relative overflow-hidden">
+              <div class="grid aspect-4/3 place-items-center bg-muted">
+                <i data-lucide="smartphone" class="h-20 w-20 text-muted-foreground/40"></i>
+              </div>
+              <div class="absolute inset-x-4 bottom-4 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-3 rounded-lg border border-border bg-card/95 p-2 pr-4 backdrop-blur">
+                  <span class="grid h-9 w-9 place-items-center rounded-md border border-border">
+                    <i data-lucide="smartphone" class="h-4 w-4"></i>
+                  </span>
+                  <div>
+                    <p class="text-sm font-semibold">iPhone 13</p>
+                    <p class="font-mono text-xs text-muted-foreground">S/N: G0H29KJML01</p>
+                  </div>
+                </div>
+                <span class="rounded-full bg-primary px-3 py-1 text-xs text-primary-foreground">Inspected by FixTrack</span>
+              </div>
+            </div>
+
+            <h2 class="mt-10 flex items-center gap-2 text-lg font-semibold">
+              <i data-lucide="history" class="h-5 w-5"></i> Service Activity Log
+            </h2>
+            <ol class="mt-5 space-y-6 border-l border-border pl-6">
+              <li class="relative">
+                <span class="absolute top-1.5 -left-[1.9rem] h-2.5 w-2.5 rounded-sm bg-muted-foreground"></span>
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                  <p class="text-sm font-semibold">Active Repair Commenced</p>
+                  <p class="font-mono text-xs text-muted-foreground">Jul 28, 2026 • 02:15 PM</p>
+                </div>
+                <p class="mt-1 text-sm text-muted-foreground">
+                  Technician has begun the screen removal and replacement process using professional
+                  heat tools and precision suction.
+                </p>
+                <p class="mt-1.5 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <i data-lucide="user" class="h-3.5 w-3.5"></i> Assigned: Prinz Paderes
+                </p>
+              </li>
+              <li class="relative">
+                <span class="absolute top-1.5 -left-[1.9rem] h-2.5 w-2.5 rounded-sm bg-muted-foreground"></span>
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                  <p class="text-sm font-semibold">Parts Arrived</p>
+                  <p class="font-mono text-xs text-muted-foreground">Jul 27, 2026 • 10:30 AM</p>
+                </div>
+                <p class="mt-1 text-sm text-muted-foreground">
+                  The genuine OEM OLED display assembly has been received and verified by the
+                  inventory team.
+                </p>
+              </li>
+              <li class="relative">
+                <span class="absolute top-1.5 -left-[1.9rem] h-2.5 w-2.5 rounded-sm bg-muted-foreground"></span>
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                  <p class="text-sm font-semibold">Awaiting Parts</p>
+                  <p class="font-mono text-xs text-muted-foreground">Jul 27, 2026 • 04:45 PM</p>
+                </div>
+                <p class="mt-1 text-sm text-muted-foreground">
+                  Standard screen stock was depleted. A genuine replacement has been ordered from
+                  our central warehouse.
+                </p>
+              </li>
+              <li class="relative">
+                <span class="absolute top-1.5 -left-[1.9rem] h-2.5 w-2.5 rounded-sm bg-muted-foreground"></span>
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                  <p class="text-sm font-semibold">Diagnostic Completed</p>
+                  <p class="font-mono text-xs text-muted-foreground">Jul 27, 2026 • 11:20 AM</p>
+                </div>
+                <p class="mt-1 text-sm text-muted-foreground">
+                  Full diagnostic run. Issue confirmed as isolated digitizer failure. No internal
+                  liquid damage found.
+                </p>
+                <p class="mt-1.5 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <i data-lucide="user" class="h-3.5 w-3.5"></i> Assigned: Adolph Mangrubang
+                </p>
+              </li>
+              <li class="relative">
+                <span class="absolute top-1.5 -left-[1.9rem] h-2.5 w-2.5 rounded-sm bg-muted-foreground"></span>
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                  <p class="text-sm font-semibold">Device Received</p>
+                  <p class="font-mono text-xs text-muted-foreground">Jul 27, 2026 • 09:00 AM</p>
+                </div>
+                <p class="mt-1 text-sm text-muted-foreground">
+                  Device logged into the system at Cabanatuan Service Center.
+                </p>
+              </li>
+            </ol>
+          </div>
+
+          <aside class="space-y-6">
+            <div class="panel p-6">
+              <p class="font-mono text-[11px] tracking-widest text-muted-foreground uppercase">Estimated Ready Date</p>
+              <p class="mt-2 text-3xl font-bold">Jul 27, 2026</p>
+              <div class="mt-5 flex items-center gap-3 border-t border-border pt-5">
+                <i data-lucide="wrench" class="h-4 w-4 text-muted-foreground"></i>
+                <div>
+                  <p class="text-sm font-semibold">Lead Technician</p>
+                  <p class="text-xs text-muted-foreground">Prinz Paderes</p>
+                </div>
+              </div>
+              <p class="mt-5 inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-xs text-muted-foreground">
+                <i data-lucide="shield-check" class="h-4 w-4"></i> Premium Repair Protection included.
+              </p>
+            </div>
+
+            <div class="panel p-6">
+              <h3 class="flex items-center gap-2 text-base font-semibold">
+                <i data-lucide="circle-dollar-sign" class="h-4 w-4"></i> Cost Breakdown
+              </h3>
+              <dl class="mt-4 space-y-2 text-sm">
+                <div class="flex justify-between gap-4">
+                  <dt class="text-muted-foreground">OLED Display Assembly (OEM)</dt>
+                  <dd class="shrink-0 font-mono">₱11,700.00</dd>
+                </div>
+                <div class="flex justify-between gap-4">
+                  <dt class="text-muted-foreground">Waterproof Seal Replacement</dt>
+                  <dd class="shrink-0 font-mono">₱1000.00</dd>
+                </div>
+                <div class="flex justify-between gap-4">
+                  <dt class="text-muted-foreground">Labor &amp; Precision Calibration</dt>
+                  <dd class="shrink-0 font-mono">₱2,800.00</dd>
+                </div>
+                <div class="flex justify-between gap-4">
+                  <dt class="text-muted-foreground">Express Service Fee</dt>
+                  <dd class="shrink-0 font-mono">Free</dd>
+                </div>
+                <div class="mt-3 space-y-2 border-t border-border pt-3">
+                  <div class="flex justify-between">
+                    <dt class="text-muted-foreground">Subtotal</dt>
+                    <dd class="font-mono">₱15,500.00</dd>
+                  </div>
+                  <div class="flex justify-between">
+                    <dt class="text-muted-foreground">Sales Tax (8%)</dt>
+                    <dd class="font-mono">₱1,200</dd>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between border-t border-dashed border-border pt-3">
+                  <dt class="text-base font-bold">Total Amount</dt>
+                  <dd class="font-mono text-xl font-bold">₱16,700</dd>
+                </div>
+              </dl>
+              <p class="mt-3 text-center text-[11px] text-muted-foreground">
+                Final cost subject to change if additional internal issues are discovered during the
+                Quality Check stage.
+              </p>
+            </div>
+
+            <div class="panel p-6">
+              <h3 class="flex items-center gap-2 text-base font-semibold">
+                <i data-lucide="help-circle" class="h-4 w-4"></i> Need Help?
+              </h3>
+              <p class="mt-3 text-sm text-muted-foreground">
+                If you have questions regarding your repair or need to modify your service, our
+                support team is available 24/7. Quote Ticket
+                <span class="font-mono font-semibold text-foreground">#1042</span> for faster
+                assistance.
+              </p>
+              <div class="mt-5 flex justify-between border-t border-border pt-4 text-sm">
+                <span class="text-muted-foreground">Service Warranty</span>
+                <a href="dashboard.html" class="font-medium hover:underline">Contact Center</a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </main>
+
+      <footer class="border-t border-border bg-surface">
+        <div class="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-3">
+          <div>
+            <h3 class="text-base font-bold">FixTrack</h3>
+            <p class="mt-3 max-w-xs text-sm text-muted-foreground">
+              Professional gadget repair tracking service. Providing transparency, real-time status
+              updates, and peace of mind for your device repairs.
+            </p>
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold">Contact Us</h4>
+            <ul class="mt-3 space-y-2 text-sm text-muted-foreground">
+              <li class="flex items-center gap-2"><i data-lucide="mail" class="h-4 w-4 shrink-0"></i> support@fixtrack.com</li>
+              <li class="flex items-center gap-2"><i data-lucide="phone" class="h-4 w-4 shrink-0"></i> +63 999-010-1782</li>
+              <li class="flex items-center gap-2"><i data-lucide="map-pin" class="h-4 w-4 shrink-0"></i> Cabanatuan City, Nueva Ecija</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold">Legal &amp; Social</h4>
+            <div class="mt-3 flex gap-3 text-muted-foreground">
+              <i data-lucide="twitter" class="h-4 w-4"></i>
+              <i data-lucide="instagram" class="h-4 w-4"></i>
+              <i data-lucide="facebook" class="h-4 w-4"></i>
+            </div>
+            <ul class="mt-3 space-y-1 text-sm text-muted-foreground">
+              <li>Privacy Policy</li>
+              <li>Terms of Service</li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-border py-5 text-center text-xs text-muted-foreground">
+          © 2026 FixTrack. All rights reserved. Built with precision and care.
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

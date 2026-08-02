@@ -1,0 +1,98 @@
+/* FixTrack — design tokens & base styles (plain CSS, no build step) */
+
+:root {
+  --radius: 0.75rem;
+  --background: oklch(0.985 0.003 250);
+  --foreground: oklch(0.19 0.02 260);
+  --surface: oklch(0.955 0.005 250);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.19 0.02 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.19 0.02 260);
+  --primary: oklch(0.24 0.025 260);
+  --primary-foreground: oklch(0.985 0.003 250);
+  --secondary: oklch(0.94 0.006 250);
+  --secondary-foreground: oklch(0.24 0.025 260);
+  --muted: oklch(0.95 0.005 250);
+  --muted-foreground: oklch(0.52 0.02 258);
+  --accent: oklch(0.6 0.13 210);
+  --accent-foreground: oklch(0.99 0 0);
+  --destructive: oklch(0.577 0.21 27);
+  --destructive-foreground: oklch(0.99 0 0);
+  --success: oklch(0.6 0.13 155);
+  --success-foreground: oklch(0.99 0 0);
+  --warning: oklch(0.75 0.14 75);
+  --warning-foreground: oklch(0.2 0.02 260);
+  --border: oklch(0.9 0.008 250);
+  --input: oklch(0.9 0.008 250);
+  --ring: oklch(0.6 0.13 210);
+  --shadow-panel: 0 1px 2px oklch(0.2 0.02 260 / 0.06), 0 12px 32px -18px oklch(0.2 0.02 260 / 0.35);
+}
+
+.dark {
+  --background: oklch(0.17 0.015 260);
+  --foreground: oklch(0.96 0.004 250);
+  --surface: oklch(0.21 0.018 260);
+  --card: oklch(0.22 0.018 260);
+  --card-foreground: oklch(0.96 0.004 250);
+  --popover: oklch(0.22 0.018 260);
+  --popover-foreground: oklch(0.96 0.004 250);
+  --primary: oklch(0.95 0.004 250);
+  --primary-foreground: oklch(0.2 0.02 260);
+  --secondary: oklch(0.27 0.02 260);
+  --secondary-foreground: oklch(0.96 0.004 250);
+  --muted: oklch(0.26 0.018 260);
+  --muted-foreground: oklch(0.7 0.02 255);
+  --accent: oklch(0.7 0.13 210);
+  --accent-foreground: oklch(0.17 0.015 260);
+  --destructive: oklch(0.66 0.19 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --success: oklch(0.7 0.13 155);
+  --success-foreground: oklch(0.17 0.015 260);
+  --warning: oklch(0.79 0.14 75);
+  --warning-foreground: oklch(0.17 0.015 260);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.7 0.13 210);
+  --shadow-panel: 0 1px 2px oklch(0 0 0 / 0.4), 0 16px 40px -20px oklch(0 0 0 / 0.7);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.panel {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + 4px);
+  box-shadow: var(--shadow-panel);
+}
+
+/* Lucide icons are injected as <svg>; keep sizing utilities working */
+[data-lucide] {
+  display: inline-block;
+}
