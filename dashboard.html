@@ -160,18 +160,23 @@
               </div>
             </div>
 
-            <div class="overflow-x-auto border-t border-border">
+            <!-- Responsive Table Wrapper -->
+            <div class="table-responsive overflow-x-auto border-t border-border">
               <table class="w-full min-w-[860px] text-sm">
+
+                <!-- Semantic Header -->
                 <thead class="bg-surface text-left text-muted-foreground">
                   <tr>
-                    <th class="px-5 py-3 font-semibold">Ticket ID</th>
-                    <th class="px-5 py-3 font-semibold">Customer</th>
-                    <th class="px-5 py-3 font-semibold">Device Model</th>
-                    <th class="px-5 py-3 font-semibold">Status</th>
-                    <th class="px-5 py-3 font-semibold">Last Updated</th>
-                    <th class="px-5 py-3 text-right font-semibold">Actions</th>
+                    <th scope="col" class="px-5 py-3 font-semibold">Ticket ID</th>
+                    <th scope="col" class="px-5 py-3 font-semibold">Customer</th>
+                    <th scope="col" class="px-5 py-3 font-semibold">Device Model</th>
+                    <th scope="col" class="px-5 py-3 font-semibold">Status</th>
+                    <th scope="col" class="px-5 py-3 font-semibold">Last Updated</th>
+                    <th scope="col" class="px-5 py-3 text-right font-semibold">Actions</th>
                   </tr>
                 </thead>
+
+                <!-- Semantic Body -->
                 <tbody id="ticket-rows"></tbody>
               </table>
             </div>
