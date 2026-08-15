@@ -29,6 +29,7 @@
   </head>
   <body>
     <div class="flex min-h-screen bg-background">
+      <!-- Desktop Sidebar -->
       <aside class="hidden w-60 shrink-0 border-r border-border bg-surface p-4 lg:block">
         <nav class="space-y-1">
           <button class="flex w-full items-center gap-3 rounded-lg bg-secondary px-3 py-2 text-sm font-medium text-foreground transition-colors">
@@ -55,14 +56,16 @@
       </aside>
 
       <div class="flex min-w-0 flex-1 flex-col">
+        <!-- Reorganized Header for Mobile Menu -->
         <header class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-4 py-3 sm:px-6 md:grid-cols-[auto_1fr_auto]">
-          <a href="index.html" class="flex min-w-0 items-center gap-2">
+          <a href="index.html" class="order-1 flex min-w-0 items-center gap-2">
             <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground">
               <i data-lucide="wrench" class="h-4 w-4"></i>
             </span>
             <span class="truncate font-display text-lg font-bold">FixTrack</span>
           </a>
-          <div class="relative col-span-2 md:col-span-1 md:max-w-md md:justify-self-center">
+
+          <div class="relative order-3 col-span-full w-full md:order-2 md:col-span-1 md:max-w-md md:justify-self-center">
             <i data-lucide="search" class="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground"></i>
             <input
               id="admin-search"
@@ -71,20 +74,57 @@
               class="w-full rounded-lg border border-input bg-card py-2 pr-3 pl-9 text-sm outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
-          <div class="flex items-center gap-3 justify-self-end">
+
+          <div class="order-2 flex items-center gap-2 justify-self-end sm:gap-3 md:order-3">
             <button
               type="button"
               data-theme-toggle
               aria-label="Toggle dark mode"
               class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             ></button>
-            <i data-lucide="bell" class="h-4 w-4 text-muted-foreground"></i>
+            <i data-lucide="bell" class="h-4 w-4 text-muted-foreground hidden sm:block"></i>
             <div class="hidden text-right sm:block">
               <p class="text-sm font-semibold">Prinz Paderes</p>
               <p class="text-xs text-muted-foreground">Admin Technician</p>
             </div>
             <i data-lucide="user-circle-2" class="h-8 w-8 text-muted-foreground"></i>
+
+            <!-- Mobile Menu Toggle Button -->
+            <button
+              type="button"
+              id="mobile-menu-btn"
+              class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground lg:hidden"
+            >
+              <i data-lucide="menu" class="h-4 w-4"></i>
+            </button>
           </div>
+
+          <!-- Mobile Dropdown Navigation -->
+          <nav
+            id="mobile-menu"
+            class="hidden order-4 col-span-full w-full flex-col gap-1 border-t border-border pt-4 lg:hidden"
+          >
+            <button class="flex w-full items-center gap-3 rounded-lg bg-secondary px-3 py-2 text-sm font-medium text-foreground transition-colors">
+              <i data-lucide="layout-dashboard" class="h-4 w-4 shrink-0"></i>
+              <span class="flex-1 text-left">Dashboard</span>
+              <i data-lucide="chevron-right" class="h-4 w-4"></i>
+            </button>
+            <button class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/60">
+              <i data-lucide="package" class="h-4 w-4 shrink-0"></i>
+              <span class="flex-1 text-left">Inventory</span>
+            </button>
+            <button class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/60">
+              <i data-lucide="users" class="h-4 w-4 shrink-0"></i>
+              <span class="flex-1 text-left">Customers</span>
+            </button>
+            <button class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/60">
+              <i data-lucide="settings" class="h-4 w-4 shrink-0"></i>
+              <span class="flex-1 text-left">Settings</span>
+            </button>
+            <a href="index.html" class="mt-4 block border-t border-border pt-4 text-xs text-muted-foreground hover:text-foreground">
+              ← Back to public site
+            </a>
+          </nav>
         </header>
 
         <main class="min-w-0 flex-1 p-4 sm:p-8">
@@ -223,5 +263,25 @@
         </div>
       </div>
     </div>
+
+    <!-- Mobile Menu Script -->
+    <script>
+      document.getElementById('mobile-menu-btn')?.addEventListener('click', function() {
+        const menu = document.getElementById('mobile-menu');
+        menu.classList.toggle('hidden');
+        menu.classList.toggle('flex');
+
+        const icon = this.querySelector('i');
+        if (menu.classList.contains('hidden')) {
+          icon.setAttribute('data-lucide', 'menu');
+        } else {
+          icon.setAttribute('data-lucide', 'x');
+        }
+
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      });
+    </script>
   </body>
 </html>
