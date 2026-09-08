@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>404 Not Found | FixTrack</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  </head>
+  <body>
+    <div class="flex min-h-screen flex-col bg-background">
+      <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
+        <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <a href="index.html" class="flex min-w-0 items-center gap-2">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground">
+              <i data-lucide="wrench" class="h-4 w-4"></i>
+            </span>
+            <span class="truncate font-display text-lg font-bold">FixTrack</span>
+          </a>
+        </div>
+      </header>
+
+      <main class="flex min-h-[70vh] flex-col items-center justify-center p-4">
+        <div class="text-center panel p-12 max-w-lg w-full">
+          <h1 class="text-6xl font-bold font-mono">404</h1>
+          <p class="mt-4 text-lg font-semibold">Page Not Found</p>
+          <p class="mt-2 text-sm text-muted-foreground">The resource you requested could not be located in our system.</p>
+          <a href="index.html" class="mt-8 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90">
+            <i data-lucide="arrow-left" class="h-4 w-4"></i> Return to Safety
+          </a>
+        </div>
+      </main>
+      
+      <footer class="border-t border-border bg-surface py-5 text-center text-xs text-muted-foreground mt-auto">
+        © <span id="year"></span> FixTrack. All rights reserved.
+      </footer>
+    </div>
+  </body>
+</html>

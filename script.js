@@ -1,8 +1,5 @@
-/* FixTrack — plain JavaScript for theming, navigation and interactions */
+/* FixTrack — Scripting Logic (Restored with Functional Fixes) */
 
-/* ---------------------------------------------------------------
-   1. Tailwind theme (compiled in the browser by the Tailwind CDN)
-   --------------------------------------------------------------- */
 (function injectTailwindTheme() {
   const style = document.createElement("style");
   style.type = "text/tailwindcss";
@@ -47,9 +44,6 @@
   document.head.appendChild(style);
 })();
 
-/* ---------------------------------------------------------------
-   2. Dark / light theme (applied before paint to avoid a flash)
-   --------------------------------------------------------------- */
 const THEME_KEY = "fixtrack-theme";
 
 function isDark() {
@@ -66,11 +60,6 @@ function applyTheme(dark) {
   if (window.lucide) window.lucide.createIcons();
 }
 
-applyTheme(isDark());
-
-/* ---------------------------------------------------------------
-   3. Hardcoded sample data
-   --------------------------------------------------------------- */
 const STATUS_OPTIONS = [
   "Pending",
   "Diagnosing",
@@ -141,14 +130,10 @@ function escapeHtml(value) {
   );
 }
 
-/* ---------------------------------------------------------------
-   4. Page wiring
-   --------------------------------------------------------------- */
 document.addEventListener("DOMContentLoaded", () => {
   if (window.lucide) window.lucide.createIcons();
-  applyTheme(document.documentElement.classList.contains("dark"));
+  applyTheme(isDark());
 
-  // Theme toggle buttons (present on every page)
   document.querySelectorAll("[data-theme-toggle]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const next = !document.documentElement.classList.contains("dark");
@@ -157,21 +142,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // Dynamic Year Fix
+  const yearEls = document.querySelectorAll("#year");
+  yearEls.forEach(el => el.textContent = new Date().getFullYear());
+
   initLanding();
   initDashboard();
 });
 
-/* ----------------------------- Landing ----------------------------- */
 function initLanding() {
-  const searchForm = document.getElementById("track-form");
-  if (searchForm) {
-    searchForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      window.location.href = "status.html";
-    });
-  }
-
-  // FAQ accordion
   document.querySelectorAll("[data-faq]").forEach((item) => {
     const button = item.querySelector("[data-faq-trigger]");
     const panel = item.querySelector("[data-faq-panel]");
@@ -189,7 +168,6 @@ function initLanding() {
     });
   });
 
-  // Star rating
   let rating = 0;
   const stars = document.querySelectorAll("[data-star]");
   stars.forEach((star, i) => {
@@ -208,13 +186,27 @@ function initLanding() {
     feedback.addEventListener("submit", (e) => {
       e.preventDefault();
       const msg = document.getElementById("feedback-sent");
-      msg.textContent = `Thanks! Your ${rating || 0}-star feedback was recorded.`;
+      const comments = document.getElementById("comments").value.trim();
+      
+      // Success/Error Message Logic Fix
+      if (!comments || rating === 0) {
+        msg.textContent = "Please select a star rating and enter a comment.";
+        msg.className = "mt-3 text-center text-xs text-destructive"; 
+      } else {
+        msg.textContent = `Thanks! Your ${rating}-star feedback was recorded.`;
+        msg.className = "mt-3 text-center text-xs text-success";
+        feedback.reset();
+        rating = 0;
+        stars.forEach((s) => {
+          const svg = s.querySelector("svg") || s;
+          svg.classList.remove("fill-current", "text-accent");
+        });
+      }
       msg.removeAttribute("hidden");
     });
   }
 }
 
-/* ---------------------------- Dashboard ---------------------------- */
 function initDashboard() {
   const tbody = document.getElementById("ticket-rows");
   if (!tbody) return;
@@ -236,7 +228,7 @@ function initDashboard() {
     );
 
     if (rows.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" class="px-5 py-10 text-center text-muted-foreground">No tickets match &ldquo;${escapeHtml(searchInput.value)}&rdquo;.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" class="px-5 py-10 text-center text-muted-foreground">No tickets match.</td></tr>`;
     } else {
       tbody.innerHTML = rows
         .map(
