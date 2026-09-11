@@ -1,4 +1,4 @@
-/* FixTrack — Scripting Logic (Restored with Functional Fixes) */
+/* FixTrack — Scripting Logic */
 
 (function injectTailwindTheme() {
   const style = document.createElement("style");
@@ -105,7 +105,7 @@ const tickets = [
   },
   {
     id: "TKT-8294",
-    customer: "Mark Ramos",
+    customer: "Rene Baterbonia",
     device: "Google Pixel 8",
     deviceType: "phone",
     status: "Parts Ordered",
@@ -150,7 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
   if (mobileBtn && mobileMenu) {
     mobileBtn.addEventListener('click', function() {
-
       mobileMenu.classList.toggle('hidden');
       mobileMenu.classList.toggle('flex');
       
@@ -208,7 +207,6 @@ function initLanding() {
       const msg = document.getElementById("feedback-sent");
       const comments = document.getElementById("comments").value.trim();
       
-      // Success/Error Message Logic Fix
       if (!comments || rating === 0) {
         msg.textContent = "Please select a star rating and enter a comment.";
         msg.className = "mt-3 text-center text-xs text-destructive"; 
@@ -237,6 +235,19 @@ function initDashboard() {
   const notesList = document.getElementById("modal-notes");
   const noteInput = document.getElementById("observation");
   let activeId = null;
+
+  function updateMetrics() {
+    const metricActive = document.getElementById("metric-active");
+    const metricPickup = document.getElementById("metric-pickup");
+    
+    if (metricActive) {
+      metricActive.textContent = tickets.length.toString().padStart(2, "0");
+    }
+    if (metricPickup) {
+      const pickupCount = tickets.filter((t) => t.status === "Ready for Pickup").length;
+      metricPickup.textContent = pickupCount.toString().padStart(2, "0");
+    }
+  }
 
   function render() {
     const q = (searchInput?.value || "").toLowerCase();
@@ -288,12 +299,17 @@ function initDashboard() {
         .join("");
     }
 
+    updateMetrics();
+
     if (window.lucide) window.lucide.createIcons();
 
     tbody.querySelectorAll("[data-status]").forEach((select) => {
       select.addEventListener("change", (e) => {
         const ticket = tickets.find((t) => t.id === select.dataset.status);
-        if (ticket) ticket.status = e.target.value;
+        if (ticket) {
+          ticket.status = e.target.value;
+          updateMetrics();
+        }
       });
     });
 
