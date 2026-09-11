@@ -142,9 +142,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Dynamic Year Fix
   const yearEls = document.querySelectorAll("#year");
   yearEls.forEach(el => el.textContent = new Date().getFullYear());
+
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  
+  if (mobileBtn && mobileMenu) {
+    mobileBtn.addEventListener('click', function() {
+
+      mobileMenu.classList.toggle('hidden');
+      mobileMenu.classList.toggle('flex');
+      
+      const icon = this.querySelector('i');
+      if (icon) {
+        if (mobileMenu.classList.contains('hidden')) {
+          icon.setAttribute('data-lucide', 'menu');
+        } else {
+          icon.setAttribute('data-lucide', 'x');
+        }
+        if (window.lucide) window.lucide.createIcons();
+      }
+    });
+  }
 
   initLanding();
   initDashboard();
