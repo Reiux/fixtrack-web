@@ -13,22 +13,33 @@
   </head>
   <body>
     <div class="flex min-h-screen bg-background">
-      <aside class="hidden w-60 shrink-0 border-r border-border bg-surface p-4 lg:block">
-        <nav class="space-y-1">
-          <button class="flex w-full items-center gap-3 rounded-lg bg-secondary px-3 py-2 text-sm font-medium text-foreground transition-colors">
-            <i data-lucide="layout-dashboard" class="h-4 w-4 shrink-0"></i>
-            <span class="flex-1 text-left">Dashboard</span>
-            <i data-lucide="chevron-right" class="h-4 w-4"></i>
-          </button>
-          <a href="404.html" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/60">
-            <i data-lucide="package" class="h-4 w-4 shrink-0"></i>
-            <span class="flex-1 text-left">Inventory</span>
-          </a>
-          <a href="404.html" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/60">
-            <i data-lucide="users" class="h-4 w-4 shrink-0"></i>
-            <span class="flex-1 text-left">Customers</span>
-          </a>
-        </nav>
+      <aside class="hidden w-60 shrink-0 border-r border-border bg-surface p-4 lg:block flex flex-col justify-between">
+        <div>
+          <nav class="space-y-1">
+            <button class="flex w-full items-center gap-3 rounded-lg bg-secondary px-3 py-2 text-sm font-medium text-foreground transition-colors">
+              <i data-lucide="layout-dashboard" class="h-4 w-4 shrink-0"></i>
+              <span class="flex-1 text-left">Dashboard</span>
+              <i data-lucide="chevron-right" class="h-4 w-4"></i>
+            </button>
+            <a href="404.html" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/60">
+              <i data-lucide="package" class="h-4 w-4 shrink-0"></i>
+              <span class="flex-1 text-left">Inventory</span>
+            </a>
+            <a href="404.html" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/60">
+              <i data-lucide="users" class="h-4 w-4 shrink-0"></i>
+              <span class="flex-1 text-left">Customers</span>
+            </a>
+          </nav>
+          
+          <!-- Desktop Sidebar GitHub Button -->
+          <div class="mt-6 border-t border-border pt-4">
+             <a href="https://github.com/Reiux/fixtrack-web" target="_blank" rel="noopener noreferrer" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/60">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.03c3.15-.38 6.5-1.4 6.5-7.17A5.5 5.5 0 0 0 19 5.9a5.5 5.5 0 0 0-.1-3s-1.1-.3-3.5 1.3a11.5 11.5 0 0 0-6 0C7.1 2.6 6 2.9 6 2.9a5.5 5.5 0 0 0-.1 3 5.5 5.5 0 0 0-1.5 4.8c0 5.7 3.35 6.79 6.5 7.17A4.8 4.8 0 0 0 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+              <span class="flex-1 text-left">GitHub Repo</span>
+            </a>
+          </div>
+        </div>
+        
         <a href="index.html" class="mt-6 block border-t border-border pt-4 text-xs text-muted-foreground hover:text-foreground">
           ← Back to public site
         </a>
@@ -55,9 +66,6 @@
           </div>
 
           <div class="order-2 flex items-center gap-2 justify-self-end sm:gap-3 md:order-3">
-            <a href="https://github.com/Reiux/fixtrack-web" target="_blank" rel="noopener noreferrer" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground" aria-label="GitHub Repository">
-              <i data-lucide="github" class="h-4 w-4"></i>
-            </a>
             <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"></button>
             <i data-lucide="bell" class="h-4 w-4 text-muted-foreground hidden sm:block"></i>
             <div class="hidden text-right sm:block">
@@ -69,9 +77,10 @@
             </button>
           </div>
 
+          <!-- Mobile Nav: Includes GitHub Button strictly in the hamburger -->
           <nav id="mobile-menu" class="hidden order-4 col-span-full w-full flex-col gap-1 border-t border-border pt-4 lg:hidden">
-            <a href="https://github.com/Reiux/fixtrack-web" target="_blank" rel="noopener noreferrer" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/60">
-              <i data-lucide="github" class="h-4 w-4 shrink-0"></i>
+             <a href="https://github.com/Reiux/fixtrack-web" target="_blank" rel="noopener noreferrer" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/60">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.03c3.15-.38 6.5-1.4 6.5-7.17A5.5 5.5 0 0 0 19 5.9a5.5 5.5 0 0 0-.1-3s-1.1-.3-3.5 1.3a11.5 11.5 0 0 0-6 0C7.1 2.6 6 2.9 6 2.9a5.5 5.5 0 0 0-.1 3 5.5 5.5 0 0 0-1.5 4.8c0 5.7 3.35 6.79 6.5 7.17A4.8 4.8 0 0 0 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
               <span class="flex-1 text-left">GitHub Repo</span>
             </a>
             <button class="flex w-full items-center gap-3 rounded-lg bg-secondary px-3 py-2 text-sm font-medium text-foreground transition-colors">
