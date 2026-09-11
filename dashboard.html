@@ -13,6 +13,7 @@
   </head>
   <body>
     <div class="flex min-h-screen bg-background">
+      
       <aside class="hidden w-60 shrink-0 border-r border-border bg-surface p-4 lg:block flex flex-col justify-between">
         <div>
           <nav class="space-y-1">
@@ -31,7 +32,6 @@
             </a>
           </nav>
           
-          <!-- Sidebar GitHub Button (Desktop Only) -->
           <div class="mt-6 border-t border-border pt-4">
              <a href="https://github.com/Reiux/fixtrack-web" target="_blank" rel="noopener noreferrer" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/60">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.03c3.15-.38 6.5-1.4 6.5-7.17A5.5 5.5 0 0 0 19 5.9a5.5 5.5 0 0 0-.1-3s-1.1-.3-3.5 1.3a11.5 11.5 0 0 0-6 0C7.1 2.6 6 2.9 6 2.9a5.5 5.5 0 0 0-.1 3 5.5 5.5 0 0 0-1.5 4.8c0 5.7 3.35 6.79 6.5 7.17A4.8 4.8 0 0 0 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
@@ -39,7 +39,6 @@
             </a>
           </div>
         </div>
-        
         <a href="index.html" class="mt-6 block border-t border-border pt-4 text-xs text-muted-foreground hover:text-foreground">
           ← Back to public site
         </a>
@@ -65,21 +64,19 @@
             />
           </div>
 
-          <!-- Removed GitHub button from top bar, kept strictly in sidebar and mobile menu -->
           <div class="order-2 flex items-center gap-2 justify-self-end sm:gap-3 md:order-3">
-            <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"></button>
+            <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"></button>
             <i data-lucide="bell" class="h-4 w-4 text-muted-foreground hidden sm:block"></i>
             <div class="hidden text-right sm:block">
               <p class="text-sm font-semibold">Admin</p>
             </div>
             <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=100&q=80" alt="Admin" class="h-8 w-8 rounded-full object-cover border border-border" />
-            <button type="button" id="mobile-menu-btn" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground lg:hidden">
+            <button type="button" id="mobile-menu-btn" class="flex lg:hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
               <i data-lucide="menu" class="h-4 w-4"></i>
             </button>
           </div>
 
           <nav id="mobile-menu" class="hidden order-4 col-span-full w-full flex-col gap-1 border-t border-border pt-4 lg:hidden">
-            <!-- Mobile Menu GitHub Button -->
             <a href="https://github.com/Reiux/fixtrack-web" target="_blank" rel="noopener noreferrer" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/60">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.03c3.15-.38 6.5-1.4 6.5-7.17A5.5 5.5 0 0 0 19 5.9a5.5 5.5 0 0 0-.1-3s-1.1-.3-3.5 1.3a11.5 11.5 0 0 0-6 0C7.1 2.6 6 2.9 6 2.9a5.5 5.5 0 0 0-.1 3 5.5 5.5 0 0 0-1.5 4.8c0 5.7 3.35 6.79 6.5 7.17A4.8 4.8 0 0 0 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
               <span class="flex-1 text-left">GitHub Repo</span>
@@ -92,17 +89,20 @@
               <i data-lucide="package" class="h-4 w-4 shrink-0"></i>
               <span class="flex-1 text-left">Inventory</span>
             </a>
+            <a href="404.html" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/60">
+              <i data-lucide="users" class="h-4 w-4 shrink-0"></i>
+              <span class="flex-1 text-left">Customers</span>
+            </a>
             <a href="index.html" class="mt-4 block border-t border-border pt-4 text-xs text-muted-foreground hover:text-foreground">
               ← Back to public site
             </a>
           </nav>
         </header>
 
-        <!-- Rest of the dashboard content -->
         <main class="min-w-0 flex-1 p-4 sm:p-8">
-           <h1 class="text-3xl font-bold sm:text-4xl">Technician Dashboard</h1>
-           <!-- (Dashboard Content from previous step stays the same, metrics are handled by script.js) -->
-           <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <h1 class="text-3xl font-bold sm:text-4xl">Technician Dashboard</h1>
+
+          <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <div class="panel p-5">
               <div class="flex items-start justify-between gap-3">
                 <p class="text-sm font-bold text-muted-foreground">Total Active Repairs</p>
@@ -118,7 +118,74 @@
               <p id="metric-pickup" class="mt-2 text-3xl font-bold">--</p>
             </div>
           </div>
+
+          <section class="panel mt-8">
+            <div class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 p-5 sm:flex sm:justify-between">
+              <div class="min-w-0">
+                <h2 class="text-xl font-bold">Repair Tickets</h2>
+              </div>
+              <div class="flex shrink-0 flex-wrap gap-2">
+                <button onclick="alert('Exporting data...')" class="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm transition-colors hover:bg-secondary">
+                  <i data-lucide="download" class="h-4 w-4"></i> Export
+                </button>
+              </div>
+            </div>
+
+            <div class="table-responsive overflow-x-auto border-t border-border">
+              <table class="w-full min-w-[860px] text-sm">
+                <caption class="sr-only">Comprehensive list of all active service requests and their current repair status.</caption>
+                <thead class="bg-surface text-left text-muted-foreground">
+                  <tr>
+                    <th scope="col" class="px-5 py-3 font-semibold">Ticket ID</th>
+                    <th scope="col" class="px-5 py-3 font-semibold">Customer</th>
+                    <th scope="col" class="px-5 py-3 font-semibold">Device Model</th>
+                    <th scope="col" class="px-5 py-3 font-semibold">Status</th>
+                    <th scope="col" class="px-5 py-3 font-semibold">Last Updated</th>
+                    <th scope="col" class="px-5 py-3 text-right font-semibold">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="ticket-rows"></tbody>
+              </table>
+            </div>
+          </section>
         </main>
+      </div>
+
+      <div id="note-modal" class="fixed inset-0 z-50 hidden place-items-center bg-foreground/50 p-4 backdrop-blur-sm">
+        <div class="panel w-full max-w-lg p-6">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h2 class="text-lg font-bold">Update Ticket Notes</h2>
+              <p class="mt-1 text-sm text-muted-foreground">For <span id="modal-ticket-id"></span>.</p>
+            </div>
+            <button aria-label="Close" data-modal-close class="text-muted-foreground hover:text-foreground">
+              <i data-lucide="x" class="h-4 w-4"></i>
+            </button>
+          </div>
+
+          <div class="mt-5 rounded-lg border border-border bg-surface p-4">
+            <p class="font-mono text-[11px] tracking-widest text-muted-foreground uppercase">Previous Notes</p>
+            <ul id="modal-notes" class="mt-2 space-y-1 text-sm"></ul>
+          </div>
+
+          <form id="note-form" method="GET" action="#">
+            <label class="mt-5 block text-sm font-medium" for="observation">New Observation</label>
+            <textarea
+              id="observation"
+              name="observation"
+              rows="4"
+              class="mt-2 w-full rounded-lg border border-input bg-background p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+            ></textarea>
+            <div class="mt-5 flex justify-end gap-2">
+              <button type="button" data-modal-close class="rounded-lg border border-border px-4 py-2 text-sm transition-colors hover:bg-secondary">
+                Cancel
+              </button>
+              <button type="button" id="save-note" class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90">
+                Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </body>
