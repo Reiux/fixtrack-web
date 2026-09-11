@@ -241,11 +241,14 @@ function initDashboard() {
       const metricActive = document.getElementById("metric-active");
       const metricPickup = document.getElementById("metric-pickup");
       
+      // Calculate tickets that are completed vs active
+      const pickupCount = tickets.filter((t) => t.status === "Ready for Pickup").length;
+      const activeCount = tickets.length - pickupCount;
+      
       if (metricActive) {
-        metricActive.textContent = tickets.length.toString().padStart(2, "0");
+        metricActive.textContent = activeCount.toString().padStart(2, "0");
       }
       if (metricPickup) {
-        const pickupCount = tickets.filter((t) => t.status === "Ready for Pickup").length;
         metricPickup.textContent = pickupCount.toString().padStart(2, "0");
       }
     } catch (error) {
