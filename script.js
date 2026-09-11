@@ -105,7 +105,7 @@ const tickets = [
   },
   {
     id: "TKT-8294",
-    customer: "Rene Baterbonia",
+    customer: "Mark Ramos",
     device: "Google Pixel 8",
     deviceType: "phone",
     status: "Parts Ordered",
@@ -237,15 +237,19 @@ function initDashboard() {
   let activeId = null;
 
   function updateMetrics() {
-    const metricActive = document.getElementById("metric-active");
-    const metricPickup = document.getElementById("metric-pickup");
-    
-    if (metricActive) {
-      metricActive.textContent = tickets.length.toString().padStart(2, "0");
-    }
-    if (metricPickup) {
-      const pickupCount = tickets.filter((t) => t.status === "Ready for Pickup").length;
-      metricPickup.textContent = pickupCount.toString().padStart(2, "0");
+    try {
+      const metricActive = document.getElementById("metric-active");
+      const metricPickup = document.getElementById("metric-pickup");
+      
+      if (metricActive) {
+        metricActive.textContent = tickets.length.toString().padStart(2, "0");
+      }
+      if (metricPickup) {
+        const pickupCount = tickets.filter((t) => t.status === "Ready for Pickup").length;
+        metricPickup.textContent = pickupCount.toString().padStart(2, "0");
+      }
+    } catch (error) {
+      console.error("Failed to update dashboard metrics", error);
     }
   }
 
