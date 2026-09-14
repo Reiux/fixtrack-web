@@ -105,7 +105,7 @@ const tickets = [
   },
   {
     id: "TKT-8294",
-    customer: "Mark Ramos",
+    customer: "Rene Baterbonia",
     device: "Google Pixel 8",
     deviceType: "phone",
     status: "Parts Ordered",
