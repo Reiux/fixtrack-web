@@ -1,4 +1,5 @@
-/* 1. Tailwind CSS Theme Injection */
+/* FixTrack — Scripting Logic */
+
 (function injectTailwindTheme() {
   const style = document.createElement("style");
   style.type = "text/tailwindcss";
@@ -43,7 +44,6 @@
   document.head.appendChild(style);
 })();
 
-/* 2. Theme State Management (Local Storage & Match Media) */
 const THEME_KEY = "fixtrack-theme";
 
 function isDark() {
@@ -62,7 +62,6 @@ function applyTheme(dark) {
 
 applyTheme(isDark());
 
-/* 3. Sample Repair Ticket Dataset */
 const STATUS_OPTIONS = [
   "Pending",
   "Diagnosing",
@@ -78,6 +77,7 @@ const DEVICE_ICONS = {
   watch: "monitor-smartphone",
 };
 
+// All 5 original tickets preserved
 const tickets = [
   {
     id: "TKT-8291",
@@ -126,7 +126,6 @@ const tickets = [
   },
 ];
 
-/* Helper to sanitize user string output into innerHTML safely */
 function escapeHtml(value) {
   return String(value).replace(
     /[&<>"']/g,
@@ -134,12 +133,10 @@ function escapeHtml(value) {
   );
 }
 
-/* 4. Global DOMContentLoaded Initializer */
 document.addEventListener("DOMContentLoaded", () => {
   if (window.lucide) window.lucide.createIcons();
   applyTheme(isDark());
 
-  /* Wire up all dark/light mode toggle buttons */
   document.querySelectorAll("[data-theme-toggle]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const next = !document.documentElement.classList.contains("dark");
@@ -148,11 +145,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  /* Dynamically update the footer copyright year across all pages */
   const yearEls = document.querySelectorAll("#year");
   yearEls.forEach((el) => (el.textContent = new Date().getFullYear()));
 
-  /* Mobile hamburger menu toggle handler */
   const mobileBtn = document.getElementById("mobile-menu-btn");
   const mobileMenu = document.getElementById("mobile-menu");
 
@@ -177,24 +172,50 @@ document.addEventListener("DOMContentLoaded", () => {
   initDashboard();
 });
 
-/* 5. Landing Page Interactions (FAQ & Star Rating) */
 function initLanding() {
-  /* FAQ Accordion Toggle */
-  document.querySelectorAll("[data-faq]").forEach((item) => {
-    const button = item.querySelector("[data-faq-trigger]");
-    const panel = item.querySelector("[data-faq-panel]");
-    const sign = item.querySelector("[data-faq-sign]");
+  /* Dynamic Interactive FAQ Accordion */
+  const faqItems = document.querySelectorAll("[data-faq]");
 
-    button?.addEventListener("click", () => {
-      const open = !panel.hasAttribute("hidden");
-      document.querySelectorAll("[data-faq]").forEach((other) => {
-        other.querySelector("[data-faq-panel]")?.setAttribute("hidden", "");
-        const otherSign = other.querySelector("[data-faq-sign]");
-        if (otherSign) otherSign.textContent = "+";
+  faqItems.forEach((item) => {
+    const trigger = item.querySelector("[data-faq-trigger]");
+    const panel = item.querySelector("[data-faq-panel]");
+    const iconWrapper = item.querySelector("[data-faq-icon]");
+
+    trigger?.addEventListener("click", () => {
+      const isOpen = !panel.classList.contains("hidden");
+
+      // Close all other items and reset their active styles
+      faqItems.forEach((other) => {
+        const otherPanel = other.querySelector("[data-faq-panel]");
+        const otherTrigger = other.querySelector("[data-faq-trigger]");
+        const otherIcon = other.querySelector("[data-faq-icon]");
+        const otherSvg = otherIcon?.querySelector("svg");
+
+        otherPanel?.classList.add("hidden");
+        otherTrigger?.setAttribute("aria-expanded", "false");
+        other.classList.remove("border-primary/60", "ring-2", "ring-primary/20");
+
+        if (otherIcon) {
+          otherIcon.classList.remove("bg-primary", "text-primary-foreground");
+          otherIcon.classList.add("bg-secondary", "text-muted-foreground");
+        }
+        if (otherSvg) {
+          otherSvg.style.transform = "rotate(0deg)";
+        }
       });
-      if (!open) {
-        panel.removeAttribute("hidden");
-        if (sign) sign.textContent = "\u2212";
+
+      // Toggle clicked item
+      if (!isOpen) {
+        panel.classList.remove("hidden");
+        trigger.setAttribute("aria-expanded", "true");
+        item.classList.add("border-primary/60", "ring-2", "ring-primary/20");
+
+        if (iconWrapper) {
+          iconWrapper.classList.remove("bg-secondary", "text-muted-foreground");
+          iconWrapper.classList.add("bg-primary", "text-primary-foreground");
+          const svg = iconWrapper.querySelector("svg");
+          if (svg) svg.style.transform = "rotate(180deg)";
+        }
       }
     });
   });
@@ -204,7 +225,6 @@ function initLanding() {
   const stars = document.querySelectorAll("[data-star]");
 
   stars.forEach((star, index) => {
-    /* Hover In: fill up to hovered star */
     star.addEventListener("mouseenter", () => {
       stars.forEach((s, j) => {
         const svg = s.querySelector("svg");
@@ -218,7 +238,6 @@ function initLanding() {
       });
     });
 
-    /* Hover Out: revert to committed rating */
     star.addEventListener("mouseleave", () => {
       stars.forEach((s, j) => {
         const svg = s.querySelector("svg");
@@ -232,7 +251,6 @@ function initLanding() {
       });
     });
 
-    /* Click: lock in rating score */
     star.addEventListener("click", () => {
       rating = index + 1;
       stars.forEach((s, j) => {
@@ -275,7 +293,6 @@ function initLanding() {
   }
 }
 
-/* 6. Dashboard Live Table & Metrics Logic */
 function initDashboard() {
   const tbody = document.getElementById("ticket-rows");
   if (!tbody) return;
@@ -287,7 +304,6 @@ function initDashboard() {
   const noteInput = document.getElementById("observation");
   let activeId = null;
 
-  /* Dynamically update the summary cards */
   function updateMetrics() {
     try {
       const metricActive = document.getElementById("metric-active");
@@ -307,7 +323,6 @@ function initDashboard() {
     }
   }
 
-  /* Render all table rows based on filter */
   function render() {
     const q = (searchInput?.value || "").toLowerCase();
     const rows = tickets.filter(
@@ -362,7 +377,6 @@ function initDashboard() {
 
     if (window.lucide) window.lucide.createIcons();
 
-    /* Dropdown change event wiring */
     tbody.querySelectorAll("[data-status]").forEach((select) => {
       select.addEventListener("change", (e) => {
         const ticket = tickets.find((t) => t.id === select.dataset.status);
@@ -373,13 +387,11 @@ function initDashboard() {
       });
     });
 
-    /* Note modal trigger button wiring */
     tbody.querySelectorAll("[data-note]").forEach((btn) => {
       btn.addEventListener("click", () => openModal(btn.dataset.note));
     });
   }
 
-  /* Note Modal Handlers */
   function openModal(id) {
     activeId = id;
     const ticket = tickets.find((t) => t.id === id);
