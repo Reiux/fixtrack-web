@@ -13,17 +13,28 @@
   </head>
   <body class="bg-background">
     <div class="flex min-h-screen flex-col">
-      <!-- Standard Navigation Header -->
       <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
         <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <a href="index.html" class="flex min-w-0 items-center gap-2 group">
-            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground group-hover:scale-105 transition-transform">
+          <a href="index.html" class="flex min-w-0 items-center gap-2">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground">
               <i data-lucide="wrench" class="h-4 w-4"></i>
             </span>
             <span class="truncate font-display text-lg font-bold">FixTrack</span>
           </a>
 
           <div class="flex items-center gap-2 md:order-3">
+            <a
+              href="https://github.com/Reiux/fixtrack-web"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hidden md:inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              aria-label="GitHub Repository"
+            >
+              <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+              </svg>
+            </a>
+
             <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"></button>
             <button type="button" id="mobile-menu-btn" class="flex md:hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
               <i data-lucide="menu" class="h-4 w-4"></i>
@@ -37,66 +48,66 @@
         </div>
       </header>
 
-      <!-- Form Content -->
-      <main class="flex-1 py-12 sm:py-20 px-4 sm:px-6">
-        <div class="mx-auto max-w-2xl panel p-6 sm:p-10">
-          <div class="text-center mb-10">
-            <h1 class="text-3xl font-bold">Book a Repair</h1>
-            <p class="mt-2 text-sm text-muted-foreground">Fill out the details below to generate a new repair ticket.</p>
+      <main class="flex-1 py-10 sm:py-16 px-4 sm:px-6">
+        <div class="mx-auto max-w-xl panel p-6 sm:p-8">
+          <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold sm:text-3xl">Book a Repair</h1>
+            <p class="mt-1 text-sm text-muted-foreground">Fill in the information below to schedule your repair.</p>
           </div>
 
-          <!-- Academic Form Structure -->
           <form action="status.html" method="GET" class="space-y-6">
             
-            <!-- Personal Details Group -->
-            <fieldset class="space-y-4 rounded-lg border border-border p-4">
-              <legend class="px-2 text-sm font-bold text-primary">Customer Information</legend>
-              
-              <div class="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label for="fullname" class="block text-sm font-bold mb-1">Full Name</label>
-                  <input id="fullname" name="fullname" type="text" required class="w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring transition-shadow" />
+            <!-- Customer Information Group -->
+            <div class="rounded-lg border border-border p-4">
+              <h2 class="text-sm font-semibold text-foreground mb-3">Customer Information</h2>
+              <div class="space-y-3">
+                <div class="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <label for="fullname" class="block text-xs font-medium mb-1">Full Name</label>
+                    <input id="fullname" name="fullname" type="text" required placeholder="Juan Dela Cruz" class="w-full rounded-md border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                  </div>
+                  <div>
+                    <label for="phone" class="block text-xs font-medium mb-1">Phone Number</label>
+                    <input id="phone" name="phone" type="tel" required placeholder="09990101782" class="w-full rounded-md border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                  </div>
                 </div>
-                <div>
-                  <label for="phone" class="block text-sm font-bold mb-1">Phone Number</label>
-                  <input id="phone" name="phone" type="tel" required class="w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring transition-shadow" />
-                </div>
-              </div>
 
-              <div>
-                <label for="email" class="block text-sm font-bold mb-1">Email Address</label>
-                <input id="email" name="email" type="email" required class="w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring transition-shadow" />
+                <div>
+                  <label for="email" class="block text-xs font-medium mb-1">Email Address</label>
+                  <input id="email" name="email" type="email" required placeholder="you@example.com" class="w-full rounded-md border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                </div>
               </div>
-            </fieldset>
+            </div>
 
             <!-- Device Details Group -->
-            <fieldset class="space-y-4 rounded-lg border border-border p-4">
-              <legend class="px-2 text-sm font-bold text-primary">Device Details</legend>
-              
-              <div>
-                <label for="device_type" class="block text-sm font-bold mb-1">Device Category</label>
-                <select id="device_type" name="device_type" required class="w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring transition-shadow appearance-none">
-                  <option value="" disabled selected>Select a category...</option>
-                  <option value="smartphone">Smartphone</option>
-                  <option value="laptop">Laptop</option>
-                  <option value="tablet">Tablet</option>
-                  <option value="smartwatch">Smartwatch</option>
-                </select>
-              </div>
+            <div class="rounded-lg border border-border p-4">
+              <h2 class="text-sm font-semibold text-foreground mb-3">Device Details</h2>
+              <div class="space-y-3">
+                <div>
+                  <label for="device_type" class="block text-xs font-medium mb-1">Device Category</label>
+                  <select id="device_type" name="device_type" required class="w-full rounded-md border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring">
+                    <option value="" disabled selected>Select category...</option>
+                    <option value="phone">Smartphone</option>
+                    <option value="laptop">Laptop</option>
+                    <option value="tablet">Tablet</option>
+                    <option value="watch">Smartwatch</option>
+                  </select>
+                </div>
 
-              <div>
-                <label for="device_model" class="block text-sm font-bold mb-1">Exact Device Model</label>
-                <input id="device_model" name="device_model" type="text" required class="w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring transition-shadow" />
-              </div>
+                <div>
+                  <label for="device_model" class="block text-xs font-medium mb-1">Exact Device Model</label>
+                  <input id="device_model" name="device_model" type="text" required placeholder="e.g., iPhone 13, Galaxy S23" class="w-full rounded-md border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                </div>
 
-              <div>
-                <label for="issue_desc" class="block text-sm font-bold mb-1">Describe the Issue</label>
-                <textarea id="issue_desc" name="issue_desc" rows="4" required class="w-full rounded-lg border border-input bg-card py-3 px-4 text-sm outline-none focus:ring-2 focus:ring-ring transition-shadow"></textarea>
+                <div>
+                  <label for="issue_desc" class="block text-xs font-medium mb-1">Issue Description</label>
+                  <textarea id="issue_desc" name="issue_desc" rows="3" required placeholder="Briefly describe what needs fixing..." class="w-full rounded-md border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"></textarea>
+                </div>
               </div>
-            </fieldset>
+            </div>
 
-            <button type="submit" class="w-full flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3.5 text-sm font-bold text-primary-foreground hover:opacity-90 transition-opacity hover:-translate-y-0.5 transform">
-              <i data-lucide="send" class="h-4 w-4"></i> Submit Repair Request
+            <button type="submit" class="w-full flex items-center justify-center gap-2 rounded-lg bg-primary py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity cursor-pointer">
+              Submit Repair Request
             </button>
           </form>
         </div>
