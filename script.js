@@ -1,5 +1,4 @@
-/* FixTrack — Scripting Logic */
-
+/* 1. Tailwind CSS Theme Injection */
 (function injectTailwindTheme() {
   const style = document.createElement("style");
   style.type = "text/tailwindcss";
@@ -44,6 +43,7 @@
   document.head.appendChild(style);
 })();
 
+/* 2. Theme State Management */
 const THEME_KEY = "fixtrack-theme";
 
 function isDark() {
@@ -62,6 +62,7 @@ function applyTheme(dark) {
 
 applyTheme(isDark());
 
+/* 3. Sample Repair Ticket Dataset */
 const STATUS_OPTIONS = [
   "Pending",
   "Diagnosing",
@@ -77,7 +78,6 @@ const DEVICE_ICONS = {
   watch: "monitor-smartphone",
 };
 
-// All 5 original tickets preserved
 const tickets = [
   {
     id: "TKT-8291",
@@ -133,6 +133,7 @@ function escapeHtml(value) {
   );
 }
 
+/* 4. Global DOMContentLoaded Initializer */
 document.addEventListener("DOMContentLoaded", () => {
   if (window.lucide) window.lucide.createIcons();
   applyTheme(isDark());
@@ -172,8 +173,9 @@ document.addEventListener("DOMContentLoaded", () => {
   initDashboard();
 });
 
+/* 5. Landing Page Interactions */
 function initLanding() {
-  /* Dynamic Interactive FAQ Accordion */
+  /* Bulletproof FAQ Accordion Toggle */
   const faqItems = document.querySelectorAll("[data-faq]");
 
   faqItems.forEach((item) => {
@@ -181,31 +183,41 @@ function initLanding() {
     const panel = item.querySelector("[data-faq-panel]");
     const iconWrapper = item.querySelector("[data-faq-icon]");
 
-    trigger?.addEventListener("click", () => {
-      const isOpen = !panel.classList.contains("hidden");
+    trigger?.addEventListener("click", (e) => {
+      e.preventDefault();
 
-      // Close all other items and reset their active styles
+      // Check if clicked panel is currently open
+      const isCurrentlyOpen = panel && panel.style.display === "block";
+
+      // 1. Close all FAQ boxes
       faqItems.forEach((other) => {
         const otherPanel = other.querySelector("[data-faq-panel]");
         const otherTrigger = other.querySelector("[data-faq-trigger]");
         const otherIcon = other.querySelector("[data-faq-icon]");
-        const otherSvg = otherIcon?.querySelector("svg");
+        const otherChevron = otherIcon?.querySelector("svg") || otherIcon?.querySelector("i");
 
-        otherPanel?.classList.add("hidden");
-        otherTrigger?.setAttribute("aria-expanded", "false");
+        if (otherPanel) {
+          otherPanel.style.display = "none";
+          otherPanel.classList.add("hidden");
+        }
+        if (otherTrigger) {
+          otherTrigger.setAttribute("aria-expanded", "false");
+        }
+
         other.classList.remove("border-primary/60", "ring-2", "ring-primary/20");
 
         if (otherIcon) {
           otherIcon.classList.remove("bg-primary", "text-primary-foreground");
           otherIcon.classList.add("bg-secondary", "text-muted-foreground");
         }
-        if (otherSvg) {
-          otherSvg.style.transform = "rotate(0deg)";
+        if (otherChevron) {
+          otherChevron.style.transform = "rotate(0deg)";
         }
       });
 
-      // Toggle clicked item
-      if (!isOpen) {
+      // 2. Open this item if it wasn't already open
+      if (!isCurrentlyOpen && panel) {
+        panel.style.display = "block";
         panel.classList.remove("hidden");
         trigger.setAttribute("aria-expanded", "true");
         item.classList.add("border-primary/60", "ring-2", "ring-primary/20");
@@ -213,8 +225,10 @@ function initLanding() {
         if (iconWrapper) {
           iconWrapper.classList.remove("bg-secondary", "text-muted-foreground");
           iconWrapper.classList.add("bg-primary", "text-primary-foreground");
-          const svg = iconWrapper.querySelector("svg");
-          if (svg) svg.style.transform = "rotate(180deg)";
+          const chevron = iconWrapper.querySelector("svg") || iconWrapper.querySelector("i");
+          if (chevron) {
+            chevron.style.transform = "rotate(180deg)";
+          }
         }
       }
     });
@@ -293,6 +307,7 @@ function initLanding() {
   }
 }
 
+/* 6. Dashboard Live Table & Metrics Logic */
 function initDashboard() {
   const tbody = document.getElementById("ticket-rows");
   if (!tbody) return;
