@@ -11,8 +11,8 @@
       --radius-lg: var(--radius);
       --radius-xl: calc(var(--radius) + 4px);
       --radius-2xl: calc(var(--radius) + 8px);
-      --font-display: "Century Gothic", "Arial", sans-serif;
-      --font-sans: "Verdana", "Arial", sans-serif;
+      --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+      --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
       --font-mono: "JetBrains Mono", ui-monospace, monospace;
       --color-background: var(--background);
       --color-foreground: var(--foreground);
@@ -75,7 +75,7 @@ const DEVICE_ICONS = {
   watch: "monitor-smartphone",
 };
 
-// All 5 original tickets completely restored
+// All 5 original tickets preserved
 const tickets = [
   {
     id: "TKT-8291",
@@ -171,15 +171,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initLanding() {
-  // FAQ Interactions
+  // FAQ Accordion
   document.querySelectorAll("[data-faq]").forEach((item) => {
     const button = item.querySelector("[data-faq-trigger]");
     const panel = item.querySelector("[data-faq-panel]");
     const sign = item.querySelector("[data-faq-sign]");
-    button.addEventListener("click", () => {
+    button?.addEventListener("click", () => {
       const open = !panel.hasAttribute("hidden");
       document.querySelectorAll("[data-faq]").forEach((other) => {
-        other.querySelector("[data-faq-panel]").setAttribute("hidden", "");
+        other.querySelector("[data-faq-panel]")?.setAttribute("hidden", "");
         other.querySelector("[data-faq-sign]").textContent = "+";
       });
       if (!open) {
@@ -189,43 +189,53 @@ function initLanding() {
     });
   });
 
-  // Fully Interactive Star Rating Logic
+  // Centered & Animated Star Rating
   let rating = 0;
   const stars = document.querySelectorAll("[data-star]");
   
   stars.forEach((star, index) => {
-    // Hover Animation: Fills stars up to the one being hovered
     star.addEventListener("mouseenter", () => {
       stars.forEach((s, j) => {
-        const svg = s.querySelector("svg") || s;
+        const svg = s.querySelector("svg");
         if (j <= index) {
-          svg.classList.add("fill-current", "text-accent", "scale-125");
+          s.classList.add("text-accent");
+          if (svg) svg.classList.add("fill-current");
         } else {
-          svg.classList.remove("fill-current", "text-accent", "scale-125");
+          s.classList.remove("text-accent");
+          if (svg) svg.classList.remove("fill-current");
         }
       });
     });
 
-    // Mouse Leave: Restores the stars back to the saved rating state
     star.addEventListener("mouseleave", () => {
       stars.forEach((s, j) => {
-        const svg = s.querySelector("svg") || s;
-        svg.classList.remove("scale-125"); // Remove the hover bulge
+        const svg = s.querySelector("svg");
         if (j < rating) {
-          svg.classList.add("fill-current", "text-accent");
+          s.classList.add("text-accent");
+          if (svg) svg.classList.add("fill-current");
         } else {
-          svg.classList.remove("fill-current", "text-accent");
+          s.classList.remove("text-accent");
+          if (svg) svg.classList.remove("fill-current");
         }
       });
     });
 
-    // Click: Locks in the rating
     star.addEventListener("click", () => {
       rating = index + 1;
+      stars.forEach((s, j) => {
+        const svg = s.querySelector("svg");
+        if (j < rating) {
+          s.classList.add("text-accent");
+          if (svg) svg.classList.add("fill-current");
+        } else {
+          s.classList.remove("text-accent");
+          if (svg) svg.classList.remove("fill-current");
+        }
+      });
     });
   });
 
-  // Form Submission Processing
+  // Feedback form handler
   const feedback = document.getElementById("feedback-form");
   if (feedback) {
     feedback.addEventListener("submit", (e) => {
@@ -235,15 +245,16 @@ function initLanding() {
       
       if (!comments || rating === 0) {
         msg.textContent = "Please select a star rating and enter a comment.";
-        msg.className = "mt-3 text-center text-xs font-bold text-destructive"; 
+        msg.className = "mt-3 text-center text-xs text-destructive"; 
       } else {
         msg.textContent = `Thanks! Your ${rating}-star feedback was recorded.`;
-        msg.className = "mt-3 text-center text-xs font-bold text-success";
+        msg.className = "mt-3 text-center text-xs text-success";
         feedback.reset();
         rating = 0;
         stars.forEach((s) => {
-          const svg = s.querySelector("svg") || s;
-          svg.classList.remove("fill-current", "text-accent");
+          const svg = s.querySelector("svg");
+          s.classList.remove("text-accent");
+          if (svg) svg.classList.remove("fill-current");
         });
       }
       msg.removeAttribute("hidden");
@@ -267,7 +278,6 @@ function initDashboard() {
       const metricActive = document.getElementById("metric-active");
       const metricPickup = document.getElementById("metric-pickup");
       
-      // Calculate tickets that are completed vs active
       const pickupCount = tickets.filter((t) => t.status === "Ready for Pickup").length;
       const activeCount = tickets.length - pickupCount;
       
@@ -311,7 +321,7 @@ function initDashboard() {
           </td>
           <td class="px-5 py-4">
             <select aria-label="Status for ${t.id}" data-status="${t.id}"
-              class="rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground outline-none">
+              class="rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground outline-none cursor-pointer">
               ${STATUS_OPTIONS.map(
                 (s) =>
                   `<option value="${s}" class="bg-card text-foreground"${s === t.status ? " selected" : ""}>${s}</option>`,
@@ -321,7 +331,7 @@ function initDashboard() {
           <td class="px-5 py-4 font-mono text-xs text-muted-foreground">${t.updated}</td>
           <td class="px-5 py-4">
             <div class="flex items-center justify-end gap-2">
-              <button data-note="${t.id}" class="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-1.5 text-xs transition-colors hover:bg-secondary">
+              <button data-note="${t.id}" class="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-1.5 text-xs transition-colors hover:bg-secondary cursor-pointer">
                 <i data-lucide="file-text" class="h-3.5 w-3.5"></i> Add Note
               </button>
               <i data-lucide="more-vertical" class="h-4 w-4 text-muted-foreground"></i>
@@ -379,7 +389,7 @@ function initDashboard() {
     btn.addEventListener("click", closeModal);
   });
 
-  document.getElementById("save-note").addEventListener("click", () => {
+  document.getElementById("save-note")?.addEventListener("click", () => {
     const ticket = tickets.find((t) => t.id === activeId);
     const value = noteInput.value.trim();
     if (ticket && value) ticket.notes.push(value);
@@ -387,6 +397,6 @@ function initDashboard() {
     render();
   });
 
-  searchInput.addEventListener("input", render);
+  searchInput?.addEventListener("input", render);
   render();
 }
