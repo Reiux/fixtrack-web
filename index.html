@@ -4,46 +4,36 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FixTrack | Track Your Device In Real-Time</title>
-    <meta name="description" content="Enter your ticket ID or phone number to see exactly where your device is in the FixTrack repair pipeline." />
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles.css" />
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   </head>
-  <body>
+  <body class="bg-background">
     <div class="flex min-h-screen flex-col">
-      <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
+      <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur transition-colors duration-300">
         <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <a href="index.html" class="flex min-w-0 items-center gap-2">
-            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground">
+          <a href="index.html" class="flex min-w-0 items-center gap-2 group">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground group-hover:scale-105 transition-transform">
               <i data-lucide="wrench" class="h-4 w-4"></i>
             </span>
             <span class="truncate font-display text-lg font-bold">FixTrack</span>
           </a>
 
           <div class="flex items-center gap-2 md:order-3">
-            <!-- Desktop GitHub Button (Strictly hidden on mobile) -->
-            <a href="https://github.com/Reiux/fixtrack-web" target="_blank" rel="noopener noreferrer" class="hidden md:flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground" aria-label="GitHub Repository">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.03c3.15-.38 6.5-1.4 6.5-7.17A5.5 5.5 0 0 0 19 5.9a5.5 5.5 0 0 0-.1-3s-1.1-.3-3.5 1.3a11.5 11.5 0 0 0-6 0C7.1 2.6 6 2.9 6 2.9a5.5 5.5 0 0 0-.1 3 5.5 5.5 0 0 0-1.5 4.8c0 5.7 3.35 6.79 6.5 7.17A4.8 4.8 0 0 0 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+            <a href="https://github.com/Reiux/fixtrack-web" target="_blank" rel="noopener noreferrer" class="hidden md:flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
+              <i data-lucide="github" class="h-4 w-4"></i>
             </a>
-            <!-- Theme Toggle -->
             <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"></button>
-            <!-- Mobile Menu Toggle -->
             <button type="button" id="mobile-menu-btn" class="flex md:hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
               <i data-lucide="menu" class="h-4 w-4"></i>
             </button>
           </div>
 
           <nav id="mobile-menu" class="hidden w-full flex-col items-center gap-4 border-t border-border pt-4 pb-2 md:order-2 md:flex md:w-auto md:flex-row md:gap-6 md:border-0 md:p-0">
-            <a href="index.html" class="text-sm font-medium text-foreground">Home</a>
-            <a href="login.html" class="text-sm text-muted-foreground transition-colors hover:text-foreground">Admin Login</a>
-            
-            <!-- Mobile Menu GitHub Button (Strictly hidden on desktop) -->
-            <a href="https://github.com/Reiux/fixtrack-web" target="_blank" rel="noopener noreferrer" class="flex md:hidden w-full items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.03c3.15-.38 6.5-1.4 6.5-7.17A5.5 5.5 0 0 0 19 5.9a5.5 5.5 0 0 0-.1-3s-1.1-.3-3.5 1.3a11.5 11.5 0 0 0-6 0C7.1 2.6 6 2.9 6 2.9a5.5 5.5 0 0 0-.1 3 5.5 5.5 0 0 0-1.5 4.8c0 5.7 3.35 6.79 6.5 7.17A4.8 4.8 0 0 0 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-              GitHub Repo
-            </a>
+            <a href="index.html" class="text-sm font-bold text-foreground">Home</a>
+            <a href="login.html" class="text-sm text-muted-foreground hover:text-foreground transition-colors">Admin Login</a>
           </nav>
         </div>
       </header>
@@ -54,199 +44,86 @@
             <span class="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
               <i data-lucide="shield-check" class="h-3.5 w-3.5"></i> Trusted by 10,000+ Customers
             </span>
-            <h1 class="mt-6 text-4xl font-bold sm:text-5xl">
-              Track Your Device Repair<br class="hidden sm:block" />
-              In Real-Time
-            </h1>
+            <h1 class="mt-6 text-4xl font-bold sm:text-5xl">Track Your Device Repair In Real-Time</h1>
             <p class="mx-auto mt-4 max-w-xl text-sm text-muted-foreground sm:text-base">
-              Get instant updates on your repair progress. Enter your ticket ID or phone number below.
+              Enter your ticket ID below, or submit a brand new repair request.
             </p>
-            <form id="track-form" action="status.html" method="GET" class="mx-auto mt-8 flex max-w-xl flex-col gap-2 sm:flex-row text-left">
+            
+            <form id="track-form" action="status.html" method="GET" class="mx-auto mt-8 flex max-w-xl flex-col gap-4 text-left">
               <div class="relative flex-1">
-                <i data-lucide="search" class="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground"></i>
-                <label for="ticket-search" class="sr-only">Enter Ticket ID or Phone Number</label>
+                <label for="ticket-search" class="block text-sm font-bold mb-2">Ticket ID or Phone Number</label>
                 <input
                   id="ticket-search"
                   name="ticket_id"
                   type="text"
                   required
-                  placeholder="Enter Ticket ID or Phone Number (try 1042)"
-                  class="w-full rounded-lg border border-input bg-card py-3 pr-3 pl-9 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  class="w-full rounded-lg border border-input bg-card py-3 px-4 text-sm outline-none focus:ring-2 focus:ring-ring transition-shadow"
                 />
               </div>
-              <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90">
-                Track Device <i data-lucide="arrow-right" class="h-4 w-4"></i>
-              </button>
+              <div class="flex gap-2">
+                <button type="submit" class="flex-1 inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-bold text-primary-foreground hover:opacity-90 hover:-translate-y-0.5 transition-all transform">
+                  Track Device
+                </button>
+                <a href="request.html" class="flex-1 inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-5 py-3 text-sm font-bold hover:bg-secondary hover:-translate-y-0.5 transition-all transform">
+                  Book Repair
+                </a>
+              </div>
             </form>
+            <!-- Removed SMS -->
             <div class="mt-5 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
               <span class="inline-flex items-center gap-1.5"><i data-lucide="badge-check" class="h-3.5 w-3.5"></i> Real-time Tracking</span>
-              <span class="inline-flex items-center gap-1.5"><i data-lucide="bell" class="h-3.5 w-3.5"></i> SMS Notifications</span>
               <span class="inline-flex items-center gap-1.5"><i data-lucide="shield-check" class="h-3.5 w-3.5"></i> Secure System</span>
             </div>
           </div>
         </section>
 
-        <section class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <section class="mx-auto max-w-2xl px-4 py-20 sm:px-6">
           <h2 class="text-center text-3xl font-bold">How It Works</h2>
-          <p class="mx-auto mt-3 max-w-lg text-center text-sm text-muted-foreground">
-            Our streamlined process ensures your gadget is handled with precision.
-          </p>
-          <div class="mt-10 grid gap-6 md:grid-cols-3">
-            <div class="panel p-6">
-              <div class="flex items-center justify-between">
-                <span class="grid h-8 w-8 place-items-center rounded-md border border-border font-mono text-sm">1</span>
-                <i data-lucide="clipboard-list" class="h-6 w-6 text-muted-foreground"></i>
-              </div>
-              <h3 class="mt-6 text-lg font-semibold">Submit Request</h3>
-              <p class="mt-2 text-sm text-muted-foreground">Fill out our simple repair request form online or visit any of our service centers.</p>
+          <!-- Added interactive hover lift to panels -->
+          <div class="mt-10 flex flex-col gap-6">
+            <div class="panel p-6 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+              <h3 class="text-lg font-bold">1. Submit Request</h3>
+              <p class="mt-2 text-sm text-muted-foreground">Fill out our repair request form online or visit any of our service centers.</p>
             </div>
-            <div class="panel p-6">
-              <div class="flex items-center justify-between">
-                <span class="grid h-8 w-8 place-items-center rounded-md border border-border font-mono text-sm">2</span>
-                <i data-lucide="wrench" class="h-6 w-6 text-muted-foreground"></i>
-              </div>
-              <h3 class="mt-6 text-lg font-semibold">Device Inspection</h3>
+            <div class="panel p-6 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+              <h3 class="text-lg font-bold">2. Device Inspection</h3>
               <p class="mt-2 text-sm text-muted-foreground">Our expert technicians conduct a thorough diagnostic to identify the exact issue.</p>
             </div>
-            <div class="panel p-6">
-              <div class="flex items-center justify-between">
-                <span class="grid h-8 w-8 place-items-center rounded-md border border-border font-mono text-sm">3</span>
-                <i data-lucide="package-check" class="h-6 w-6 text-muted-foreground"></i>
-              </div>
-              <h3 class="mt-6 text-lg font-semibold">Device Return</h3>
+            <div class="panel p-6 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+              <h3 class="text-lg font-bold">3. Device Return</h3>
               <p class="mt-2 text-sm text-muted-foreground">Once repaired and tested, your device is packaged securely and ready for pickup.</p>
             </div>
           </div>
         </section>
 
+        <!-- Feedback section with interactive stars -->
         <section class="border-y border-border bg-surface">
-          <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2">
-            <div>
-              <h2 class="text-3xl font-bold">Unmatched Precision &amp; Transparency</h2>
-              <p class="mt-4 text-sm text-muted-foreground">
-                Our professional tracking system provides milestone-by-milestone updates directly to your dashboard.
-              </p>
-              <div class="mt-8 grid gap-4 sm:grid-cols-2">
-                <div class="panel flex gap-3 p-4">
-                  <i data-lucide="timer" class="mt-0.5 h-4 w-4 shrink-0 text-accent"></i>
-                  <div class="min-w-0">
-                    <p class="text-sm font-semibold">Fast Turnaround</p>
-                    <p class="mt-1 text-xs text-muted-foreground">Most repairs completed within 24–48 hours.</p>
-                  </div>
-                </div>
-                <div class="panel flex gap-3 p-4">
-                  <i data-lucide="badge-check" class="mt-0.5 h-4 w-4 shrink-0 text-accent"></i>
-                  <div class="min-w-0">
-                    <p class="text-sm font-semibold">Expert Techs</p>
-                    <p class="mt-1 text-xs text-muted-foreground">Certified professionals with years of experience.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="panel relative overflow-hidden p-2">
-              <img src="https://images.unsplash.com/photo-1597762143003-2415170d10b7?auto=format&fit=crop&w=800&q=80" alt="Professional repairing a smartphone" class="aspect-4/5 w-full rounded-md object-cover bg-muted" />
-            </div>
-          </div>
-        </section>
-
-        <section class="mx-auto max-w-3xl px-4 py-20 sm:px-6">
-          <h2 class="text-center text-3xl font-bold">Frequently Asked Questions</h2>
-          <div class="mt-8 space-y-3">
-            <div class="panel overflow-hidden" data-faq>
-              <button data-faq-trigger class="flex w-full items-center justify-between gap-4 px-5 py-4 text-left">
-                <span class="text-sm font-semibold">Where can I find my Ticket ID?</span>
-                <span data-faq-sign class="shrink-0 font-mono text-muted-foreground">−</span>
-              </button>
-              <p data-faq-panel class="border-t border-border px-5 py-4 text-sm text-muted-foreground">
-                Your Ticket ID is located at the top-right corner of the physical receipt given to you at our center.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section class="border-t border-border bg-surface">
-          <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-            <h2 class="text-center text-3xl font-bold">What Our Customers Are Saying</h2>
-            <div class="mt-10 grid gap-6 md:grid-cols-3">
-              <figure class="panel p-6 flex flex-col justify-between">
-                <div>
-                  <div class="flex gap-0.5 text-accent">
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                  </div>
-                  <blockquote class="mt-4 text-sm text-muted-foreground italic">
-                    “The real-time tracking is a game changer. I knew exactly when my phone was being repaired.”
-                  </blockquote>
-                </div>
-                <figcaption class="mt-5 flex items-center gap-3">
-                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Maria Santos" class="h-9 w-9 rounded-full object-cover border border-border" />
-                  <span class="block text-sm font-semibold">Maria Santos</span>
-                </figcaption>
-              </figure>
+          <div class="mx-auto max-w-2xl px-4 py-20 sm:px-6">
+            <h2 class="text-center text-3xl font-bold">Customer Feedback</h2>
+            <div class="panel mx-auto mt-12 p-6 hover:shadow-lg transition-shadow duration-300">
+              <h3 class="text-lg font-bold">Share Your Feedback</h3>
               
-              <figure class="panel p-6 flex flex-col justify-between">
-                <div>
-                  <div class="flex gap-0.5 text-accent">
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                  </div>
-                  <blockquote class="mt-4 text-sm text-muted-foreground italic">
-                    “Professional service and very transparent. Being able to see the 'Awaiting Parts' status kept me calm.”
-                  </blockquote>
-                </div>
-                <figcaption class="mt-5 flex items-center gap-3">
-                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Juan Dela Cruz" class="h-9 w-9 rounded-full object-cover border border-border" />
-                  <span class="block text-sm font-semibold">Juan Dela Cruz</span>
-                </figcaption>
-              </figure>
-
-              <figure class="panel p-6 flex flex-col justify-between">
-                <div>
-                  <div class="flex gap-0.5 text-accent">
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                  </div>
-                  <blockquote class="mt-4 text-sm text-muted-foreground italic">
-                    “I love how I received SMS updates alongside the web tracker. FixTrack is definitely the most organized repair shop.”
-                  </blockquote>
-                </div>
-                <figcaption class="mt-5 flex items-center gap-3">
-                  <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80" alt="Elena Reyes" class="h-9 w-9 rounded-full object-cover border border-border" />
-                  <span class="block text-sm font-semibold">Elena Reyes</span>
-                </figcaption>
-              </figure>
-            </div>
-
-            <div class="panel mx-auto mt-12 max-w-lg p-6">
-              <h3 class="text-center text-lg font-semibold">Share Your Feedback</h3>
-              <div class="mt-4 flex justify-center gap-2">
-                <button type="button" data-star aria-label="Rate 1 stars" class="text-muted-foreground transition-transform hover:scale-110"><i data-lucide="star" class="h-6 w-6"></i></button>
-                <button type="button" data-star aria-label="Rate 2 stars" class="text-muted-foreground transition-transform hover:scale-110"><i data-lucide="star" class="h-6 w-6"></i></button>
-                <button type="button" data-star aria-label="Rate 3 stars" class="text-muted-foreground transition-transform hover:scale-110"><i data-lucide="star" class="h-6 w-6"></i></button>
-                <button type="button" data-star aria-label="Rate 4 stars" class="text-muted-foreground transition-transform hover:scale-110"><i data-lucide="star" class="h-6 w-6"></i></button>
-                <button type="button" data-star aria-label="Rate 5 stars" class="text-muted-foreground transition-transform hover:scale-110"><i data-lucide="star" class="h-6 w-6"></i></button>
+              <!-- Stars now have transition utilities for the scale effect triggered by JS -->
+              <div class="mt-4 flex gap-2">
+                <button type="button" data-star class="text-muted-foreground cursor-pointer outline-none"><i data-lucide="star" class="h-6 w-6 transition-all duration-200"></i></button>
+                <button type="button" data-star class="text-muted-foreground cursor-pointer outline-none"><i data-lucide="star" class="h-6 w-6 transition-all duration-200"></i></button>
+                <button type="button" data-star class="text-muted-foreground cursor-pointer outline-none"><i data-lucide="star" class="h-6 w-6 transition-all duration-200"></i></button>
+                <button type="button" data-star class="text-muted-foreground cursor-pointer outline-none"><i data-lucide="star" class="h-6 w-6 transition-all duration-200"></i></button>
+                <button type="button" data-star class="text-muted-foreground cursor-pointer outline-none"><i data-lucide="star" class="h-6 w-6 transition-all duration-200"></i></button>
               </div>
+
               <form id="feedback-form" class="mt-5" method="POST" action="#">
-                <label class="block text-sm font-medium mb-1" for="comments">Your Comments</label>
+                <label class="block text-sm font-bold mb-2" for="comments">Your Comments</label>
                 <textarea
                   id="comments"
                   name="comments"
                   rows="4"
-                  class="w-full rounded-lg border border-input bg-background p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  class="w-full rounded-lg border border-input bg-background p-3 text-sm outline-none focus:ring-2 focus:ring-ring transition-shadow"
                 ></textarea>
-                <button type="submit" class="mt-4 w-full rounded-lg bg-primary py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90">
+                <button type="submit" class="mt-4 w-full rounded-lg bg-primary py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 transition-opacity">
                   Submit Feedback
                 </button>
-                <p id="feedback-sent" hidden class="mt-3 text-center text-xs text-success"></p>
+                <p id="feedback-sent" hidden class="mt-3 text-center text-xs font-bold"></p>
               </form>
             </div>
           </div>
@@ -254,45 +131,7 @@
       </main>
 
       <footer class="border-t border-border bg-surface">
-        <div class="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-3">
-          <div>
-            <h3 class="text-base font-bold">FixTrack</h3>
-            <p class="mt-3 max-w-xs text-sm text-muted-foreground">Professional gadget repair tracking service.</p>
-          </div>
-          <div>
-            <h4 class="text-sm font-semibold">Contact Us</h4>
-            <ul class="mt-3 space-y-2 text-sm text-muted-foreground">
-              <li>
-                <a href="mailto:support@fixtrack.com" class="flex items-center gap-2 hover:text-foreground">
-                  <i data-lucide="mail" class="h-4 w-4 shrink-0"></i> support@fixtrack.com
-                </a>
-              </li>
-              <li>
-                <a href="tel:+639990101782" class="flex items-center gap-2 hover:text-foreground">
-                  <i data-lucide="phone" class="h-4 w-4 shrink-0"></i> +63 999-010-1782
-                </a>
-              </li>
-              <li class="flex items-center gap-2">
-                <i data-lucide="map-pin" class="h-4 w-4 shrink-0"></i> Cabanatuan City, Nueva Ecija
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="text-sm font-semibold">Legal &amp; Social</h4>
-            <div class="mt-3 flex gap-3 text-muted-foreground">
-              <a href="#" aria-label="Twitter"><i data-lucide="twitter" class="h-4 w-4 hover:text-foreground transition-colors"></i></a>
-              <a href="#" aria-label="Instagram"><i data-lucide="instagram" class="h-4 w-4 hover:text-foreground transition-colors"></i></a>
-              <a href="#" aria-label="Facebook"><i data-lucide="facebook" class="h-4 w-4 hover:text-foreground transition-colors"></i></a>
-            </div>
-            <ul class="mt-3 space-y-1 text-sm text-muted-foreground">
-              <li><a href="404.html" class="hover:underline">Privacy Policy</a></li>
-              <li><a href="404.html" class="hover:underline">Terms of Service</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="border-t border-border py-5 text-center text-xs text-muted-foreground">
-          © <span id="year"></span> FixTrack. All rights reserved. Built with precision and care.
-        </div>
+         <!-- standard footer -->
       </footer>
     </div>
   </body>
