@@ -1,7 +1,8 @@
-/* FixTrack — Design Tokens & Base Styles */
-
+/* 1. Theme Color Tokens (Light Mode Default) */
 :root {
   --radius: 0.75rem;
+
+  /* Neutrals & Surfaces */
   --background: oklch(0.985 0.003 250);
   --foreground: oklch(0.19 0.02 260);
   --surface: oklch(0.955 0.005 250);
@@ -9,6 +10,8 @@
   --card-foreground: oklch(0.19 0.02 260);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.19 0.02 260);
+
+  /* Brand Colors */
   --primary: oklch(0.24 0.025 260);
   --primary-foreground: oklch(0.985 0.003 250);
   --secondary: oklch(0.94 0.006 250);
@@ -17,18 +20,23 @@
   --muted-foreground: oklch(0.52 0.02 258);
   --accent: oklch(0.6 0.13 210);
   --accent-foreground: oklch(0.99 0 0);
+
+  /* Status Tokens */
   --destructive: oklch(0.577 0.21 27);
   --destructive-foreground: oklch(0.99 0 0);
   --success: oklch(0.6 0.13 155);
   --success-foreground: oklch(0.99 0 0);
   --warning: oklch(0.75 0.14 75);
   --warning-foreground: oklch(0.2 0.02 260);
+
+  /* Layout Boundaries & Shadows */
   --border: oklch(0.9 0.008 250);
   --input: oklch(0.9 0.008 250);
   --ring: oklch(0.6 0.13 210);
   --shadow-panel: 0 1px 2px oklch(0.2 0.02 260 / 0.06), 0 12px 32px -18px oklch(0.2 0.02 260 / 0.35);
 }
 
+/* 2. Theme Color Tokens (Dark Mode Override) */
 .dark {
   --background: oklch(0.17 0.015 260);
   --foreground: oklch(0.96 0.004 250);
@@ -57,24 +65,39 @@
   --shadow-panel: 0 1px 2px oklch(0 0 0 / 0.4), 0 16px 40px -20px oklch(0 0 0 / 0.7);
 }
 
-* { border-color: var(--border); }
-html { color-scheme: light; }
-html.dark { color-scheme: dark; }
+/* 3. Base Document Resets */
+* {
+  border-color: var(--border);
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
 
 body {
   margin: 0;
-  overflow-x: hidden; /* Fixes mobile overflow checklist item */
+  overflow-x: hidden; /* Prevents horizontal scroll on mobile viewports */
   background-color: var(--background);
   color: var(--foreground);
   font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4 {
+/* 4. Heading Typography Hierarchy */
+h1,
+h2,
+h3,
+h4 {
   font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   letter-spacing: -0.02em;
 }
 
+/* 5. Custom Card & Container Surface */
 .panel {
   background-color: var(--card);
   border: 1px solid var(--border);
@@ -82,4 +105,7 @@ h1, h2, h3, h4 {
   box-shadow: var(--shadow-panel);
 }
 
-[data-lucide] { display: inline-block; }
+/* 6. Lucide Icon SVG Display */
+[data-lucide] {
+  display: inline-block;
+}

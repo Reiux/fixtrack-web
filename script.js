@@ -1,5 +1,4 @@
-/* FixTrack — Scripting Logic */
-
+/* 1. Tailwind CSS Theme Injection */
 (function injectTailwindTheme() {
   const style = document.createElement("style");
   style.type = "text/tailwindcss";
@@ -44,6 +43,7 @@
   document.head.appendChild(style);
 })();
 
+/* 2. Theme State Management (Local Storage & Match Media) */
 const THEME_KEY = "fixtrack-theme";
 
 function isDark() {
@@ -60,6 +60,9 @@ function applyTheme(dark) {
   if (window.lucide) window.lucide.createIcons();
 }
 
+applyTheme(isDark());
+
+/* 3. Sample Repair Ticket Dataset */
 const STATUS_OPTIONS = [
   "Pending",
   "Diagnosing",
@@ -75,7 +78,6 @@ const DEVICE_ICONS = {
   watch: "monitor-smartphone",
 };
 
-// All 5 original tickets completely preserved
 const tickets = [
   {
     id: "TKT-8291",
@@ -124,6 +126,7 @@ const tickets = [
   },
 ];
 
+/* Helper to sanitize user string output into innerHTML safely */
 function escapeHtml(value) {
   return String(value).replace(
     /[&<>"']/g,
@@ -131,10 +134,12 @@ function escapeHtml(value) {
   );
 }
 
+/* 4. Global DOMContentLoaded Initializer */
 document.addEventListener("DOMContentLoaded", () => {
   if (window.lucide) window.lucide.createIcons();
   applyTheme(isDark());
 
+  /* Wire up all dark/light mode toggle buttons */
   document.querySelectorAll("[data-theme-toggle]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const next = !document.documentElement.classList.contains("dark");
@@ -143,23 +148,25 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  /* Dynamically update the footer copyright year across all pages */
   const yearEls = document.querySelectorAll("#year");
-  yearEls.forEach(el => el.textContent = new Date().getFullYear());
+  yearEls.forEach((el) => (el.textContent = new Date().getFullYear()));
 
-  const mobileBtn = document.getElementById('mobile-menu-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
-  
+  /* Mobile hamburger menu toggle handler */
+  const mobileBtn = document.getElementById("mobile-menu-btn");
+  const mobileMenu = document.getElementById("mobile-menu");
+
   if (mobileBtn && mobileMenu) {
-    mobileBtn.addEventListener('click', function() {
-      mobileMenu.classList.toggle('hidden');
-      mobileMenu.classList.toggle('flex');
-      
-      const icon = this.querySelector('i');
+    mobileBtn.addEventListener("click", function () {
+      mobileMenu.classList.toggle("hidden");
+      mobileMenu.classList.toggle("flex");
+
+      const icon = this.querySelector("i");
       if (icon) {
-        if (mobileMenu.classList.contains('hidden')) {
-          icon.setAttribute('data-lucide', 'menu');
+        if (mobileMenu.classList.contains("hidden")) {
+          icon.setAttribute("data-lucide", "menu");
         } else {
-          icon.setAttribute('data-lucide', 'x');
+          icon.setAttribute("data-lucide", "x");
         }
         if (window.lucide) window.lucide.createIcons();
       }
@@ -170,30 +177,34 @@ document.addEventListener("DOMContentLoaded", () => {
   initDashboard();
 });
 
+/* 5. Landing Page Interactions (FAQ & Star Rating) */
 function initLanding() {
-  // FAQ Accordion
+  /* FAQ Accordion Toggle */
   document.querySelectorAll("[data-faq]").forEach((item) => {
     const button = item.querySelector("[data-faq-trigger]");
     const panel = item.querySelector("[data-faq-panel]");
     const sign = item.querySelector("[data-faq-sign]");
+
     button?.addEventListener("click", () => {
       const open = !panel.hasAttribute("hidden");
       document.querySelectorAll("[data-faq]").forEach((other) => {
         other.querySelector("[data-faq-panel]")?.setAttribute("hidden", "");
-        other.querySelector("[data-faq-sign]").textContent = "+";
+        const otherSign = other.querySelector("[data-faq-sign]");
+        if (otherSign) otherSign.textContent = "+";
       });
       if (!open) {
         panel.removeAttribute("hidden");
-        sign.textContent = "\u2212";
+        if (sign) sign.textContent = "\u2212";
       }
     });
   });
 
-  // Centered & Animated Star Rating
+  /* Interactive Animated Star Rating */
   let rating = 0;
   const stars = document.querySelectorAll("[data-star]");
-  
+
   stars.forEach((star, index) => {
+    /* Hover In: fill up to hovered star */
     star.addEventListener("mouseenter", () => {
       stars.forEach((s, j) => {
         const svg = s.querySelector("svg");
@@ -207,6 +218,7 @@ function initLanding() {
       });
     });
 
+    /* Hover Out: revert to committed rating */
     star.addEventListener("mouseleave", () => {
       stars.forEach((s, j) => {
         const svg = s.querySelector("svg");
@@ -220,6 +232,7 @@ function initLanding() {
       });
     });
 
+    /* Click: lock in rating score */
     star.addEventListener("click", () => {
       rating = index + 1;
       stars.forEach((s, j) => {
@@ -235,20 +248,20 @@ function initLanding() {
     });
   });
 
-  // Feedback form handler
+  /* Feedback Form Submission with Validation Messages */
   const feedback = document.getElementById("feedback-form");
   if (feedback) {
     feedback.addEventListener("submit", (e) => {
       e.preventDefault();
       const msg = document.getElementById("feedback-sent");
       const comments = document.getElementById("comments").value.trim();
-      
+
       if (!comments || rating === 0) {
         msg.textContent = "Please select a star rating and enter a comment.";
-        msg.className = "mt-3 text-center text-xs text-destructive"; 
+        msg.className = "mt-3 text-center text-xs font-bold text-destructive";
       } else {
         msg.textContent = `Thanks! Your ${rating}-star feedback was recorded.`;
-        msg.className = "mt-3 text-center text-xs text-success";
+        msg.className = "mt-3 text-center text-xs font-bold text-success";
         feedback.reset();
         rating = 0;
         stars.forEach((s) => {
@@ -262,6 +275,7 @@ function initLanding() {
   }
 }
 
+/* 6. Dashboard Live Table & Metrics Logic */
 function initDashboard() {
   const tbody = document.getElementById("ticket-rows");
   if (!tbody) return;
@@ -273,14 +287,15 @@ function initDashboard() {
   const noteInput = document.getElementById("observation");
   let activeId = null;
 
+  /* Dynamically update the summary cards */
   function updateMetrics() {
     try {
       const metricActive = document.getElementById("metric-active");
       const metricPickup = document.getElementById("metric-pickup");
-      
+
       const pickupCount = tickets.filter((t) => t.status === "Ready for Pickup").length;
       const activeCount = tickets.length - pickupCount;
-      
+
       if (metricActive) {
         metricActive.textContent = activeCount.toString().padStart(2, "0");
       }
@@ -292,6 +307,7 @@ function initDashboard() {
     }
   }
 
+  /* Render all table rows based on filter */
   function render() {
     const q = (searchInput?.value || "").toLowerCase();
     const rows = tickets.filter(
@@ -307,7 +323,7 @@ function initDashboard() {
       tbody.innerHTML = rows
         .map(
           (t) => `
-        <tr class="border-t border-border hover:bg-surface/60">
+        <tr class="border-t border-border hover:bg-surface/60 transition-colors">
           <td class="px-5 py-4 font-mono text-xs">${t.id}</td>
           <td class="px-5 py-4">
             <p class="font-semibold">${escapeHtml(t.customer)}</p>
@@ -321,7 +337,7 @@ function initDashboard() {
           </td>
           <td class="px-5 py-4">
             <select aria-label="Status for ${t.id}" data-status="${t.id}"
-              class="rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground outline-none cursor-pointer">
+              class="rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground outline-none cursor-pointer transition-all duration-200 hover:opacity-90">
               ${STATUS_OPTIONS.map(
                 (s) =>
                   `<option value="${s}" class="bg-card text-foreground"${s === t.status ? " selected" : ""}>${s}</option>`,
@@ -346,6 +362,7 @@ function initDashboard() {
 
     if (window.lucide) window.lucide.createIcons();
 
+    /* Dropdown change event wiring */
     tbody.querySelectorAll("[data-status]").forEach((select) => {
       select.addEventListener("change", (e) => {
         const ticket = tickets.find((t) => t.id === select.dataset.status);
@@ -356,11 +373,13 @@ function initDashboard() {
       });
     });
 
+    /* Note modal trigger button wiring */
     tbody.querySelectorAll("[data-note]").forEach((btn) => {
       btn.addEventListener("click", () => openModal(btn.dataset.note));
     });
   }
 
+  /* Note Modal Handlers */
   function openModal(id) {
     activeId = id;
     const ticket = tickets.find((t) => t.id === id);

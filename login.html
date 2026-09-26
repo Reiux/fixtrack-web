@@ -14,14 +14,15 @@
   <body class="bg-background">
     <div class="flex min-h-screen">
       
+      <!-- Left Side: Authentication Form -->
       <div class="flex w-full flex-col justify-center px-4 py-12 sm:px-6 lg:w-1/2 lg:flex-none lg:px-20 xl:px-24">
         <div class="mx-auto w-full max-w-sm lg:w-96">
-          <div class="flex items-center gap-2">
-            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground">
+          <a href="index.html" class="flex items-center gap-2 group w-fit">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground transition-transform duration-200 group-hover:scale-105">
               <i data-lucide="wrench" class="h-4 w-4"></i>
             </span>
             <span class="font-display text-xl font-bold">FixTrack</span>
-          </div>
+          </a>
           
           <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight">Sign in to your account</h2>
           <p class="mt-2 text-sm text-muted-foreground">
@@ -29,6 +30,7 @@
           </p>
 
           <div class="mt-10">
+            <!-- Form using GET to avoid static 405 error -->
             <form action="dashboard.html" method="GET" class="space-y-6">
               <div>
                 <label for="email" class="block text-sm font-medium leading-6">Email Address</label>
@@ -48,7 +50,8 @@
               </div>
 
               <div>
-                <button type="submit" class="flex w-full justify-center rounded-lg bg-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:opacity-90 transition-opacity">
+                <!-- Bouncy Submit Button -->
+                <button type="submit" class="flex w-full justify-center rounded-lg bg-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer">
                   Sign in
                 </button>
               </div>
@@ -61,13 +64,15 @@
           </div>
         </div>
         
+        <!-- Bouncy Back to Home Link -->
         <div class="mx-auto mt-12 w-full max-w-sm lg:w-96">
-            <a href="index.html" class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-                <i data-lucide="arrow-left" class="h-4 w-4"></i> Back to public site
-            </a>
+          <a href="index.html" class="inline-flex items-center gap-2 text-sm text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:text-foreground active:translate-y-0">
+            <i data-lucide="arrow-left" class="h-4 w-4"></i> Back to public site
+          </a>
         </div>
       </div>
 
+      <!-- Right Side: Authentic Stock Photo -->
       <div class="relative hidden w-0 flex-1 lg:block bg-muted">
         <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1200&q=80" alt="Technician repairing electronic device motherboard" />
         <div class="absolute inset-0 bg-primary/20 backdrop-blur-[2px]"></div>
