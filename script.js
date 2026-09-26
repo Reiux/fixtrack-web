@@ -11,8 +11,8 @@
       --radius-lg: var(--radius);
       --radius-xl: calc(var(--radius) + 4px);
       --radius-2xl: calc(var(--radius) + 8px);
-      --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-      --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+      --font-display: "Century Gothic", "Arial", sans-serif;
+      --font-sans: "Verdana", "Arial", sans-serif;
       --font-mono: "JetBrains Mono", ui-monospace, monospace;
       --color-background: var(--background);
       --color-foreground: var(--foreground);
@@ -75,6 +75,7 @@ const DEVICE_ICONS = {
   watch: "monitor-smartphone",
 };
 
+// All 5 original tickets completely restored
 const tickets = [
   {
     id: "TKT-8291",
@@ -105,7 +106,7 @@ const tickets = [
   },
   {
     id: "TKT-8294",
-    customer: "Rene Baterbonia",
+    customer: "Mark Ramos",
     device: "Google Pixel 8",
     deviceType: "phone",
     status: "Parts Ordered",
@@ -170,6 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initLanding() {
+  // FAQ Interactions
   document.querySelectorAll("[data-faq]").forEach((item) => {
     const button = item.querySelector("[data-faq-trigger]");
     const panel = item.querySelector("[data-faq-panel]");
@@ -187,19 +189,43 @@ function initLanding() {
     });
   });
 
+  // Fully Interactive Star Rating Logic
   let rating = 0;
   const stars = document.querySelectorAll("[data-star]");
-  stars.forEach((star, i) => {
-    star.addEventListener("click", () => {
-      rating = i + 1;
+  
+  stars.forEach((star, index) => {
+    // Hover Animation: Fills stars up to the one being hovered
+    star.addEventListener("mouseenter", () => {
       stars.forEach((s, j) => {
         const svg = s.querySelector("svg") || s;
-        svg.classList.toggle("fill-current", j < rating);
-        svg.classList.toggle("text-accent", j < rating);
+        if (j <= index) {
+          svg.classList.add("fill-current", "text-accent", "scale-125");
+        } else {
+          svg.classList.remove("fill-current", "text-accent", "scale-125");
+        }
       });
+    });
+
+    // Mouse Leave: Restores the stars back to the saved rating state
+    star.addEventListener("mouseleave", () => {
+      stars.forEach((s, j) => {
+        const svg = s.querySelector("svg") || s;
+        svg.classList.remove("scale-125"); // Remove the hover bulge
+        if (j < rating) {
+          svg.classList.add("fill-current", "text-accent");
+        } else {
+          svg.classList.remove("fill-current", "text-accent");
+        }
+      });
+    });
+
+    // Click: Locks in the rating
+    star.addEventListener("click", () => {
+      rating = index + 1;
     });
   });
 
+  // Form Submission Processing
   const feedback = document.getElementById("feedback-form");
   if (feedback) {
     feedback.addEventListener("submit", (e) => {
@@ -209,10 +235,10 @@ function initLanding() {
       
       if (!comments || rating === 0) {
         msg.textContent = "Please select a star rating and enter a comment.";
-        msg.className = "mt-3 text-center text-xs text-destructive"; 
+        msg.className = "mt-3 text-center text-xs font-bold text-destructive"; 
       } else {
         msg.textContent = `Thanks! Your ${rating}-star feedback was recorded.`;
-        msg.className = "mt-3 text-center text-xs text-success";
+        msg.className = "mt-3 text-center text-xs font-bold text-success";
         feedback.reset();
         rating = 0;
         stars.forEach((s) => {
