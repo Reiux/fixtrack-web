@@ -75,7 +75,7 @@ const DEVICE_ICONS = {
   watch: "monitor-smartphone",
 };
 
-// All 5 original tickets preserved
+// All 5 original tickets completely preserved
 const tickets = [
   {
     id: "TKT-8291",
@@ -331,7 +331,7 @@ function initDashboard() {
           <td class="px-5 py-4 font-mono text-xs text-muted-foreground">${t.updated}</td>
           <td class="px-5 py-4">
             <div class="flex items-center justify-end gap-2">
-              <button data-note="${t.id}" class="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-1.5 text-xs transition-colors hover:bg-secondary cursor-pointer">
+              <button data-note="${t.id}" class="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-1.5 text-xs transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:shadow-sm active:translate-y-0 cursor-pointer">
                 <i data-lucide="file-text" class="h-3.5 w-3.5"></i> Add Note
               </button>
               <i data-lucide="more-vertical" class="h-4 w-4 text-muted-foreground"></i>
