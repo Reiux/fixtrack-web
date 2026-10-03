@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy Policy | Demo Repair Shop</title>
+    <meta name="description" content="Privacy policy for Demo Repair Shop." />
+    
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="config.js"></script>
+    <script src="script.js" defer></script>
+    <script src="https://unpkg.com/lucide@0.292.0/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="bg-background">
+    <div class="flex min-h-screen flex-col">
+      <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
+        <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <a href="index.html" class="flex min-w-0 items-center gap-2 group">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground">
+              <i data-lucide="wrench" class="h-4 w-4"></i>
+            </span>
+            <span class="truncate font-display text-lg font-bold" data-bind="shopName"></span>
+          </a>
+          <a href="index.html" class="text-sm text-muted-foreground hover:text-foreground">← Back to Home</a>
+        </div>
+      </header>
+
+      <main class="mx-auto max-w-3xl flex-1 px-4 py-12 sm:px-6">
+        <div class="panel p-6 sm:p-10 space-y-6">
+          <h1 class="text-3xl font-bold">Privacy Policy</h1>
+          <p class="text-xs text-muted-foreground font-mono">Last updated: October 2026</p>
+
+          <section class="space-y-3 text-sm text-muted-foreground">
+            <h2 class="text-base font-bold text-foreground">1. What Information We Collect</h2>
+            <p>
+              When you book a repair with <strong data-bind="shopName"></strong>, we ask for your name, phone number, email address, device model, and a description of the issue. We only use this information to update you on your repair, contact you when it's done, and keep your warranty on file.
+            </p>
+          </section>
+
+          <section class="space-y-3 text-sm text-muted-foreground">
+            <h2 class="text-base font-bold text-foreground">2. Your Data on Your Device</h2>
+            <p>
+              Our technicians only focus on fixing hardware issues. We do not look at your personal photos, files, or messages. To keep your information safe, we always recommend backing up your device before bringing it in.
+            </p>
+          </section>
+
+          <section class="space-y-3 text-sm text-muted-foreground">
+            <h2 class="text-base font-bold text-foreground">3. Platform Provider</h2>
+            <p>
+              Our online tracking system is provided by <strong data-bind="vendorName"></strong>. Your customer details belong solely to <span data-bind="shopName"></span> and are not sold to third parties.
+            </p>
+          </section>
+        </div>
+      </main>
+
+      <footer class="border-t border-border bg-surface py-5 text-center text-xs text-muted-foreground mt-auto">
+        © <span id="year"></span> <span data-bind="shopName"></span>. All rights reserved. • Powered by <span class="font-bold text-foreground" data-bind="vendorName"></span>
+      </footer>
+    </div>
+  </body>
+</html>

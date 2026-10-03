@@ -3,95 +3,109 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Technician Registration | FixTrack</title>
-    <meta name="description" content="Request access to the FixTrack technician dashboard." />
+    <title>Request Staff Account | Demo Repair Shop</title>
+    <meta name="description" content="Request a staff account for Demo Repair Shop." />
+
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles.css" />
+    <script src="config.js"></script>
     <script src="script.js" defer></script>
+    <script src="https://unpkg.com/lucide@0.292.0/dist/umd/lucide.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   </head>
   <body class="bg-background">
-    <div class="flex min-h-screen">
-      
-      <!-- Left Side: Registration Controls -->
-      <div class="flex w-full flex-col justify-center px-4 py-12 sm:px-6 lg:w-1/2 lg:flex-none lg:px-20 xl:px-24">
-        <div class="mx-auto w-full max-w-sm lg:w-96">
-          <a href="index.html" class="flex items-center gap-2 group w-fit">
-            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground transition-transform duration-200 group-hover:scale-105">
+    <div class="flex min-h-screen flex-col">
+      <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur lg:hidden">
+        <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <a href="index.html" class="flex min-w-0 items-center gap-2 group">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground">
               <i data-lucide="wrench" class="h-4 w-4"></i>
             </span>
-            <span class="font-display text-xl font-bold">FixTrack</span>
+            <span class="truncate font-display text-lg font-bold" data-bind="shopName"></span>
           </a>
-          
-          <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight">Request Access</h2>
-          
-          <!-- Store Owner Review Notice -->
-          <div class="mt-4 rounded-md border border-accent/20 bg-accent/10 p-4">
-            <div class="flex">
-              <div class="shrink-0">
-                <i data-lucide="info" class="h-5 w-5 text-accent"></i>
-              </div>
-              <div class="ml-3">
-                <p class="text-sm text-accent">
-                  Your registration requires approval from the store owner. You will not be able to log in until your details have been reviewed and authorized.
-                </p>
+          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary cursor-pointer"></button>
+        </div>
+      </header>
+
+      <div class="flex flex-1">
+        <div class="flex w-full flex-col justify-center px-4 py-12 sm:px-6 lg:w-1/2 lg:flex-none lg:px-20 xl:px-24">
+          <div class="mx-auto w-full max-w-sm lg:w-96">
+            <a href="index.html" class="hidden lg:flex items-center gap-2 group w-fit">
+              <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground transition-transform duration-200 group-hover:scale-105">
+                <i data-lucide="wrench" class="h-4 w-4"></i>
+              </span>
+              <span class="font-display text-xl font-bold" data-bind="shopName"></span>
+            </a>
+
+            <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight">Request Staff Access</h2>
+
+            <div class="mt-4 rounded-md border border-accent/20 bg-accent/10 p-4">
+              <div class="flex">
+                <i data-lucide="info" class="h-5 w-5 text-accent shrink-0"></i>
+                <div class="ml-3">
+                  <p class="text-xs text-accent">
+                    Staff accounts must be approved by the <strong>Owner/Admin</strong> before you can sign in to the dashboard.
+                  </p>
+                </div>
               </div>
             </div>
+
+            <div id="reg-success-alert" class="hidden mt-4 rounded-md border border-success/30 bg-success/10 p-4"></div>
+
+            <div class="mt-6">
+              <form id="staff-register-form" class="space-y-4">
+                <div>
+                  <label for="shop_code" class="block text-xs font-semibold">Shop Code *</label>
+                  <input id="shop_code" name="shop_code" type="text" value="DEMO-01" required class="mt-1 block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm font-mono outline-none focus:ring-2 focus:ring-ring" />
+                </div>
+
+                <div>
+                  <label for="reg_fullname" class="block text-xs font-semibold">Full Name *</label>
+                  <input id="reg_fullname" name="fullname" type="text" placeholder="e.g. Carlos Mendoza" required class="mt-1 block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                </div>
+
+                <div>
+                  <label for="reg_email" class="block text-xs font-semibold">Work Email *</label>
+                  <input id="reg_email" name="email" type="email" placeholder="carlos@demorepairshop.ph" required class="mt-1 block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                </div>
+
+                <div>
+                  <label for="staff_role" class="block text-xs font-semibold">Requested Role *</label>
+                  <select id="staff_role" name="role" class="mt-1 block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring cursor-pointer"></select>
+                </div>
+
+                <div>
+                  <label for="reg_password" class="block text-xs font-semibold">Choose a Password *</label>
+                  <input id="reg_password" name="password" type="password" required class="mt-1 block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                </div>
+
+                <p id="reg-error" class="hidden text-xs font-semibold text-destructive"></p>
+
+                <div class="pt-2">
+                  <button type="submit" class="flex w-full justify-center rounded-lg bg-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer">
+                    Submit Request
+                  </button>
+                </div>
+              </form>
+
+              <p class="mt-6 text-center text-sm text-muted-foreground">
+                Already approved?
+                <a href="login.html" class="font-semibold text-foreground hover:underline">Log in</a>
+              </p>
+            </div>
           </div>
+        </div>
 
-          <div class="mt-8">
-            <form action="login.html" method="GET" class="space-y-5">
-              <div>
-                <label for="fullname" class="block text-sm font-medium leading-6">Full Name</label>
-                <div class="mt-2">
-                  <input id="fullname" name="fullname" type="text" required class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
-                </div>
-              </div>
-
-              <div>
-                <label for="email" class="block text-sm font-medium leading-6">Company Email Address</label>
-                <div class="mt-2">
-                  <input id="email" name="email" type="email" autocomplete="email" required class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
-                </div>
-              </div>
-              
-              <div>
-                <label for="employee_id" class="block text-sm font-medium leading-6">Employee ID / Role</label>
-                <div class="mt-2">
-                  <input id="employee_id" name="employee_id" type="text" required class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
-                </div>
-              </div>
-
-              <div>
-                <label for="password" class="block text-sm font-medium leading-6">Create Password</label>
-                <div class="mt-2">
-                  <input id="password" name="password" type="password" required class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
-                </div>
-              </div>
-
-              <div class="pt-2">
-                <!-- Bouncy Submit Button -->
-                <button type="submit" class="flex w-full justify-center rounded-lg bg-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer">
-                  Submit for Approval
-                </button>
-              </div>
-            </form>
-
-            <p class="mt-10 text-center text-sm text-muted-foreground">
-              Already have an account? 
-              <a href="login.html" class="font-semibold leading-6 text-foreground hover:underline">Log in</a>
-            </p>
-          </div>
+        <div class="relative hidden w-0 flex-1 lg:block bg-muted">
+          <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=1200&q=80" alt="Technician inspecting logic board" />
+          <div class="absolute inset-0 bg-primary/20 backdrop-blur-[2px]"></div>
+          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="absolute top-4 right-4 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary cursor-pointer"></button>
         </div>
       </div>
 
-      <!-- Right Side: Authentic Stock Photo -->
-      <div class="relative hidden w-0 flex-1 lg:block bg-muted">
-        <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=1200&q=80" alt="Repair technician inspecting a device with a magnifying lamp" />
-        <div class="absolute inset-0 bg-primary/20 backdrop-blur-[2px]"></div>
-      </div>
-      
+      <footer class="border-t border-border bg-surface py-5 text-center text-xs text-muted-foreground mt-auto">
+        © <span id="year"></span> <span data-bind="shopName"></span>. All rights reserved. • Powered by <span class="font-bold text-foreground" data-bind="vendorName"></span>
+      </footer>
     </div>
   </body>
 </html>

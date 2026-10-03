@@ -3,45 +3,49 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>404 Not Found | FixTrack</title>
+    <title>404 Page Not Found | Demo Repair Shop</title>
+    <meta name="description" content="The page you are looking for does not exist on the Demo Repair Shop website." />
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="404 - Page Not Found | Demo Repair Shop" />
+    <meta property="og:description" content="Page not found." />
+    <meta name="twitter:card" content="summary" />
+
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles.css" />
-    <script src="script.js"></script>
+    <script src="config.js"></script>
+    <script src="script.js" defer></script>
+    <script src="https://unpkg.com/lucide@0.292.0/dist/umd/lucide.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   </head>
   <body>
     <div class="flex min-h-screen flex-col bg-background">
-      <!-- Semantic Header -->
       <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
         <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <a href="index.html" class="flex min-w-0 items-center gap-2 group">
-            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground transition-transform duration-200 group-hover:scale-105">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground">
               <i data-lucide="wrench" class="h-4 w-4"></i>
             </span>
-            <span class="truncate font-display text-lg font-bold">FixTrack</span>
+            <span class="truncate font-display text-lg font-bold" data-bind="shopName"></span>
           </a>
-          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer"></button>
+          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground"></button>
         </div>
       </header>
 
-      <!-- 404 Status Display -->
-      <main class="flex min-h-[70vh] flex-col items-center justify-center p-4">
-        <div class="text-center panel p-12 max-w-lg w-full transition-all duration-200 hover:shadow-md">
+      <main class="flex min-h-[60vh] flex-col items-center justify-center p-4">
+        <div class="text-center panel p-12 max-w-lg w-full">
           <h1 class="text-6xl font-bold font-mono">404</h1>
           <p class="mt-4 text-lg font-semibold">Page Not Found</p>
-          <p class="mt-2 text-sm text-muted-foreground">The resource you requested could not be located in our system.</p>
+          <p class="mt-2 text-sm text-muted-foreground">We couldn't find the page you're looking for. It might have been moved or removed.</p>
           
-          <!-- Bouncy Action Button -->
-          <a href="index.html" class="mt-8 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer">
-            <i data-lucide="arrow-left" class="h-4 w-4"></i> Return to homepage
+          <a href="index.html" class="mt-8 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0">
+            <i data-lucide="arrow-left" class="h-4 w-4"></i> Back to Homepage
           </a>
         </div>
       </main>
       
-      <!-- Semantic Footer -->
       <footer class="border-t border-border bg-surface py-5 text-center text-xs text-muted-foreground mt-auto">
-        © <span id="year"></span> FixTrack. All rights reserved.
+        © <span id="year"></span> <span data-bind="shopName"></span>. All rights reserved. • Powered by <span class="font-bold text-foreground" data-bind="vendorName"></span>
       </footer>
     </div>
   </body>

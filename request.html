@@ -3,134 +3,178 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Book a Repair | FixTrack</title>
-    <meta name="description" content="Submit a request to have your device repaired by FixTrack professionals." />
+    <title>Book a Repair | Demo Repair Shop</title>
+    <meta name="description" content="Book a repair with Demo Repair Shop. Quick diagnostics and quality replacement parts." />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Book a Repair | Demo Repair Shop" />
+    <meta property="og:description" content="Schedule a device repair online." />
+    <meta name="twitter:card" content="summary" />
+
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles.css" />
+    <script src="config.js"></script>
     <script src="script.js" defer></script>
+    <script src="https://unpkg.com/lucide@0.292.0/dist/umd/lucide.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   </head>
   <body class="bg-background">
     <div class="flex min-h-screen flex-col">
-      <!-- Semantic Header -->
       <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
         <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <a href="index.html" class="flex min-w-0 items-center gap-2 group">
             <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground transition-transform duration-200 group-hover:scale-105">
               <i data-lucide="wrench" class="h-4 w-4"></i>
             </span>
-            <span class="truncate font-display text-lg font-bold">FixTrack</span>
+            <span class="truncate font-display text-lg font-bold" data-bind="shopName"></span>
           </a>
 
           <div class="flex items-center gap-2 md:order-3">
-            <!-- Desktop GitHub Button -->
-            <a
-              href="https://github.com/Reiux/fixtrack-web"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="hidden md:inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0"
-              aria-label="GitHub Repository"
-            >
-              <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-              </svg>
-            </a>
-
-            <!-- Theme Toggle -->
             <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer"></button>
-
-            <!-- Mobile Menu Toggle -->
             <button type="button" id="mobile-menu-btn" class="flex md:hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer">
               <i data-lucide="menu" class="h-4 w-4"></i>
             </button>
           </div>
 
-          <nav id="mobile-menu" class="hidden w-full flex-col items-center gap-4 border-t border-border pt-4 pb-2 md:order-2 md:flex md:w-auto md:flex-row md:gap-6 md:border-0 md:p-0">
-            <a href="index.html" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Home</a>
-            <a href="login.html" class="text-sm text-muted-foreground transition-colors hover:text-foreground">Admin Login</a>
+          <nav id="mobile-menu" class="hidden w-full flex-col items-stretch gap-2 border-t border-border pt-4 pb-2 md:order-2 md:flex md:w-auto md:flex-row md:gap-2 md:border-0 md:p-0">
+            <a href="index.html" class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-muted-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-md active:translate-y-0 md:w-auto">
+              <i data-lucide="home" class="h-4 w-4"></i> Home
+            </a>
+            <a href="status.html" class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-muted-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-md active:translate-y-0 md:w-auto">
+              <i data-lucide="search" class="h-4 w-4"></i> Track
+            </a>
+            <a href="request.html" class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-secondary px-3 py-2 text-sm font-semibold text-foreground shadow-sm transition-all duration-200 md:w-auto" aria-current="page">
+              <i data-lucide="calendar-plus" class="h-4 w-4"></i> Book a Repair
+            </a>
+            <a href="login.html" class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-muted-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-md active:translate-y-0 md:w-auto">
+              <i data-lucide="log-in" class="h-4 w-4"></i> Staff Login
+            </a>
           </nav>
         </div>
       </header>
 
-      <!-- Main Booking Form Content -->
       <main class="flex-1 py-10 sm:py-16 px-4 sm:px-6">
         <div class="mx-auto max-w-xl panel p-6 sm:p-8">
           <div class="text-center mb-8">
             <h1 class="text-2xl font-bold sm:text-3xl">Book a Repair</h1>
-            <p class="mt-1 text-sm text-muted-foreground">Fill in the details below to schedule your gadget repair.</p>
+            <p class="mt-1 text-sm text-muted-foreground">
+              Tell us what needs fixing. Required fields are marked with (<span class="text-destructive font-bold">*</span>).
+            </p>
           </div>
 
-          <!-- HTML5 Form with Explicit Controls -->
-          <form action="status.html" method="GET" class="space-y-6">
-            
-            <!-- Customer Information Fieldset (No vertical gap artifact) -->
-            <fieldset class="rounded-xl border border-border bg-card p-4 sm:p-5">
-              <legend class="-ml-1 px-2 font-display text-xs font-bold uppercase tracking-wider text-primary">
-                Customer Information
-              </legend>
-              <div class="mt-2 space-y-4">
+          <form id="repair-booking-form" novalidate class="space-y-6">
+            <div class="rounded-xl border border-border bg-card p-4 sm:p-5">
+              <h2 class="font-display text-xs font-bold uppercase tracking-wider text-primary mb-3">1. Your Contact Info</h2>
+              <div class="space-y-3">
+                <div>
+                  <label for="fullname" class="block text-xs font-semibold mb-1">Your Full Name <span class="text-destructive">*</span></label>
+                  <input id="fullname" name="fullname" type="text" placeholder="e.g. Juan Dela Cruz" class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                  <p id="error-fullname" class="hidden mt-1 text-xs text-destructive"></p>
+                </div>
                 <div class="grid gap-3 sm:grid-cols-2">
                   <div>
-                    <label for="fullname" class="block text-xs font-semibold mb-1">Full Name</label>
-                    <input id="fullname" name="fullname" type="text" required placeholder="Juan Dela Cruz" class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                    <label for="phone" class="block text-xs font-semibold mb-1">Phone Number <span class="text-destructive">*</span></label>
+                    <input id="phone" name="phone" type="tel" placeholder="09123456789" class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                    <p id="error-phone" class="hidden mt-1 text-xs text-destructive"></p>
                   </div>
                   <div>
-                    <label for="phone" class="block text-xs font-semibold mb-1">Phone Number</label>
-                    <input id="phone" name="phone" type="tel" required placeholder="09990101782" class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                    <label for="email" class="block text-xs font-semibold mb-1">Email (for receipt) <span class="text-destructive">*</span></label>
+                    <input id="email" name="email" type="email" placeholder="you@example.ph" class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                    <p id="error-email" class="hidden mt-1 text-xs text-destructive"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-xl border border-border bg-card p-4 sm:p-5">
+              <h2 class="font-display text-xs font-bold uppercase tracking-wider text-primary mb-3">2. Device &amp; Problem</h2>
+              <div class="space-y-3">
+                <div class="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <label for="device_brand" class="block text-xs font-semibold mb-1">Brand <span class="text-destructive">*</span></label>
+                    <select id="device_brand" name="device_brand" class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring cursor-pointer">
+                      <option value="" disabled selected>Select brand...</option>
+                    </select>
+                    <p id="error-device_brand" class="hidden mt-1 text-xs text-destructive"></p>
+                  </div>
+                  <div>
+                    <label for="device_type" class="block text-xs font-semibold mb-1">Device Type <span class="text-destructive">*</span></label>
+                    <select id="device_type" name="device_type" class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring cursor-pointer">
+                      <option value="" disabled selected>Select device type...</option>
+                    </select>
+                    <p id="error-device_type" class="hidden mt-1 text-xs text-destructive"></p>
                   </div>
                 </div>
 
                 <div>
-                  <label for="email" class="block text-xs font-semibold mb-1">Email Address</label>
-                  <input id="email" name="email" type="email" required placeholder="you@example.com" class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                  <label for="device_model" class="block text-xs font-semibold mb-1">Model Name / Number <span class="text-destructive">*</span></label>
+                  <input id="device_model" name="device_model" type="text" placeholder="e.g. iPhone 13 Pro Max or Galaxy S23" class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                  <p id="error-device_model" class="hidden mt-1 text-xs text-destructive"></p>
+                </div>
+
+                <div class="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <label for="service_type" class="block text-xs font-semibold mb-1">How will you bring it in? <span class="text-destructive">*</span></label>
+                    <select id="service_type" name="service_type" class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring cursor-pointer"></select>
+                    <p id="error-service_type" class="hidden mt-1 text-xs text-destructive"></p>
+                  </div>
+                  <div>
+                    <label for="preferred_date" class="block text-xs font-semibold mb-1">Preferred Date <span class="text-destructive">*</span></label>
+                    <input id="preferred_date" name="preferred_date" type="date" class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                    <p id="error-preferred_date" class="hidden mt-1 text-xs text-destructive"></p>
+                  </div>
+                </div>
+
+                <div>
+                  <label for="issue_desc" class="block text-xs font-semibold mb-1">What seems to be the problem? <span class="text-destructive">*</span></label>
+                  <textarea id="issue_desc" name="issue_desc" rows="3" placeholder="e.g. Cracked screen, won't turn on, battery drains fast..." class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"></textarea>
+                  <p id="error-issue_desc" class="hidden mt-1 text-xs text-destructive"></p>
                 </div>
               </div>
-            </fieldset>
+            </div>
 
-            <!-- Device Details Fieldset (No vertical gap artifact) -->
-            <fieldset class="rounded-xl border border-border bg-card p-4 sm:p-5">
-              <legend class="-ml-1 px-2 font-display text-xs font-bold uppercase tracking-wider text-primary">
-                Device Details
-              </legend>
-              <div class="mt-2 space-y-4">
-                <div>
-                  <label for="device_type" class="block text-xs font-semibold mb-1">Device Category</label>
-                  <select id="device_type" name="device_type" required class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring cursor-pointer">
-                    <option value="" disabled selected>Select a category...</option>
-                    <option value="phone">Smartphone</option>
-                    <option value="laptop">Laptop</option>
-                    <option value="tablet">Tablet</option>
-                    <option value="watch">Smartwatch</option>
-                  </select>
-                </div>
+            <div>
+              <label class="flex items-start gap-2 cursor-pointer">
+                <input id="privacy_consent" name="privacy_consent" type="checkbox" class="mt-1 h-4 w-4 rounded border-input text-primary focus:ring-ring" />
+                <span class="text-xs text-muted-foreground leading-normal">
+                  I agree to the <a href="privacy.html" target="_blank" class="text-foreground underline">Privacy Policy</a> and allow <span data-bind="shopName"></span> to store my repair details.
+                </span>
+              </label>
+              <p id="error-privacy_consent" class="hidden mt-1 text-xs text-destructive"></p>
+            </div>
 
-                <div>
-                  <label for="device_model" class="block text-xs font-semibold mb-1">Exact Device Model</label>
-                  <input id="device_model" name="device_model" type="text" required placeholder="e.g., iPhone 13, Galaxy S23" class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
-                </div>
-
-                <div>
-                  <label for="issue_desc" class="block text-xs font-semibold mb-1">Issue Description</label>
-                  <textarea id="issue_desc" name="issue_desc" rows="3" required placeholder="Briefly describe what needs fixing..." class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"></textarea>
-                </div>
-              </div>
-            </fieldset>
-
-            <!-- Interactive Moving Submit Button -->
-            <button
-              type="submit"
-              class="w-full flex items-center justify-center gap-2 rounded-lg bg-primary py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer"
-            >
-              Submit Repair Request
+            <button type="submit" class="w-full flex items-center justify-center gap-2 rounded-lg bg-primary py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer">
+              <i data-lucide="send" class="h-4 w-4"></i> Submit Repair Request
             </button>
           </form>
         </div>
       </main>
 
-      <!-- Semantic Footer -->
+      <div id="booking-success-modal" class="fixed inset-0 z-50 hidden place-items-center bg-foreground/50 p-4 backdrop-blur-sm">
+        <div class="panel w-full max-w-md p-6 text-center">
+          <div class="mx-auto grid h-12 w-12 place-items-center rounded-full bg-success/20 text-success mb-4">
+            <i data-lucide="check" class="h-6 w-6"></i>
+          </div>
+          <h2 class="text-xl font-bold">Repair Request Sent!</h2>
+          <p class="mt-2 text-sm text-muted-foreground">Keep this ticket number safe. It has been successfully logged.</p>
+          <p id="modal-generated-id" class="mt-3 text-3xl font-mono font-black text-primary"></p>
+          <p class="mt-2 text-xs text-muted-foreground">
+            (Demo note: No email is actually sent). You can print this page or track your repair immediately.
+          </p>
+
+          <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
+            <button onclick="window.print()" class="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-all hover:bg-secondary cursor-pointer">
+              Print Receipt
+            </button>
+            <a id="modal-track-link" href="#" class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:opacity-90 cursor-pointer">
+              Track Repair Now →
+            </a>
+          </div>
+        </div>
+      </div>
+
       <footer class="border-t border-border bg-surface py-5 text-center text-xs text-muted-foreground mt-auto">
-        © <span id="year"></span> FixTrack. All rights reserved.
+        © <span id="year"></span> <span data-bind="shopName"></span>. All rights reserved. • Powered by <span class="font-bold text-foreground" data-bind="vendorName"></span>
       </footer>
     </div>
   </body>

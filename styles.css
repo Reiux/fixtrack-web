@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
 /* 1. Theme Color Tokens (Light Mode Default) */
 :root {
   --radius: 0.75rem;
@@ -81,7 +83,7 @@ html.dark {
 
 body {
   margin: 0;
-  overflow-x: hidden; /* Prevents horizontal scroll on mobile viewports */
+  overflow-x: hidden;
   background-color: var(--background);
   color: var(--foreground);
   font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
@@ -89,10 +91,7 @@ body {
 }
 
 /* 4. Heading Typography Hierarchy */
-h1,
-h2,
-h3,
-h4 {
+h1, h2, h3, h4 {
   font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   letter-spacing: -0.02em;
 }
@@ -108,4 +107,22 @@ h4 {
 /* 6. Lucide Icon SVG Display */
 [data-lucide] {
   display: inline-block;
+}
+
+/* 7. Print Overrides for Receipts */
+@media print {
+  header, footer, nav, aside, button, [data-theme-toggle], #status-search-section {
+    display: none !important;
+  }
+  .panel {
+    box-shadow: none !important;
+    border-color: #000 !important;
+  }
+  body, html {
+    background-color: #fff !important;
+    color: #000 !important;
+  }
+  body:has(#booking-success-modal:not(.hidden)) main {
+    display: none !important;
+  }
 }

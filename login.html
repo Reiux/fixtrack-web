@@ -3,81 +3,99 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Technician Login | FixTrack</title>
-    <meta name="description" content="Secure login portal for FixTrack repair technicians." />
+    <title>Staff Login | Demo Repair Shop</title>
+    <meta name="description" content="Log in to manage device repairs at Demo Repair Shop." />
+    
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles.css" />
+    <script src="config.js"></script>
     <script src="script.js" defer></script>
+    <script src="https://unpkg.com/lucide@0.292.0/dist/umd/lucide.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   </head>
   <body class="bg-background">
-    <div class="flex min-h-screen">
-      
-      <!-- Left Side: Authentication Form -->
-      <div class="flex w-full flex-col justify-center px-4 py-12 sm:px-6 lg:w-1/2 lg:flex-none lg:px-20 xl:px-24">
-        <div class="mx-auto w-full max-w-sm lg:w-96">
-          <a href="index.html" class="flex items-center gap-2 group w-fit">
-            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground transition-transform duration-200 group-hover:scale-105">
+    <div class="flex min-h-screen flex-col">
+      <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur lg:hidden">
+        <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <a href="index.html" class="flex min-w-0 items-center gap-2 group">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground">
               <i data-lucide="wrench" class="h-4 w-4"></i>
             </span>
-            <span class="font-display text-xl font-bold">FixTrack</span>
+            <span class="truncate font-display text-lg font-bold" data-bind="shopName"></span>
           </a>
-          
-          <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight">Sign in to your account</h2>
-          <p class="mt-2 text-sm text-muted-foreground">
-            Internal console for active repair management.
-          </p>
+          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary cursor-pointer"></button>
+        </div>
+      </header>
 
-          <div class="mt-10">
-            <!-- Form using GET to avoid static 405 error -->
-            <form action="dashboard.html" method="GET" class="space-y-6">
-              <div>
-                <label for="email" class="block text-sm font-medium leading-6">Email Address</label>
-                <div class="mt-2">
-                  <input id="email" name="email" type="email" autocomplete="email" required class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
-                </div>
-              </div>
-
-              <div>
-                <label for="password" class="block text-sm font-medium leading-6">Password</label>
-                <div class="mt-2">
-                  <input id="password" name="password" type="password" autocomplete="current-password" required class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
-                </div>
-                <div class="mt-2 flex items-center justify-end">
-                  <a href="#" class="text-xs font-semibold text-primary hover:underline">Forgot password?</a>
-                </div>
-              </div>
-
-              <div>
-                <!-- Bouncy Submit Button -->
-                <button type="submit" class="flex w-full justify-center rounded-lg bg-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer">
-                  Sign in
-                </button>
-              </div>
-            </form>
-
-            <p class="mt-10 text-center text-sm text-muted-foreground">
-              New technician? 
-              <a href="register.html" class="font-semibold leading-6 text-foreground hover:underline">Request access here</a>
+      <div class="flex flex-1">
+        <div class="flex w-full flex-col justify-center px-4 py-12 sm:px-6 lg:w-1/2 lg:flex-none lg:px-20 xl:px-24">
+          <div class="mx-auto w-full max-w-sm lg:w-96">
+            <a href="index.html" class="hidden lg:flex items-center gap-2 group w-fit">
+              <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground transition-transform duration-200 group-hover:scale-105">
+                <i data-lucide="wrench" class="h-4 w-4"></i>
+              </span>
+              <span class="font-display text-xl font-bold" data-bind="shopName"></span>
+            </a>
+            
+            <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight">Staff Login</h2>
+            <p class="mt-2 text-sm text-muted-foreground">
+              Log in to update repair tickets and manage the repair queue.
             </p>
+
+            <div class="mt-8">
+              <form id="staff-login-form" class="space-y-6">
+                <div>
+                  <label for="login-email" class="block text-sm font-medium leading-6">Email Address</label>
+                  <div class="mt-2">
+                    <input id="login-email" name="email" type="email" value="alex.rivera@demorepairshop.ph" required class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                  </div>
+                </div>
+
+                <div>
+                  <label for="login-password" class="block text-sm font-medium leading-6">Password</label>
+                  <div class="mt-2">
+                    <input id="login-password" name="password" type="password" value="demo" required class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                  </div>
+                  <div class="mt-2 flex items-center justify-end">
+                    <button type="button" onclick="alert('Contact your Owner/Admin to issue a manual password reset.')" class="text-xs font-semibold text-primary hover:underline cursor-pointer">
+                      Forgot password?
+                    </button>
+                  </div>
+                </div>
+
+                <p id="login-error" class="hidden text-xs font-semibold text-destructive"></p>
+
+                <div>
+                  <button type="submit" class="flex w-full justify-center rounded-lg bg-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer">
+                    Log In
+                  </button>
+                </div>
+              </form>
+
+              <p class="mt-8 text-center text-sm text-muted-foreground">
+                New staff member? 
+                <a href="register.html" class="font-semibold text-foreground hover:underline">Request an account</a>
+              </p>
+            </div>
+          </div>
+          
+          <div class="mx-auto mt-12 w-full max-w-sm lg:w-96">
+            <a href="index.html" class="inline-flex items-center gap-2 text-sm text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:text-foreground active:translate-y-0">
+              <i data-lucide="arrow-left" class="h-4 w-4"></i> Back to website
+            </a>
           </div>
         </div>
-        
-        <!-- Bouncy Back to Home Link -->
-        <div class="mx-auto mt-12 w-full max-w-sm lg:w-96">
-          <a href="index.html" class="inline-flex items-center gap-2 text-sm text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:text-foreground active:translate-y-0">
-            <i data-lucide="arrow-left" class="h-4 w-4"></i> Back to public site
-          </a>
+
+        <div class="relative hidden w-0 flex-1 lg:block bg-muted">
+          <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1200&q=80" alt="Technician working on electronics" />
+          <div class="absolute inset-0 bg-primary/20 backdrop-blur-[2px]"></div>
+          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="absolute top-4 right-4 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary cursor-pointer"></button>
         </div>
       </div>
-
-      <!-- Right Side: Authentic Stock Photo -->
-      <div class="relative hidden w-0 flex-1 lg:block bg-muted">
-        <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1200&q=80" alt="Technician repairing electronic device motherboard" />
-        <div class="absolute inset-0 bg-primary/20 backdrop-blur-[2px]"></div>
-      </div>
       
+      <footer class="border-t border-border bg-surface py-5 text-center text-xs text-muted-foreground mt-auto">
+        © <span id="year"></span> <span data-bind="shopName"></span>. All rights reserved. • Powered by <span class="font-bold text-foreground" data-bind="vendorName"></span>
+      </footer>
     </div>
   </body>
 </html>
