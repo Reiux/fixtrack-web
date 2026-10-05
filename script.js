@@ -77,7 +77,7 @@ function resolveDeviceImage(deviceModel, deviceType) {
   }
   const model = normalizeModel(deviceModel);
 
-  // 1. Direct match or substring from config.deviceImages
+  // 1. Config images
   if (CONFIG.deviceImages) {
     for (const [key, url] of Object.entries(CONFIG.deviceImages)) {
       const normKey = normalizeModel(key);
@@ -87,74 +87,34 @@ function resolveDeviceImage(deviceModel, deviceType) {
     }
   }
 
-  // 2. Automated Model Pattern Matching
+  // 2. Automated fallback matching
   if (model.includes("turbo 3") || (model.includes("redmi") && model.includes("turbo"))) {
     return "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-turbo-3.jpg";
   }
-  if (model.includes("poco f6")) {
+  if (model.includes("poco")) {
     return "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-poco-f6.jpg";
   }
-  if (model.includes("redmi note 13")) {
-    return "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-note-13-pro-5g.jpg";
-  }
-  if (model.includes("redmi") || model.includes("xiaomi") || model.includes("poco")) {
+  if (model.includes("redmi") || model.includes("xiaomi")) {
     return "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-turbo-3.jpg";
   }
-  if (model.includes("iphone 16")) {
-    return "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-16.jpg";
-  }
-  if (model.includes("iphone 15")) {
+  if (model.includes("iphone") || model.includes("apple")) {
     return "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-15.jpg";
   }
-  if (model.includes("iphone 14")) {
-    return "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14.jpg";
-  }
-  if (model.includes("iphone 13")) {
-    return "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-13.jpg";
-  }
-  if (model.includes("iphone")) {
-    return "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-15.jpg";
-  }
-  if (model.includes("s24") || (model.includes("samsung") && model.includes("24"))) {
+  if (model.includes("samsung") || model.includes("galaxy")) {
     return "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24-5g-sm-s921.jpg";
   }
-  if (model.includes("s23") || (model.includes("samsung") && model.includes("23"))) {
-    return "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s23-5g.jpg";
-  }
-  if (model.includes("galaxy") || model.includes("samsung")) {
-    return "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24-5g-sm-s921.jpg";
-  }
-  if (model.includes("pixel 8") || model.includes("pixel 9") || model.includes("pixel")) {
+  if (model.includes("pixel") || model.includes("google")) {
     return "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-8.jpg";
   }
-  if (model.includes("oneplus")) {
-    return "https://fdn2.gsmarena.com/vv/bigpic/oneplus-12.jpg";
-  }
-  if (model.includes("huawei")) {
-    return "https://fdn2.gsmarena.com/vv/bigpic/huawei-pura-70.jpg";
-  }
-  if (model.includes("macbook")) {
-    return "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80";
-  }
-  if (model.includes("thinkpad") || model.includes("laptop")) {
-    return "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=800&q=80";
-  }
-  if (model.includes("ipad")) {
-    return "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=800&q=80";
-  }
-  if (model.includes("watch")) {
-    return "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=800&q=80";
-  }
 
-  // 3. Fallback
   return DEVICE_IMAGES[deviceType] || DEVICE_IMAGES.other;
 }
 
 function generateRandomSerialNumber(deviceModel) {
   const clean = (deviceModel || "DEV")
-    .replace(/[^a-zA-Z0-9]/g, "")
-    .substring(0, 4)
-    .toUpperCase();
+  .replace(/[^a-zA-Z0-9]/g, "")
+  .substring(0, 4)
+  .toUpperCase();
   const randHex = Math.random().toString(36).substring(2, 6).toUpperCase();
   const randNum = Math.floor(1000 + Math.random() * 9000);
   return `SN-${clean || "DEV"}-${randHex}${randNum}`;
@@ -252,22 +212,22 @@ function hydrateWhiteLabelConfig() {
     else if (CONFIG.socials && CONFIG.socials[key]) el.href = CONFIG.socials[key];
   });
 
-  if (document.title.includes("|")) {
-    const parts = document.title.split("|");
-    document.title = `${parts[0].trim()} | ${CONFIG.shopName}`;
-  }
+    if (document.title.includes("|")) {
+      const parts = document.title.split("|");
+      document.title = `${parts[0].trim()} | ${CONFIG.shopName}`;
+    }
 
-  document.querySelectorAll("#year").forEach((el) => {
-    el.textContent = new Date().getFullYear();
-  });
+    document.querySelectorAll("#year").forEach((el) => {
+      el.textContent = new Date().getFullYear();
+    });
 
-  const brandsList = document.getElementById("brands-list-text");
-  if (brandsList) {
-    const b = CONFIG.supportedBrands.filter(x => x.toLowerCase() !== "other");
-    brandsList.textContent = b.length > 1
+    const brandsList = document.getElementById("brands-list-text");
+    if (brandsList) {
+      const b = CONFIG.supportedBrands.filter(x => x.toLowerCase() !== "other");
+      brandsList.textContent = b.length > 1
       ? `We repair ${b.slice(0, -1).join(", ")}, and ${b[b.length - 1]}.`
       : `We repair ${b[0]}.`;
-  }
+    }
 }
 
 function escapeHtml(value) {
@@ -391,18 +351,18 @@ function initFaqAccordion() {
         if (chevron) chevron.style.transform = "rotate(0deg)";
       });
 
-      if (!isAlreadyOpen && panel) {
-        panel.style.display = "block";
-        panel.classList.remove("hidden");
-        trigger.setAttribute("aria-expanded", "true");
-        item.classList.add("border-primary/60", "ring-2", "ring-primary/20");
-        if (iconWrapper) {
-          iconWrapper.classList.remove("bg-secondary", "text-muted-foreground");
-          iconWrapper.classList.add("bg-primary", "text-primary-foreground");
-          const chevron = iconWrapper.querySelector("svg, i");
-          if (chevron) chevron.style.transform = "rotate(180deg)";
+        if (!isAlreadyOpen && panel) {
+          panel.style.display = "block";
+          panel.classList.remove("hidden");
+          trigger.setAttribute("aria-expanded", "true");
+          item.classList.add("border-primary/60", "ring-2", "ring-primary/20");
+          if (iconWrapper) {
+            iconWrapper.classList.remove("bg-secondary", "text-muted-foreground");
+            iconWrapper.classList.add("bg-primary", "text-primary-foreground");
+            const chevron = iconWrapper.querySelector("svg, i");
+            if (chevron) chevron.style.transform = "rotate(180deg)";
+          }
         }
-      }
     });
   });
 }
@@ -541,51 +501,51 @@ function initRequestForm() {
       if (err) valid = false;
     };
 
-    const fullname = getVal("fullname");
-    setError("fullname", fullname.length >= 2 ? "" : "Full name must be at least 2 characters.");
+      const fullname = getVal("fullname");
+      setError("fullname", fullname.length >= 2 ? "" : "Full name must be at least 2 characters.");
 
-    const phone = getVal("phone");
-    const phPhoneRegex = /^(09|\+639)\d{9}$/;
-    const cleanPhone = phone.replace(/[\s-]/g, "");
-    setError("phone", phPhoneRegex.test(cleanPhone) ? "" : "Enter a valid Philippine mobile number (e.g. 09123456789).");
+      const phone = getVal("phone");
+      const phPhoneRegex = /^(09|\+639)\d{9}$/;
+      const cleanPhone = phone.replace(/[\s-]/g, "");
+      setError("phone", phPhoneRegex.test(cleanPhone) ? "" : "Enter a valid Philippine mobile number (e.g. 09123456789).");
 
-    const email = getVal("email");
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setError("email", emailRegex.test(email) ? "" : "Please provide a valid email address.");
+      const email = getVal("email");
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      setError("email", emailRegex.test(email) ? "" : "Please provide a valid email address.");
 
-    const brand = getVal("device_brand");
-    setError("device_brand", brand ? "" : "Please select your device brand.");
+      const brand = getVal("device_brand");
+      setError("device_brand", brand ? "" : "Please select your device brand.");
 
-    const category = getVal("device_type");
-    setError("device_type", category ? "" : "Please select a device category.");
+      const category = getVal("device_type");
+      setError("device_type", category ? "" : "Please select a device category.");
 
-    const model = getVal("device_model");
-    setError("device_model", model.length >= 2 ? "" : "Please specify your exact device model.");
+      const model = getVal("device_model");
+      setError("device_model", model.length >= 2 ? "" : "Please specify your exact device model.");
 
-    const service = getVal("service_type");
-    setError("service_type", service ? "" : "Please select a service type.");
+      const service = getVal("service_type");
+      setError("service_type", service ? "" : "Please select a service type.");
 
-    const preferredDate = getVal("preferred_date");
-    if (!preferredDate) {
-      setError("preferred_date", "Please select a preferred date.");
-    } else if (preferredDate < localISOTime) {
-      setError("preferred_date", "Preferred date can't be in the past.");
-    } else {
-      setError("preferred_date", "");
-    }
+      const preferredDate = getVal("preferred_date");
+      if (!preferredDate) {
+        setError("preferred_date", "Please select a preferred date.");
+      } else if (preferredDate < localISOTime) {
+        setError("preferred_date", "Preferred date can't be in the past.");
+      } else {
+        setError("preferred_date", "");
+      }
 
-    const issue = getVal("issue_desc");
-    setError("issue_desc", issue.length >= 5 ? "" : "Please describe the problem (at least 5 characters).");
+      const issue = getVal("issue_desc");
+      setError("issue_desc", issue.length >= 5 ? "" : "Please describe the problem (at least 5 characters).");
 
-    const consent = document.getElementById("privacy_consent")?.checked;
-    setError("privacy_consent", consent ? "" : "You must agree to the Privacy Policy to proceed.");
+      const consent = document.getElementById("privacy_consent")?.checked;
+      setError("privacy_consent", consent ? "" : "You must agree to the Privacy Policy to proceed.");
 
-    if (!valid) return;
+      if (!valid) return;
 
-    const currentTickets = DataStore.getTickets();
+                        const currentTickets = DataStore.getTickets();
     const numericIds = currentTickets
-      .map((t) => parseInt(t.id, 10))
-      .filter((n) => !isNaN(n));
+    .map((t) => parseInt(t.id, 10))
+    .filter((n) => !isNaN(n));
     const nextId = String(numericIds.length ? Math.max(...numericIds) + 1 : 1043);
 
     const now = new Date();
@@ -594,11 +554,11 @@ function initRequestForm() {
 
     let iconKey = "other";
     if (category.includes("phone")) iconKey = "phone";
-    else if (category.includes("laptop")) iconKey = "laptop";
-    else if (category.includes("tablet")) iconKey = "tablet";
-    else if (category.includes("watch")) iconKey = "watch";
+                        else if (category.includes("laptop")) iconKey = "laptop";
+                        else if (category.includes("tablet")) iconKey = "tablet";
+                        else if (category.includes("watch")) iconKey = "watch";
 
-    const initialFee = (CONFIG.defaultDiagnosticFee !== undefined) ? CONFIG.defaultDiagnosticFee : 500.0;
+                        const initialFee = (CONFIG.defaultDiagnosticFee !== undefined) ? CONFIG.defaultDiagnosticFee : 500.0;
 
     const newTicket = {
       id: nextId,
@@ -719,61 +679,61 @@ function initStatusPage() {
   const milestonesList = document.getElementById("tracker-milestones");
   if (milestonesList) {
     milestonesList.innerHTML = CONFIG.statuses
-      .map((statusName, i) => {
-        const isPassed = i <= stageIndex && ticket.status !== "Ready for Pickup";
-        const isCurrent = i === stageIndex;
-        const allDone = ticket.status === "Ready for Pickup";
+    .map((statusName, i) => {
+      const isPassed = i <= stageIndex && ticket.status !== "Ready for Pickup";
+      const isCurrent = i === stageIndex;
+      const allDone = ticket.status === "Ready for Pickup";
 
-        let nodeIcon = `<span class="h-2 w-2 rounded-full bg-muted-foreground/40"></span>`;
-        let ringClasses = "border-border bg-muted text-muted-foreground";
+      let nodeIcon = `<span class="h-2 w-2 rounded-full bg-muted-foreground/40"></span>`;
+      let ringClasses = "border-border bg-muted text-muted-foreground";
 
-        if (allDone || (isPassed && !isCurrent)) {
-          nodeIcon = `<i data-lucide="check" class="h-4 w-4"></i>`;
-          ringClasses = "border-primary bg-primary text-primary-foreground";
-        } else if (isCurrent && !allDone) {
-          nodeIcon = `<span class="h-2.5 w-2.5 rounded-full bg-accent-foreground animate-pulse"></span>`;
-          ringClasses = "border-accent bg-accent text-accent-foreground ring-4 ring-accent/20";
-        }
+      if (allDone || (isPassed && !isCurrent)) {
+        nodeIcon = `<i data-lucide="check" class="h-4 w-4"></i>`;
+        ringClasses = "border-primary bg-primary text-primary-foreground";
+      } else if (isCurrent && !allDone) {
+        nodeIcon = `<span class="h-2.5 w-2.5 rounded-full bg-accent-foreground animate-pulse"></span>`;
+        ringClasses = "border-accent bg-accent text-accent-foreground ring-4 ring-accent/20";
+      }
 
-        const leftLine = i === 0 ? "opacity-0" : (allDone || isPassed || isCurrent) ? "bg-primary" : "bg-border";
-        const rightLine = i === CONFIG.statuses.length - 1 ? "opacity-0" : (allDone || (isPassed && !isCurrent)) ? "bg-primary" : "bg-border";
+      const leftLine = i === 0 ? "opacity-0" : (allDone || isPassed || isCurrent) ? "bg-primary" : "bg-border";
+      const rightLine = i === CONFIG.statuses.length - 1 ? "opacity-0" : (allDone || (isPassed && !isCurrent)) ? "bg-primary" : "bg-border";
 
-        return `
-        <li class="flex flex-1 flex-col items-center">
-          <div class="flex w-full items-center">
-            <span class="h-0.5 flex-1 ${leftLine}"></span>
-            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full border ${ringClasses} transition-all">
-              ${nodeIcon}
-            </span>
-            <span class="h-0.5 flex-1 ${rightLine}"></span>
-          </div>
-          <span class="mt-3 max-w-[85px] text-center font-mono text-[11px] font-bold tracking-tight uppercase ${
-            isCurrent || allDone ? "text-foreground font-black" : "text-muted-foreground"
-          }">
-            ${statusName}
-          </span>
-        </li>`;
-      })
-      .join("");
+      return `
+      <li class="flex flex-1 flex-col items-center">
+      <div class="flex w-full items-center">
+      <span class="h-0.5 flex-1 ${leftLine}"></span>
+      <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full border ${ringClasses} transition-all">
+      ${nodeIcon}
+      </span>
+      <span class="h-0.5 flex-1 ${rightLine}"></span>
+      </div>
+      <span class="mt-3 max-w-[85px] text-center font-mono text-[11px] font-bold tracking-tight uppercase ${
+        isCurrent || allDone ? "text-foreground font-black" : "text-muted-foreground"
+      }">
+      ${statusName}
+      </span>
+      </li>`;
+    })
+    .join("");
   }
 
   const logContainer = document.getElementById("activity-log-list");
   if (logContainer) {
     logContainer.innerHTML = (ticket.logs || [])
-      .map(
-        (log, idx) => `
-        <li class="relative pl-6 pb-6 last:pb-0">
-          <span class="absolute top-1.5 left-0 h-2.5 w-2.5 -translate-x-1/2 rounded-full ${
-            idx === 0 ? "bg-accent ring-4 ring-accent/20" : "bg-muted-foreground"
-          }"></span>
-          <div class="flex flex-wrap items-baseline justify-between gap-2">
-            <p class="text-sm font-bold text-foreground">${escapeHtml(log.title)}</p>
-            <time class="font-mono text-xs text-muted-foreground">${escapeHtml(log.timestamp)}</time>
-          </div>
-          <p class="mt-1 text-sm text-muted-foreground">${escapeHtml(log.desc)}</p>
-        </li>`
-      )
-      .join("");
+    .map(
+      (log, idx) => `
+      <li class="relative pl-6 pb-6 last:pb-0">
+      <span class="absolute top-1.5 left-0 h-2.5 w-2.5 -translate-x-1/2 rounded-full ${
+        idx === 0 ? "bg-accent ring-4 ring-accent/20" : "bg-muted-foreground"
+      }"></span>
+      <div class="flex flex-wrap items-baseline justify-between gap-2">
+      <p class="text-sm font-bold text-foreground">${escapeHtml(log.title)}</p>
+      <time class="font-mono text-xs text-muted-foreground">${escapeHtml(log.timestamp)}</time>
+      </div>
+      <p class="mt-1 text-sm text-muted-foreground">${escapeHtml(log.desc)}</p>
+      </li>`
+    )
+    .join("");
   }
 
   const costList = document.getElementById("cost-breakdown-list");
@@ -783,21 +743,21 @@ function initStatusPage() {
   const totalAmountEl = document.getElementById("billing-total");
 
   const items = (Array.isArray(ticket.costItems) && ticket.costItems.length > 0)
-    ? ticket.costItems
-    : [{ desc: "Initial Intake & Diagnostic Assessment", amount: CONFIG.defaultDiagnosticFee || 500.0 }];
+  ? ticket.costItems
+  : [{ desc: "Initial Intake & Diagnostic Assessment", amount: CONFIG.defaultDiagnosticFee || 500.0 }];
 
   if (costList) {
     costList.innerHTML = items
-      .map(
-        (item) => `
-        <div class="flex justify-between gap-4">
-          <dt class="text-muted-foreground">${escapeHtml(item.desc)}</dt>
-          <dd class="shrink-0 font-mono font-medium">${CONFIG.currencySymbol}${Number(item.amount || 0).toLocaleString("en-PH", {
-            minimumFractionDigits: 2,
-          })}</dd>
-        </div>`
-      )
-      .join("");
+    .map(
+      (item) => `
+      <div class="flex justify-between gap-4">
+      <dt class="text-muted-foreground">${escapeHtml(item.desc)}</dt>
+      <dd class="shrink-0 font-mono font-medium">${CONFIG.currencySymbol}${Number(item.amount || 0).toLocaleString("en-PH", {
+        minimumFractionDigits: 2,
+      })}</dd>
+      </div>`
+    )
+    .join("");
 
     const subtotal = items.reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0);
     const tax = subtotal * CONFIG.taxRate;
@@ -810,6 +770,25 @@ function initStatusPage() {
   }
 
   if (window.lucide) window.lucide.createIcons();
+}
+
+function createCostRow(desc = "", amount = "") {
+  const row = document.createElement("div");
+  row.className = "cost-item-row flex items-center gap-2";
+  row.innerHTML = `
+  <input type="text" placeholder="Description (e.g. Battery Replacement)" value="${escapeHtml(desc)}" class="cost-desc-input flex-1 rounded-lg border border-input bg-background py-1.5 px-2.5 text-xs outline-none focus:ring-2 focus:ring-ring" />
+  <div class="relative w-28 shrink-0">
+  <span class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-muted-foreground font-mono">${CONFIG.currencySymbol || "₱"}</span>
+  <input type="number" step="0.01" min="0" placeholder="0.00" value="${amount !== "" ? Number(amount) : ""}" class="cost-amount-input w-full rounded-lg border border-input bg-background py-1.5 pl-6 pr-2 text-xs font-mono outline-none focus:ring-2 focus:ring-ring" />
+  </div>
+  <button type="button" class="btn-remove-cost-row p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors cursor-pointer" title="Remove Item">
+  <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
+  </button>
+  `;
+  row.querySelector(".btn-remove-cost-row").addEventListener("click", () => {
+    row.remove();
+  });
+  return row;
 }
 
 function initDashboard() {
@@ -845,7 +824,7 @@ function initDashboard() {
   });
 
   const searchInput = document.getElementById("admin-search");
-  
+
   // Note Modal Elements
   const noteModal = document.getElementById("note-modal");
   const noteModalTitle = document.getElementById("modal-ticket-id");
@@ -860,18 +839,19 @@ function initDashboard() {
   const manageEstReadyInput = document.getElementById("manage-est-ready");
   const manageSerialInput = document.getElementById("manage-serial");
   const btnGenerateSn = document.getElementById("btn-generate-sn");
+  const btnAddCostItem = document.getElementById("btn-add-cost-item");
+  const costItemsContainer = document.getElementById("manage-cost-items-container");
   const manageForm = document.getElementById("manage-ticket-form");
   let activeManageId = null;
 
-  // Populate technician options
   if (manageTechSelect) {
     const techOptions = (CONFIG.technicians && CONFIG.technicians.length)
-      ? CONFIG.technicians
-      : CONFIG.staff.map(s => s.name);
+    ? CONFIG.technicians
+    : CONFIG.staff.map(s => s.name);
 
     manageTechSelect.innerHTML = `
-      <option value="Pending Assignment">Pending Assignment</option>
-      ${techOptions.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("")}
+    <option value="Pending Assignment">Pending Assignment</option>
+    ${techOptions.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("")}
     `;
   }
 
@@ -893,12 +873,12 @@ function initDashboard() {
 
     const filtered = allTickets.filter(
       (t) =>
-        t.id.toLowerCase().includes(q) ||
-        (t.customer || "").toLowerCase().includes(q) ||
-        (t.device || "").toLowerCase().includes(q) ||
-        (t.phone || "").includes(q) ||
-        (t.serial || "").toLowerCase().includes(q) ||
-        (t.leadTech || "").toLowerCase().includes(q)
+      t.id.toLowerCase().includes(q) ||
+      (t.customer || "").toLowerCase().includes(q) ||
+      (t.device || "").toLowerCase().includes(q) ||
+      (t.phone || "").includes(q) ||
+      (t.serial || "").toLowerCase().includes(q) ||
+      (t.leadTech || "").toLowerCase().includes(q)
     );
 
     if (filtered.length === 0) {
@@ -908,57 +888,56 @@ function initDashboard() {
     }
 
     tbody.innerHTML = filtered
-      .map(
-        (t) => `
-        <tr class="border-t border-border hover:bg-surface/60 transition-colors">
-          <td class="px-5 py-4 font-mono text-xs font-bold text-foreground">
-            <a href="status.html?id=${t.id}" class="hover:underline text-primary">#${escapeHtml(t.id)}</a>
-          </td>
-          <td class="px-5 py-4">
-            <p class="font-semibold text-foreground">${escapeHtml(t.customer)}</p>
-            <p class="text-xs text-muted-foreground font-mono">${escapeHtml(t.phone || "No phone")}</p>
-          </td>
-          <td class="px-5 py-4">
-            <span class="flex items-center gap-2">
-              <i data-lucide="${DEVICE_ICONS[t.deviceType] || 'hard-drive'}" class="h-4 w-4 shrink-0 text-muted-foreground"></i>
-              <span class="font-medium">${escapeHtml(t.device)}</span>
-            </span>
-            <p class="text-xs font-mono text-muted-foreground mt-0.5">${escapeHtml(t.serial || "Pending intake")}</p>
-          </td>
-          <td class="px-5 py-4">
-            <select aria-label="Status for ticket ${t.id}" data-status="${t.id}"
-              class="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground outline-none cursor-pointer transition-all hover:opacity-90">
-              ${CONFIG.statuses
-                .map(
-                  (s) =>
-                    `<option value="${s}" class="bg-card text-foreground"${s === t.status ? " selected" : ""}>${s}</option>`
-                )
-                .join("")}
-            </select>
-            <p class="text-[11px] text-muted-foreground mt-1">Tech: <strong class="text-foreground">${escapeHtml(t.leadTech || "Unassigned")}</strong></p>
-          </td>
-          <td class="px-5 py-4 font-mono text-xs text-muted-foreground">
-            <p>${escapeHtml(t.intakeDate || "Pending")}</p>
-            <p class="text-[11px] text-muted-foreground mt-0.5">Est: ${escapeHtml(t.estimatedReady || "Pending")}</p>
-          </td>
-          <td class="px-5 py-4 text-right">
-            <div class="flex items-center justify-end gap-2">
-              <button data-manage="${t.id}" class="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium transition-all hover:-translate-y-0.5 hover:bg-secondary cursor-pointer">
-                <i data-lucide="sliders" class="h-3.5 w-3.5"></i> Manage
-              </button>
-              <button data-note="${t.id}" class="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium transition-all hover:-translate-y-0.5 hover:bg-secondary cursor-pointer">
-                <i data-lucide="file-text" class="h-3.5 w-3.5"></i> Notes (${(t.notes || []).length})
-              </button>
-            </div>
-          </td>
+    .map(
+      (t) => `
+      <tr class="border-t border-border hover:bg-surface/60 transition-colors">
+      <td class="px-5 py-4 font-mono text-xs font-bold text-foreground">
+      <a href="status.html?id=${t.id}" class="hover:underline text-primary">#${escapeHtml(t.id)}</a>
+      </td>
+      <td class="px-5 py-4">
+      <p class="font-semibold text-foreground">${escapeHtml(t.customer)}</p>
+      <p class="text-xs text-muted-foreground font-mono">${escapeHtml(t.phone || "No phone")}</p>
+      </td>
+      <td class="px-5 py-4">
+      <span class="flex items-center gap-2">
+      <i data-lucide="${DEVICE_ICONS[t.deviceType] || 'hard-drive'}" class="h-4 w-4 shrink-0 text-muted-foreground"></i>
+      <span class="font-medium">${escapeHtml(t.device)}</span>
+      </span>
+      <p class="text-xs font-mono text-muted-foreground mt-0.5">${escapeHtml(t.serial || "Pending intake")}</p>
+      </td>
+      <td class="px-5 py-4">
+      <select aria-label="Status for ticket ${t.id}" data-status="${t.id}"
+      class="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground outline-none cursor-pointer transition-all hover:opacity-90">
+      ${CONFIG.statuses
+        .map(
+          (s) =>
+          `<option value="${s}" class="bg-card text-foreground"${s === t.status ? " selected" : ""}>${s}</option>`
+        )
+        .join("")}
+        </select>
+        <p class="text-[11px] text-muted-foreground mt-1">Tech: <strong class="text-foreground">${escapeHtml(t.leadTech || "Unassigned")}</strong></p>
+        </td>
+        <td class="px-5 py-4 font-mono text-xs text-muted-foreground">
+        <p>${escapeHtml(t.intakeDate || "Pending")}</p>
+        <p class="text-[11px] text-muted-foreground mt-0.5">Est: ${escapeHtml(t.estimatedReady || "Pending")}</p>
+        </td>
+        <td class="px-5 py-4 text-right">
+        <div class="flex items-center justify-end gap-2">
+        <button data-manage="${t.id}" class="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium transition-all hover:-translate-y-0.5 hover:bg-secondary cursor-pointer">
+        <i data-lucide="sliders" class="h-3.5 w-3.5"></i> Manage
+        </button>
+        <button data-note="${t.id}" class="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium transition-all hover:-translate-y-0.5 hover:bg-secondary cursor-pointer">
+        <i data-lucide="file-text" class="h-3.5 w-3.5"></i> Notes (${(t.notes || []).length})
+        </button>
+        </div>
+        </td>
         </tr>`
-      )
-      .join("");
+    )
+    .join("");
 
     updateMetrics();
     if (window.lucide) window.lucide.createIcons();
 
-    // Status change listener
     tbody.querySelectorAll("[data-status]").forEach((select) => {
       select.addEventListener("change", (e) => {
         const id = select.dataset.status;
@@ -981,12 +960,10 @@ function initDashboard() {
       });
     });
 
-    // Note button listener
     tbody.querySelectorAll("[data-note]").forEach((btn) => {
       btn.addEventListener("click", () => openNoteModal(btn.dataset.note));
     });
 
-    // Manage button listener
     tbody.querySelectorAll("[data-manage]").forEach((btn) => {
       btn.addEventListener("click", () => openManageModal(btn.dataset.manage));
     });
@@ -999,12 +976,12 @@ function initDashboard() {
 
     noteModalTitle.textContent = `Ticket #${id}`;
     notesList.innerHTML = (ticket.notes || []).length
-      ? ticket.notes
-          .map(
-            (n) => `<li class="flex items-start gap-2"><span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary"></span><span>${escapeHtml(n)}</span></li>`
-          )
-          .join("")
-      : `<li class="text-sm text-muted-foreground">No notes logged yet.</li>`;
+    ? ticket.notes
+    .map(
+      (n) => `<li class="flex items-start gap-2"><span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary"></span><span>${escapeHtml(n)}</span></li>`
+    )
+    .join("")
+    : `<li class="text-sm text-muted-foreground">No notes logged yet.</li>`;
 
     noteInput.value = "";
     noteModal.classList.remove("hidden");
@@ -1037,6 +1014,17 @@ function initDashboard() {
       manageSerialInput.value = ticket.serial === "Pending intake" ? "" : (ticket.serial || "");
     }
 
+    if (costItemsContainer) {
+      costItemsContainer.innerHTML = "";
+      const items = (Array.isArray(ticket.costItems) && ticket.costItems.length > 0)
+      ? ticket.costItems
+      : [{ desc: "Initial Intake & Diagnostic Assessment", amount: CONFIG.defaultDiagnosticFee || 500.0 }];
+
+      items.forEach(item => {
+        costItemsContainer.appendChild(createCostRow(item.desc, item.amount));
+      });
+    }
+
     manageModal.classList.remove("hidden");
     manageModal.classList.add("grid");
     if (window.lucide) window.lucide.createIcons();
@@ -1050,7 +1038,15 @@ function initDashboard() {
     }
   }
 
-  // Random serial generator trigger
+  if (btnAddCostItem) {
+    btnAddCostItem.addEventListener("click", () => {
+      if (costItemsContainer) {
+        costItemsContainer.appendChild(createCostRow("", ""));
+        if (window.lucide) window.lucide.createIcons();
+      }
+    });
+  }
+
   if (btnGenerateSn) {
     btnGenerateSn.addEventListener("click", () => {
       if (!activeManageId) return;
@@ -1060,7 +1056,6 @@ function initDashboard() {
     });
   }
 
-  // Save manage modal changes
   if (manageForm) {
     manageForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -1078,9 +1073,23 @@ function initDashboard() {
       const updatedEstReady = estReady || "Pending Diagnostic";
       const updatedSerial = serialVal || "Pending intake";
 
+      // Harvest updated cost items
+      const costRows = document.querySelectorAll("#manage-cost-items-container .cost-item-row");
+      const updatedCostItems = [];
+      costRows.forEach(row => {
+        const descInput = row.querySelector(".cost-desc-input");
+        const amountInput = row.querySelector(".cost-amount-input");
+        const desc = descInput ? descInput.value.trim() : "";
+        const amount = amountInput ? (parseFloat(amountInput.value) || 0) : 0;
+        if (desc) {
+          updatedCostItems.push({ desc, amount });
+        }
+      });
+
       ticket.leadTech = updatedLeadTech;
       ticket.estimatedReady = updatedEstReady;
       ticket.serial = updatedSerial;
+      ticket.costItems = updatedCostItems.length > 0 ? updatedCostItems : [{ desc: "Initial Diagnostic Assessment", amount: 0 }];
 
       const now = new Date();
       const timestamp = `${now.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} • ${now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`;
@@ -1088,7 +1097,7 @@ function initDashboard() {
       ticket.logs.unshift({
         timestamp: timestamp,
         title: "Workbench Assignment Updated",
-        desc: `Technician assigned: ${updatedLeadTech} • Est. Completion: ${updatedEstReady} • S/N: ${updatedSerial} (Updated by ${session.name})`,
+        desc: `Technician: ${updatedLeadTech} • Est. Completion: ${updatedEstReady} • S/N: ${updatedSerial} • Cost breakdown updated (${ticket.costItems.length} items) (Updated by ${session.name})`,
       });
 
       DataStore.saveTickets(list);
