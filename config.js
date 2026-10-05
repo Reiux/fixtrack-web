@@ -56,6 +56,14 @@ const CONFIG = {
     "Ready for Pickup": "Your device is fully repaired and waiting for you to collect it."
   },
 
+  deviceImages: {
+    "iphone 13": "/home/rei/Downloads/new_code/images/devices/iphone-13.jpg",
+    "samsung galaxy tab s9": "/home/rei/Downloads/new_code/images/devices/galaxy-tab-s9.jpg",
+    "macbook pro m3 14": "/home/rei/Downloads/new_code/images/devices/macbook-pro-14-m3.jpg",
+    "google pixel 8": "/home/rei/Downloads/new_code/images/devices/pixel-8.jpg",
+    "apple watch ultra 2": "/home/rei/Downloads/new_code/images/devices/apple-watch-ultra-2.jpg"
+  },
+
   // 7. Roles & Auth
   roles: ["Owner/Admin", "Technician"],
   shopCode: "DEMO-01",

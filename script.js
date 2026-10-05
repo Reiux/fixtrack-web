@@ -1,47 +1,47 @@
 /* ==========================================================================
-   FixTrack — Client Engine & Reactive State Store
-   ========================================================================== */
+ *  FixTrack — Client Engine & Reactive State Store
+ *  ========================================================================== */
 
 (function injectTailwindTheme() {
   const style = document.createElement("style");
   style.type = "text/tailwindcss";
   style.textContent = `
-    @custom-variant dark (&:is(.dark *));
-    @theme inline {
-      --radius-sm: calc(var(--radius) - 4px);
-      --radius-md: calc(var(--radius) - 2px);
-      --radius-lg: var(--radius);
-      --radius-xl: calc(var(--radius) + 4px);
-      --radius-2xl: calc(var(--radius) + 8px);
-      --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-      --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-      --font-mono: "JetBrains Mono", ui-monospace, monospace;
-      --color-background: var(--background);
-      --color-foreground: var(--foreground);
-      --color-card: var(--card);
-      --color-card-foreground: var(--card-foreground);
-      --color-popover: var(--popover);
-      --color-popover-foreground: var(--popover-foreground);
-      --color-primary: var(--primary);
-      --color-primary-foreground: var(--primary-foreground);
-      --color-secondary: var(--secondary);
-      --color-secondary-foreground: var(--secondary-foreground);
-      --color-muted: var(--muted);
-      --color-muted-foreground: var(--muted-foreground);
-      --color-accent: var(--accent);
-      --color-accent-foreground: var(--accent-foreground);
-      --color-destructive: var(--destructive);
-      --color-destructive-foreground: var(--destructive-foreground);
-      --color-success: var(--success);
-      --color-success-foreground: var(--success-foreground);
-      --color-warning: var(--warning);
-      --color-warning-foreground: var(--warning-foreground);
-      --color-border: var(--border);
-      --color-input: var(--input);
-      --color-ring: var(--ring);
-      --color-surface: var(--surface);
-      --shadow-panel: var(--shadow-panel);
-    }
+  @custom-variant dark (&:is(.dark *));
+  @theme inline {
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+    --radius-2xl: calc(var(--radius) + 8px);
+    --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-success: var(--success);
+    --color-success-foreground: var(--success-foreground);
+    --color-warning: var(--warning);
+    --color-warning-foreground: var(--warning-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-surface: var(--surface);
+    --shadow-panel: var(--shadow-panel);
+  }
   `;
   document.head.appendChild(style);
 })();
@@ -71,7 +71,7 @@ const DataStore = {
   getTickets() {
     const version = localStorage.getItem(STORE_KEY_VERSION);
     const raw = localStorage.getItem(STORE_KEY_TICKETS);
-    
+
     if (!raw || version !== String(CONFIG.dataVersion)) {
       localStorage.setItem(STORE_KEY_TICKETS, JSON.stringify(CONFIG.initialTickets));
       localStorage.setItem(STORE_KEY_VERSION, String(CONFIG.dataVersion));
@@ -90,7 +90,7 @@ const DataStore = {
     if (!query) return null;
     const cleanId = query.trim().toLowerCase().replace("#", "");
     const cleanPhone = query.trim().replace(/[\s-]/g, "").replace(/^0/, "+63");
-    
+
     return this.getTickets().find((t) => {
       const idMatch = t.id.toLowerCase() === cleanId;
       const phoneRaw = (t.phone || "").replace(/[\s-]/g, "").replace(/^0/, "+63");
@@ -153,22 +153,22 @@ function hydrateWhiteLabelConfig() {
     else if (CONFIG.socials && CONFIG.socials[key]) el.href = CONFIG.socials[key];
   });
 
-  if (document.title.includes("|")) {
-    const parts = document.title.split("|");
-    document.title = `${parts[0].trim()} | ${CONFIG.shopName}`;
-  }
+    if (document.title.includes("|")) {
+      const parts = document.title.split("|");
+      document.title = `${parts[0].trim()} | ${CONFIG.shopName}`;
+    }
 
-  document.querySelectorAll("#year").forEach((el) => {
-    el.textContent = new Date().getFullYear();
-  });
+    document.querySelectorAll("#year").forEach((el) => {
+      el.textContent = new Date().getFullYear();
+    });
 
-  const brandsList = document.getElementById("brands-list-text");
-  if (brandsList) {
-    const b = CONFIG.supportedBrands.filter(x => x.toLowerCase() !== "other");
-    brandsList.textContent = b.length > 1 
-      ? `We repair ${b.slice(0, -1).join(", ")}, and ${b[b.length - 1]}.` 
+    const brandsList = document.getElementById("brands-list-text");
+    if (brandsList) {
+      const b = CONFIG.supportedBrands.filter(x => x.toLowerCase() !== "other");
+      brandsList.textContent = b.length > 1
+      ? `We repair ${b.slice(0, -1).join(", ")}, and ${b[b.length - 1]}.`
       : `We repair ${b[0]}.`;
-  }
+    }
 }
 
 function escapeHtml(value) {
@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initSearchHandler("track-form", "ticket-search", "search-error");
   initSearchHandler("status-track-form", "status-ticket-search", "status-search-error");
-  
+
   initFaqAccordion();
   initStarRatings();
   initRequestForm();
@@ -253,14 +253,14 @@ function initSearchHandler(formId, inputId, errorId) {
 function initFaqAccordion() {
   const faq2Panel = document.getElementById("faq2-panel-content");
   if (faq2Panel) {
-      const ul = document.createElement("ul");
-      ul.className = "list-disc pl-5 mt-2 space-y-1";
-      CONFIG.statuses.forEach(status => {
-          const li = document.createElement("li");
-          li.innerHTML = `<strong>${status}:</strong> ${CONFIG.statusDescriptions[status]}`;
-          ul.appendChild(li);
-      });
-      faq2Panel.appendChild(ul);
+    const ul = document.createElement("ul");
+    ul.className = "list-disc pl-5 mt-2 space-y-1";
+    CONFIG.statuses.forEach(status => {
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${status}:</strong> ${CONFIG.statusDescriptions[status]}`;
+      ul.appendChild(li);
+    });
+    faq2Panel.appendChild(ul);
   }
 
   const faqItems = document.querySelectorAll("[data-faq]");
@@ -292,18 +292,18 @@ function initFaqAccordion() {
         if (chevron) chevron.style.transform = "rotate(0deg)";
       });
 
-      if (!isAlreadyOpen && panel) {
-        panel.style.display = "block";
-        panel.classList.remove("hidden");
-        trigger.setAttribute("aria-expanded", "true");
-        item.classList.add("border-primary/60", "ring-2", "ring-primary/20");
-        if (iconWrapper) {
-          iconWrapper.classList.remove("bg-secondary", "text-muted-foreground");
-          iconWrapper.classList.add("bg-primary", "text-primary-foreground");
-          const chevron = iconWrapper.querySelector("svg, i");
-          if (chevron) chevron.style.transform = "rotate(180deg)";
+        if (!isAlreadyOpen && panel) {
+          panel.style.display = "block";
+          panel.classList.remove("hidden");
+          trigger.setAttribute("aria-expanded", "true");
+          item.classList.add("border-primary/60", "ring-2", "ring-primary/20");
+          if (iconWrapper) {
+            iconWrapper.classList.remove("bg-secondary", "text-muted-foreground");
+            iconWrapper.classList.add("bg-primary", "text-primary-foreground");
+            const chevron = iconWrapper.querySelector("svg, i");
+            if (chevron) chevron.style.transform = "rotate(180deg)";
+          }
         }
-      }
     });
   });
 }
@@ -420,12 +420,12 @@ function initRequestForm() {
 
   const serviceSelect = document.getElementById("service_type");
   if (serviceSelect && serviceSelect.options.length === 0) {
-     CONFIG.serviceTypes.forEach((s) => {
-       const opt = document.createElement("option");
-       opt.value = s;
-       opt.textContent = s;
-       serviceSelect.appendChild(opt);
-     });
+    CONFIG.serviceTypes.forEach((s) => {
+      const opt = document.createElement("option");
+      opt.value = s;
+      opt.textContent = s;
+      serviceSelect.appendChild(opt);
+    });
   }
 
   form.addEventListener("submit", (e) => {
@@ -442,51 +442,51 @@ function initRequestForm() {
       if (err) valid = false;
     };
 
-    const fullname = getVal("fullname");
-    setError("fullname", fullname.length >= 2 ? "" : "Full name must be at least 2 characters.");
+      const fullname = getVal("fullname");
+      setError("fullname", fullname.length >= 2 ? "" : "Full name must be at least 2 characters.");
 
-    const phone = getVal("phone");
-    const phPhoneRegex = /^(09|\+639)\d{9}$/;
-    const cleanPhone = phone.replace(/[\s-]/g, "");
-    setError("phone", phPhoneRegex.test(cleanPhone) ? "" : "Enter a valid Philippine mobile number (e.g. 09123456789).");
+      const phone = getVal("phone");
+      const phPhoneRegex = /^(09|\+639)\d{9}$/;
+      const cleanPhone = phone.replace(/[\s-]/g, "");
+      setError("phone", phPhoneRegex.test(cleanPhone) ? "" : "Enter a valid Philippine mobile number (e.g. 09123456789).");
 
-    const email = getVal("email");
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setError("email", emailRegex.test(email) ? "" : "Please provide a valid email address.");
+      const email = getVal("email");
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      setError("email", emailRegex.test(email) ? "" : "Please provide a valid email address.");
 
-    const brand = getVal("device_brand");
-    setError("device_brand", brand ? "" : "Please select your device brand.");
+      const brand = getVal("device_brand");
+      setError("device_brand", brand ? "" : "Please select your device brand.");
 
-    const category = getVal("device_type");
-    setError("device_type", category ? "" : "Please select a device category.");
+      const category = getVal("device_type");
+      setError("device_type", category ? "" : "Please select a device category.");
 
-    const model = getVal("device_model");
-    setError("device_model", model.length >= 2 ? "" : "Please specify your exact device model.");
+      const model = getVal("device_model");
+      setError("device_model", model.length >= 2 ? "" : "Please specify your exact device model.");
 
-    const service = getVal("service_type");
-    setError("service_type", service ? "" : "Please select a service type.");
+      const service = getVal("service_type");
+      setError("service_type", service ? "" : "Please select a service type.");
 
-    const preferredDate = getVal("preferred_date");
-    if (!preferredDate) {
-      setError("preferred_date", "Please select a preferred date.");
-    } else if (preferredDate < localISOTime) {
-      setError("preferred_date", "Preferred date can't be in the past.");
-    } else {
-      setError("preferred_date", "");
-    }
+      const preferredDate = getVal("preferred_date");
+      if (!preferredDate) {
+        setError("preferred_date", "Please select a preferred date.");
+      } else if (preferredDate < localISOTime) {
+        setError("preferred_date", "Preferred date can't be in the past.");
+      } else {
+        setError("preferred_date", "");
+      }
 
-    const issue = getVal("issue_desc");
-    setError("issue_desc", issue.length >= 5 ? "" : "Please describe the problem (at least 5 characters).");
+      const issue = getVal("issue_desc");
+      setError("issue_desc", issue.length >= 5 ? "" : "Please describe the problem (at least 5 characters).");
 
-    const consent = document.getElementById("privacy_consent")?.checked;
-    setError("privacy_consent", consent ? "" : "You must agree to the Privacy Policy to proceed.");
+      const consent = document.getElementById("privacy_consent")?.checked;
+      setError("privacy_consent", consent ? "" : "You must agree to the Privacy Policy to proceed.");
 
-    if (!valid) return;
+      if (!valid) return;
 
-    const currentTickets = DataStore.getTickets();
+                        const currentTickets = DataStore.getTickets();
     const numericIds = currentTickets
-      .map((t) => parseInt(t.id, 10))
-      .filter((n) => !isNaN(n));
+    .map((t) => parseInt(t.id, 10))
+    .filter((n) => !isNaN(n));
     const nextId = String(numericIds.length ? Math.max(...numericIds) + 1 : 1043);
 
     const now = new Date();
@@ -495,48 +495,48 @@ function initRequestForm() {
 
     let iconKey = "other";
     if (category.includes("phone")) iconKey = "phone";
-    else if (category.includes("laptop")) iconKey = "laptop";
-    else if (category.includes("tablet")) iconKey = "tablet";
-    else if (category.includes("watch")) iconKey = "watch";
+                        else if (category.includes("laptop")) iconKey = "laptop";
+                        else if (category.includes("tablet")) iconKey = "tablet";
+                        else if (category.includes("watch")) iconKey = "watch";
 
-    const newTicket = {
-      id: nextId,
-      customer: fullname,
-      phone: cleanPhone,
-      email: email,
-      deviceBrand: brand,
-      device: `${brand} ${model}`,
-      deviceType: iconKey,
-      repairTitle: "Diagnostic Request",
-      serial: "Pending intake",
-      status: "Device Received",
-      leadTech: "Pending Assignment",
-      serviceType: service,
-      intakeDate: formattedDate,
-      preferredDate: preferredDate,
-      estimatedReady: "Pending Diagnostic",
-      costItems: [{ desc: "Initial Intake & Diagnostic Assessment", amount: 0.0 }],
-      logs: [
-        {
-          timestamp: `${formattedDate} • ${formattedTime}`,
-          title: "Repair Request Received",
-          desc: `Request submitted online. Please bring your device to ${CONFIG.shopName} or wait for courier pickup. We'll update this ticket as work begins.`,
-        },
-      ],
-      notes: [`Customer intake notes: ${issue}`],
-    };
+                        const newTicket = {
+                          id: nextId,
+                          customer: fullname,
+                          phone: cleanPhone,
+                          email: email,
+                          deviceBrand: brand,
+                          device: `${brand} ${model}`,
+                          deviceType: iconKey,
+                          repairTitle: "Diagnostic Request",
+                          serial: "Pending intake",
+                          status: "Device Received",
+                          leadTech: "Pending Assignment",
+                          serviceType: service,
+                          intakeDate: formattedDate,
+                          preferredDate: preferredDate,
+                          estimatedReady: "Pending Diagnostic",
+                          costItems: [{ desc: "Initial Intake & Diagnostic Assessment", amount: 0.0 }],
+                          logs: [
+                            {
+                              timestamp: `${formattedDate} • ${formattedTime}`,
+                              title: "Repair Request Received",
+                              desc: `Request submitted online. Please bring your device to ${CONFIG.shopName} or wait for courier pickup. We'll update this ticket as work begins.`,
+                            },
+                          ],
+                          notes: [`Customer intake notes: ${issue}`],
+                        };
 
-    DataStore.addTicket(newTicket);
+                        DataStore.addTicket(newTicket);
 
-    const modal = document.getElementById("booking-success-modal");
-    if (modal) {
-      document.getElementById("modal-generated-id").textContent = `#${nextId}`;
-      document.getElementById("modal-track-link").href = `status.html?id=${nextId}`;
-      modal.classList.remove("hidden");
-      modal.classList.add("grid");
-    } else {
-      window.location.href = `status.html?id=${nextId}`;
-    }
+                        const modal = document.getElementById("booking-success-modal");
+                        if (modal) {
+                          document.getElementById("modal-generated-id").textContent = `#${nextId}`;
+                          document.getElementById("modal-track-link").href = `status.html?id=${nextId}`;
+                          modal.classList.remove("hidden");
+                          modal.classList.add("grid");
+                        } else {
+                          window.location.href = `status.html?id=${nextId}`;
+                        }
   });
 }
 
@@ -579,16 +579,16 @@ function initStatusPage() {
   document.getElementById("lead-tech-name").textContent = ticket.leadTech || "Pending Assignment";
   document.getElementById("est-ready-date").textContent = ticket.estimatedReady || "Pending Diagnostic";
   document.getElementById("inspected-by-badge").textContent = `Inspected by ${CONFIG.shopName}`;
-  
+
   const imgEl = document.getElementById("status-device-img");
   if (imgEl) {
     const normalized = normalizeModel(ticket.device);
     const fallback = DEVICE_IMAGES[ticket.deviceType] || DEVICE_IMAGES["other"];
     const specific = CONFIG.deviceImages && CONFIG.deviceImages[normalized];
-    
+
     imgEl.src = specific || fallback;
     imgEl.alt = ticket.device;
-    
+
     imgEl.onerror = () => {
       if (imgEl.src !== fallback) {
         imgEl.src = fallback;
@@ -601,11 +601,11 @@ function initStatusPage() {
 
   const statusBadge = document.getElementById("current-status-badge");
   if (statusBadge) {
-     statusBadge.textContent = ticket.status;
-     if (ticket.status === "Ready for Pickup") {
-       statusBadge.classList.replace("bg-primary", "bg-success");
-       statusBadge.classList.replace("text-primary-foreground", "text-success-foreground");
-     }
+    statusBadge.textContent = ticket.status;
+    if (ticket.status === "Ready for Pickup") {
+      statusBadge.classList.replace("bg-primary", "bg-success");
+      statusBadge.classList.replace("text-primary-foreground", "text-success-foreground");
+    }
   }
 
   const latestLog = ticket.logs && ticket.logs.length ? ticket.logs[0] : null;
@@ -618,61 +618,61 @@ function initStatusPage() {
   const milestonesList = document.getElementById("tracker-milestones");
   if (milestonesList) {
     milestonesList.innerHTML = CONFIG.statuses
-      .map((statusName, i) => {
-        const isPassed = i <= stageIndex && ticket.status !== "Ready for Pickup";
-        const isCurrent = i === stageIndex;
-        const allDone = ticket.status === "Ready for Pickup";
+    .map((statusName, i) => {
+      const isPassed = i <= stageIndex && ticket.status !== "Ready for Pickup";
+      const isCurrent = i === stageIndex;
+      const allDone = ticket.status === "Ready for Pickup";
 
-        let nodeIcon = `<span class="h-2 w-2 rounded-full bg-muted-foreground/40"></span>`;
-        let ringClasses = "border-border bg-muted text-muted-foreground";
+      let nodeIcon = `<span class="h-2 w-2 rounded-full bg-muted-foreground/40"></span>`;
+      let ringClasses = "border-border bg-muted text-muted-foreground";
 
-        if (allDone || (isPassed && !isCurrent)) {
-          nodeIcon = `<i data-lucide="check" class="h-4 w-4"></i>`;
-          ringClasses = "border-primary bg-primary text-primary-foreground";
-        } else if (isCurrent && !allDone) {
-          nodeIcon = `<span class="h-2.5 w-2.5 rounded-full bg-accent-foreground animate-pulse"></span>`;
-          ringClasses = "border-accent bg-accent text-accent-foreground ring-4 ring-accent/20";
-        }
+      if (allDone || (isPassed && !isCurrent)) {
+        nodeIcon = `<i data-lucide="check" class="h-4 w-4"></i>`;
+        ringClasses = "border-primary bg-primary text-primary-foreground";
+      } else if (isCurrent && !allDone) {
+        nodeIcon = `<span class="h-2.5 w-2.5 rounded-full bg-accent-foreground animate-pulse"></span>`;
+        ringClasses = "border-accent bg-accent text-accent-foreground ring-4 ring-accent/20";
+      }
 
-        const leftLine = i === 0 ? "opacity-0" : (allDone || isPassed || isCurrent) ? "bg-primary" : "bg-border";
-        const rightLine = i === CONFIG.statuses.length - 1 ? "opacity-0" : (allDone || (isPassed && !isCurrent)) ? "bg-primary" : "bg-border";
+      const leftLine = i === 0 ? "opacity-0" : (allDone || isPassed || isCurrent) ? "bg-primary" : "bg-border";
+      const rightLine = i === CONFIG.statuses.length - 1 ? "opacity-0" : (allDone || (isPassed && !isCurrent)) ? "bg-primary" : "bg-border";
 
-        return `
-          <li class="flex flex-1 flex-col items-center">
-            <div class="flex w-full items-center">
-              <span class="h-0.5 flex-1 ${leftLine}"></span>
-              <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full border ${ringClasses} transition-all">
-                ${nodeIcon}
-              </span>
-              <span class="h-0.5 flex-1 ${rightLine}"></span>
-            </div>
-            <span class="mt-3 max-w-[85px] text-center font-mono text-[11px] font-bold tracking-tight uppercase ${
-              isCurrent || allDone ? "text-foreground font-black" : "text-muted-foreground"
-            }">
-              ${statusName}
-            </span>
-          </li>`;
-      })
-      .join("");
+      return `
+      <li class="flex flex-1 flex-col items-center">
+      <div class="flex w-full items-center">
+      <span class="h-0.5 flex-1 ${leftLine}"></span>
+      <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full border ${ringClasses} transition-all">
+      ${nodeIcon}
+      </span>
+      <span class="h-0.5 flex-1 ${rightLine}"></span>
+      </div>
+      <span class="mt-3 max-w-[85px] text-center font-mono text-[11px] font-bold tracking-tight uppercase ${
+        isCurrent || allDone ? "text-foreground font-black" : "text-muted-foreground"
+      }">
+      ${statusName}
+      </span>
+      </li>`;
+    })
+    .join("");
   }
 
   const logContainer = document.getElementById("activity-log-list");
   if (logContainer) {
     logContainer.innerHTML = (ticket.logs || [])
-      .map(
-        (log, idx) => `
-        <li class="relative pl-6 pb-6 last:pb-0">
-          <span class="absolute top-1.5 left-0 h-2.5 w-2.5 -translate-x-1/2 rounded-full ${
-            idx === 0 ? "bg-accent ring-4 ring-accent/20" : "bg-muted-foreground"
-          }"></span>
-          <div class="flex flex-wrap items-baseline justify-between gap-2">
-            <p class="text-sm font-bold text-foreground">${escapeHtml(log.title)}</p>
-            <time class="font-mono text-xs text-muted-foreground">${escapeHtml(log.timestamp)}</time>
-          </div>
-          <p class="mt-1 text-sm text-muted-foreground">${escapeHtml(log.desc)}</p>
-        </li>`
-      )
-      .join("");
+    .map(
+      (log, idx) => `
+      <li class="relative pl-6 pb-6 last:pb-0">
+      <span class="absolute top-1.5 left-0 h-2.5 w-2.5 -translate-x-1/2 rounded-full ${
+        idx === 0 ? "bg-accent ring-4 ring-accent/20" : "bg-muted-foreground"
+      }"></span>
+      <div class="flex flex-wrap items-baseline justify-between gap-2">
+      <p class="text-sm font-bold text-foreground">${escapeHtml(log.title)}</p>
+      <time class="font-mono text-xs text-muted-foreground">${escapeHtml(log.timestamp)}</time>
+      </div>
+      <p class="mt-1 text-sm text-muted-foreground">${escapeHtml(log.desc)}</p>
+      </li>`
+    )
+    .join("");
   }
 
   const costList = document.getElementById("cost-breakdown-list");
@@ -683,16 +683,16 @@ function initStatusPage() {
 
   if (costList && ticket.costItems) {
     costList.innerHTML = ticket.costItems
-      .map(
-        (item) => `
-        <div class="flex justify-between gap-4">
-          <dt class="text-muted-foreground">${escapeHtml(item.desc)}</dt>
-          <dd class="shrink-0 font-mono font-medium">${CONFIG.currencySymbol}${item.amount.toLocaleString("en-PH", {
-          minimumFractionDigits: 2,
-        })}</dd>
-        </div>`
-      )
-      .join("");
+    .map(
+      (item) => `
+      <div class="flex justify-between gap-4">
+      <dt class="text-muted-foreground">${escapeHtml(item.desc)}</dt>
+      <dd class="shrink-0 font-mono font-medium">${CONFIG.currencySymbol}${item.amount.toLocaleString("en-PH", {
+        minimumFractionDigits: 2,
+      })}</dd>
+      </div>`
+    )
+    .join("");
 
     const subtotal = ticket.costItems.reduce((acc, curr) => acc + curr.amount, 0);
     const tax = subtotal * CONFIG.taxRate;
@@ -764,10 +764,10 @@ function initDashboard() {
 
     const filtered = allTickets.filter(
       (t) =>
-        t.id.toLowerCase().includes(q) ||
-        (t.customer || "").toLowerCase().includes(q) ||
-        (t.device || "").toLowerCase().includes(q) ||
-        (t.phone || "").includes(q)
+      t.id.toLowerCase().includes(q) ||
+      (t.customer || "").toLowerCase().includes(q) ||
+      (t.device || "").toLowerCase().includes(q) ||
+      (t.phone || "").includes(q)
     );
 
     if (filtered.length === 0) {
@@ -777,44 +777,44 @@ function initDashboard() {
     }
 
     tbody.innerHTML = filtered
-      .map(
-        (t) => `
-        <tr class="border-t border-border hover:bg-surface/60 transition-colors">
-          <td class="px-5 py-4 font-mono text-xs font-bold text-foreground">
-            <a href="status.html?id=${t.id}" class="hover:underline text-primary">#${escapeHtml(t.id)}</a>
-          </td>
-          <td class="px-5 py-4">
-            <p class="font-semibold text-foreground">${escapeHtml(t.customer)}</p>
-            <p class="text-xs text-muted-foreground font-mono">${escapeHtml(t.phone || "No phone")}</p>
-          </td>
-          <td class="px-5 py-4">
-            <span class="flex items-center gap-2">
-              <i data-lucide="${DEVICE_ICONS[t.deviceType] || 'hard-drive'}" class="h-4 w-4 shrink-0 text-muted-foreground"></i>
-              <span class="font-medium">${escapeHtml(t.device)}</span>
-            </span>
-          </td>
-          <td class="px-5 py-4">
-            <select aria-label="Status for ticket ${t.id}" data-status="${t.id}"
-              class="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground outline-none cursor-pointer transition-all hover:opacity-90">
-              ${CONFIG.statuses
-                .map(
-                  (s) =>
-                    `<option value="${s}" class="bg-card text-foreground"${s === t.status ? " selected" : ""}>${s}</option>`
-                )
-                .join("")}
-            </select>
-          </td>
-          <td class="px-5 py-4 font-mono text-xs text-muted-foreground">${escapeHtml(t.intakeDate || "Pending")}</td>
-          <td class="px-5 py-4 text-right">
-            <div class="flex items-center justify-end gap-2">
-              <button data-note="${t.id}" class="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium transition-all hover:-translate-y-0.5 hover:bg-secondary cursor-pointer">
-                <i data-lucide="file-text" class="h-3.5 w-3.5"></i> Notes (${(t.notes || []).length})
-              </button>
-            </div>
-          </td>
+    .map(
+      (t) => `
+      <tr class="border-t border-border hover:bg-surface/60 transition-colors">
+      <td class="px-5 py-4 font-mono text-xs font-bold text-foreground">
+      <a href="status.html?id=${t.id}" class="hover:underline text-primary">#${escapeHtml(t.id)}</a>
+      </td>
+      <td class="px-5 py-4">
+      <p class="font-semibold text-foreground">${escapeHtml(t.customer)}</p>
+      <p class="text-xs text-muted-foreground font-mono">${escapeHtml(t.phone || "No phone")}</p>
+      </td>
+      <td class="px-5 py-4">
+      <span class="flex items-center gap-2">
+      <i data-lucide="${DEVICE_ICONS[t.deviceType] || 'hard-drive'}" class="h-4 w-4 shrink-0 text-muted-foreground"></i>
+      <span class="font-medium">${escapeHtml(t.device)}</span>
+      </span>
+      </td>
+      <td class="px-5 py-4">
+      <select aria-label="Status for ticket ${t.id}" data-status="${t.id}"
+      class="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground outline-none cursor-pointer transition-all hover:opacity-90">
+      ${CONFIG.statuses
+        .map(
+          (s) =>
+          `<option value="${s}" class="bg-card text-foreground"${s === t.status ? " selected" : ""}>${s}</option>`
+        )
+        .join("")}
+        </select>
+        </td>
+        <td class="px-5 py-4 font-mono text-xs text-muted-foreground">${escapeHtml(t.intakeDate || "Pending")}</td>
+        <td class="px-5 py-4 text-right">
+        <div class="flex items-center justify-end gap-2">
+        <button data-note="${t.id}" class="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium transition-all hover:-translate-y-0.5 hover:bg-secondary cursor-pointer">
+        <i data-lucide="file-text" class="h-3.5 w-3.5"></i> Notes (${(t.notes || []).length})
+        </button>
+        </div>
+        </td>
         </tr>`
-      )
-      .join("");
+    )
+    .join("");
 
     updateMetrics();
     if (window.lucide) window.lucide.createIcons();
@@ -853,12 +853,12 @@ function initDashboard() {
 
     modalTitle.textContent = `Ticket #${id}`;
     notesList.innerHTML = (ticket.notes || []).length
-      ? ticket.notes
-          .map(
-            (n) => `<li class="flex items-start gap-2"><span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary"></span><span>${escapeHtml(n)}</span></li>`
-          )
-          .join("")
-      : `<li class="text-sm text-muted-foreground">No notes logged yet.</li>`;
+    ? ticket.notes
+    .map(
+      (n) => `<li class="flex items-start gap-2"><span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary"></span><span>${escapeHtml(n)}</span></li>`
+    )
+    .join("")
+    : `<li class="text-sm text-muted-foreground">No notes logged yet.</li>`;
 
     noteInput.value = "";
     modal.classList.remove("hidden");
@@ -960,11 +960,11 @@ function initAuthForms() {
         }
         return;
       }
-      
+
       if (pass.length < 6) {
         if (errEl) {
-           errEl.textContent = "Password must be at least 6 characters.";
-           errEl.classList.remove("hidden");
+          errEl.textContent = "Password must be at least 6 characters.";
+          errEl.classList.remove("hidden");
         }
         return;
       }
@@ -974,8 +974,8 @@ function initAuthForms() {
       if (alertEl) {
         alertEl.classList.remove("hidden");
         alertEl.innerHTML = `
-          <p class="font-bold text-success">Registration Request Received!</p>
-          <p class="text-xs text-muted-foreground mt-1">Your request to join <strong>${escapeHtml(code)}</strong> has been routed to the Owner/Admin. You will be notified once reviewed.</p>
+        <p class="font-bold text-success">Registration Request Received!</p>
+        <p class="text-xs text-muted-foreground mt-1">Your request to join <strong>${escapeHtml(code)}</strong> has been routed to the Owner/Admin. You will be notified once reviewed.</p>
         `;
         regForm.reset();
         if (roleSelect) roleSelect.value = "Technician";

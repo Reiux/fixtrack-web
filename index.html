@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Track Your Repair | Demo Repair Shop</title>
     <meta name="description" content="Check your device repair status in real time with Demo Repair Shop. Phone, laptop, tablet, and smartwatch repairs." />
-    
+
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Demo Repair Shop | Track Your Repair Online" />
     <meta property="og:description" content="See live updates, technician notes, and turnaround times for your repair." />
     <meta property="og:image" content="https://reiux.github.io/fixtrack-web/banner.png" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
     <script src="config.js"></script>
     <script src="script.js" defer></script>
@@ -58,7 +58,7 @@
         <section class="border-b border-border bg-surface">
           <div class="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6">
             <span class="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
-              <i data-lucide="shield-check" class="h-3.5 w-3.5 text-accent"></i> 
+              <i data-lucide="shield-check" class="h-3.5 w-3.5 text-accent"></i>
               Trusted by <span data-bind="trustedCount"></span> customers
             </span>
 
@@ -69,7 +69,7 @@
             <p class="mx-auto mt-4 max-w-xl text-sm text-muted-foreground sm:text-base">
               Want to see how your repair is going? Enter your ticket number or phone number below for live updates.
             </p>
-            
+
             <form id="track-form" class="mx-auto mt-8 flex max-w-xl flex-col gap-2 sm:flex-row">
               <div class="relative flex-1">
                 <i data-lucide="search" class="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground"></i>
@@ -199,7 +199,6 @@
           </div>
         </section>
 
-        <!-- EXACT FAQ SECTION LOGIC & ORDER (A.2) -->
         <section class="mx-auto max-w-3xl px-4 py-20 sm:px-6">
           <h2 class="text-center text-3xl font-bold">Frequently Asked Questions</h2>
           <p class="mt-3 text-center text-sm text-muted-foreground">
@@ -207,7 +206,6 @@
           </p>
 
           <div class="mt-8 space-y-3 dynamic-faq" id="faq-accordion">
-            
             <div class="panel overflow-hidden border border-primary/60 ring-2 ring-primary/20 transition-all duration-200" data-faq>
               <button type="button" data-faq-trigger aria-expanded="true" class="flex w-full items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer">
                 <span class="text-sm font-semibold">Where can I find my Ticket ID?</span>
@@ -228,7 +226,6 @@
                 </span>
               </button>
               <div data-faq-panel id="faq2-panel-content" style="display: none;" class="hidden border-t border-border px-5 py-4 text-sm text-muted-foreground bg-surface/30">
-                <!-- Javascript injects descriptions here -->
               </div>
             </div>
 
@@ -258,7 +255,6 @@
           </div>
         </section>
 
-        <!-- Testimonials -->
         <section class="border-t border-border bg-surface">
           <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
             <h2 class="text-center text-3xl font-bold">What Our Customers Say</h2>
@@ -284,7 +280,7 @@
                   <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Maria" class="h-9 w-9 rounded-full object-cover border border-border" />
                   <span>
                     <span class="block text-sm font-semibold">Maria Santos</span>
-                    <span class="block text-xs text-muted-foreground">iPhone 15 Pro Max Screen Repair</span>
+                    <span class="block text-xs text-muted-foreground">iPhone 13 Screen Repair</span>
                   </span>
                 </figcaption>
               </figure>
@@ -334,11 +330,10 @@
               </figure>
             </div>
 
-            <!-- Review Component -->
             <div class="panel mx-auto mt-12 max-w-lg p-6 transition-all duration-200 hover:shadow-md">
               <h3 class="text-center text-lg font-semibold">Leave a Review</h3>
               <p class="mt-1 text-center text-xs text-muted-foreground">How was your repair experience?</p>
-              
+
               <div class="mt-4 flex justify-center gap-2">
                 <button type="button" data-star aria-label="Rate 1 star" class="p-1 text-muted-foreground transition-transform duration-200 hover:scale-125 cursor-pointer outline-none"><i data-lucide="star" class="h-6 w-6 pointer-events-none"></i></button>
                 <button type="button" data-star aria-label="Rate 2 stars" class="p-1 text-muted-foreground transition-transform duration-200 hover:scale-125 cursor-pointer outline-none"><i data-lucide="star" class="h-6 w-6 pointer-events-none"></i></button>

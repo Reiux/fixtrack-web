@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Request Staff Account | Demo Repair Shop</title>
     <meta name="description" content="Request a staff account for Demo Repair Shop." />
-
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    
+    <link rel="icon" href="favicon.svg" type="image/x-icon" />
     <link rel="stylesheet" href="styles.css" />
     <script src="config.js"></script>
     <script src="script.js" defer></script>
@@ -36,9 +36,9 @@
               </span>
               <span class="font-display text-xl font-bold" data-bind="shopName"></span>
             </a>
-
+            
             <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight">Request Staff Access</h2>
-
+            
             <div class="mt-4 rounded-md border border-accent/20 bg-accent/10 p-4">
               <div class="flex">
                 <i data-lucide="info" class="h-5 w-5 text-accent shrink-0"></i>
@@ -68,7 +68,7 @@
                   <label for="reg_email" class="block text-xs font-semibold">Work Email *</label>
                   <input id="reg_email" name="email" type="email" placeholder="carlos@demorepairshop.ph" required class="mt-1 block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
                 </div>
-
+                
                 <div>
                   <label for="staff_role" class="block text-xs font-semibold">Requested Role *</label>
                   <select id="staff_role" name="role" class="mt-1 block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring cursor-pointer"></select>
@@ -89,7 +89,7 @@
               </form>
 
               <p class="mt-6 text-center text-sm text-muted-foreground">
-                Already approved?
+                Already approved? 
                 <a href="login.html" class="font-semibold text-foreground hover:underline">Log in</a>
               </p>
             </div>
@@ -102,7 +102,7 @@
           <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="absolute top-4 right-4 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary cursor-pointer"></button>
         </div>
       </div>
-
+      
       <footer class="border-t border-border bg-surface py-5 text-center text-xs text-muted-foreground mt-auto">
         © <span id="year"></span> <span data-bind="shopName"></span>. All rights reserved. • Powered by <span class="font-bold text-foreground" data-bind="vendorName"></span>
       </footer>
