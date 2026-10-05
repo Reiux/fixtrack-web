@@ -62,7 +62,7 @@ const DEVICE_ICONS = {
 const DEVICE_IMAGES = {
   phone: "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?auto=format&fit=crop&w=800&q=80",
   laptop: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=800&q=80",
-  tablet: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=800&q=80",
+  tablet: "https://m.media-amazon.com/images/I/71wf0FpPBcL._AC_UF894,1000_QL80_.jpg",
   watch: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=800&q=80",
   other: "https://images.unsplash.com/photo-1597762143003-2415170d10b7?auto=format&fit=crop&w=800&q=80"
 };
