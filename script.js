@@ -62,7 +62,7 @@ const DEVICE_ICONS = {
 const DEVICE_IMAGES = {
   phone: "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?auto=format&fit=crop&w=800&q=80",
   laptop: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=800&q=80",
-  tablet: "https://m.media-amazon.com/images/I/71wf0FpPBcL._AC_UF894,1000_QL80_.jpg",
+  tablet: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=800&q=80",
   watch: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=800&q=80",
   other: "https://images.unsplash.com/photo-1597762143003-2415170d10b7?auto=format&fit=crop&w=800&q=80"
 };
@@ -131,6 +131,10 @@ function applyTheme(dark) {
     btn.innerHTML = `<i data-lucide="${dark ? "sun" : "moon"}" class="h-4 w-4"></i>`;
   });
   if (window.lucide) window.lucide.createIcons();
+}
+
+function normalizeModel(s) {
+  return String(s || "").toLowerCase().replace(/["']/g, "").replace(/\s+/g, " ").trim();
 }
 
 function hydrateWhiteLabelConfig() {
@@ -577,7 +581,21 @@ function initStatusPage() {
   document.getElementById("inspected-by-badge").textContent = `Inspected by ${CONFIG.shopName}`;
   
   const imgEl = document.getElementById("status-device-img");
-  if (imgEl) imgEl.src = DEVICE_IMAGES[ticket.deviceType] || DEVICE_IMAGES["other"];
+  if (imgEl) {
+    const normalized = normalizeModel(ticket.device);
+    const fallback = DEVICE_IMAGES[ticket.deviceType] || DEVICE_IMAGES["other"];
+    const specific = CONFIG.deviceImages && CONFIG.deviceImages[normalized];
+    
+    imgEl.src = specific || fallback;
+    imgEl.alt = ticket.device;
+    
+    imgEl.onerror = () => {
+      if (imgEl.src !== fallback) {
+        imgEl.src = fallback;
+      }
+    };
+  }
+
   const iconEl = document.getElementById("status-device-icon");
   if (iconEl) iconEl.setAttribute("data-lucide", DEVICE_ICONS[ticket.deviceType] || "hard-drive");
 
