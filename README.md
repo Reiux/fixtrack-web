@@ -8,15 +8,25 @@ This project was built as an academic case study for IT-WS02. The current demo i
 
 * **Easy Rebranding (`config.js`):** You can change the shop's name, contact info, supported devices, and tax rates just by editing the `config.js` file. The whole site reads from this file and updates automatically.
 * **Real-Time Tracking & Booking:** Customers can submit repair requests online and check their repair status using a ticket ID (try demo ticket `1042`).
-* **Staff Dashboard:** A simple admin panel for technicians to update ticket statuses and add notes.
-* **Local Data Storage:** All ticket data is saved locally in your browser's `localStorage`. You can easily reset the demo data back to its original state using a button inside the dashboard.
-* **Simulated Authentication:** The login system is simulated using `sessionStorage` and is **not secure**. Passwords are saved in plain text in `config.js` for demo purposes..
+* **Staff Workbench & Ticket Management:** A workbench console allowing staff to assign lead technicians, specify estimated turnaround times, manage device serial numbers (with random demo generator), and customize line-item cost breakdowns (parts and labor) that sync live with the customer invoice.
+* **Local Data Storage:** All ticket data is saved locally in your browser's `localStorage`. You can easily reset the demo data back to its original state using the button inside the dashboard.
+* **Simulated Authentication:** The login system is simulated using `sessionStorage` and is **not secure**. Passwords are saved in plain text in `config.js` for demo purposes.
 
 ## Demo Logins
 
-To test the staff dashboard, use these credentials:
-* **Owner/Admin:** `alex.rivera@demorepairshop.ph` / `demo`
-* **Technician:** `carlos@demorepairshop.ph` / `demo`
+All demo accounts share the password: `demo`
+
+### Owners / Administrators
+* **Alex Rivera:** `alex.rivera@demorepairshop.ph`
+* **Prinz Charles Paderes:** `prinz.paderes@demorepairshop.ph`
+
+### Technicians
+* **Carlos Mendoza:** `carlos@demorepairshop.ph`
+* **Sara Chen:** `sara.chen@demorepairshop.ph`
+* **Mark Bautista:** `mark.bautista@demorepairshop.ph`
+* **Adolph Jeremy Mangrubang:** `adolph.mangrubang@demorepairshop.ph`
+* **Stephen Chua:** `stephen.chua@demorepairshop.ph`
+* **Shian Chua:** `shian.chua@demorepairshop.ph`
 
 ## Tech Stack
 
@@ -45,12 +55,3 @@ fixtrack-web/
 ├── favicon.svg       # SVG Wrench Favicon
 ├── banner.png        # OpenGraph fallback banner
 └── LICENSE           # Project License
-```
-
-## Project Planning
-
-### Sitemap
-![FixTrack Sitemap](images/sitemap.png)
-
-### Wireframe
-![FixTrack Wireframe](images/wireframe.png)

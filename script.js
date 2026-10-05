@@ -77,7 +77,6 @@ function resolveDeviceImage(deviceModel, deviceType) {
   }
   const model = normalizeModel(deviceModel);
 
-  // 1. Config images
   if (CONFIG.deviceImages) {
     for (const [key, url] of Object.entries(CONFIG.deviceImages)) {
       const normKey = normalizeModel(key);
@@ -87,7 +86,6 @@ function resolveDeviceImage(deviceModel, deviceType) {
     }
   }
 
-  // 2. Automated fallback matching
   if (model.includes("turbo 3") || (model.includes("redmi") && model.includes("turbo"))) {
     return "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-turbo-3.jpg";
   }
@@ -782,7 +780,7 @@ function createCostRow(desc = "", amount = "") {
   <input type="number" step="0.01" min="0" placeholder="0.00" value="${amount !== "" ? Number(amount) : ""}" class="cost-amount-input w-full rounded-lg border border-input bg-background py-1.5 pl-6 pr-2 text-xs font-mono outline-none focus:ring-2 focus:ring-ring" />
   </div>
   <button type="button" class="btn-remove-cost-row p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors cursor-pointer" title="Remove Item">
-  <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
+  <i data-lucide="trash-2" class="h-3.5 w-3.5 pointer-events-none"></i>
   </button>
   `;
   row.querySelector(".btn-remove-cost-row").addEventListener("click", () => {
@@ -790,6 +788,27 @@ function createCostRow(desc = "", amount = "") {
   });
   return row;
 }
+
+window.addCostItemRow = function(desc = "", amount = "") {
+  const container = document.getElementById("manage-cost-items-container");
+  if (!container) return;
+  const row = createCostRow(desc, amount);
+  container.appendChild(row);
+  if (window.lucide) window.lucide.createIcons();
+  const input = row.querySelector(".cost-desc-input");
+  if (input) input.focus();
+  container.scrollTop = container.scrollHeight;
+};
+
+let activeManageTicketId = null;
+
+window.handleGenerateSn = function() {
+  if (!activeManageTicketId) return;
+  const ticket = DataStore.getTickets().find((t) => t.id === activeManageTicketId);
+  const randomSn = generateRandomSerialNumber(ticket ? ticket.device : "DEV");
+  const serialInput = document.getElementById("manage-serial");
+  if (serialInput) serialInput.value = randomSn;
+};
 
 function initDashboard() {
   const tbody = document.getElementById("ticket-rows");
@@ -825,24 +844,19 @@ function initDashboard() {
 
   const searchInput = document.getElementById("admin-search");
 
-  // Note Modal Elements
   const noteModal = document.getElementById("note-modal");
   const noteModalTitle = document.getElementById("modal-ticket-id");
   const notesList = document.getElementById("modal-notes");
   const noteInput = document.getElementById("observation");
   let activeNoteId = null;
 
-  // Manage Modal Elements
   const manageModal = document.getElementById("manage-modal");
   const manageModalTitle = document.getElementById("manage-modal-ticket-id");
   const manageTechSelect = document.getElementById("manage-lead-tech");
   const manageEstReadyInput = document.getElementById("manage-est-ready");
   const manageSerialInput = document.getElementById("manage-serial");
-  const btnGenerateSn = document.getElementById("btn-generate-sn");
-  const btnAddCostItem = document.getElementById("btn-add-cost-item");
   const costItemsContainer = document.getElementById("manage-cost-items-container");
   const manageForm = document.getElementById("manage-ticket-form");
-  let activeManageId = null;
 
   if (manageTechSelect) {
     const techOptions = (CONFIG.technicians && CONFIG.technicians.length)
@@ -996,7 +1010,7 @@ function initDashboard() {
   }
 
   function openManageModal(id) {
-    activeManageId = id;
+    activeManageTicketId = id;
     const ticket = DataStore.getTickets().find((t) => t.id === id);
     if (!ticket || !manageModal) return;
 
@@ -1031,38 +1045,20 @@ function initDashboard() {
   }
 
   function closeManageModal() {
-    activeManageId = null;
+    activeManageTicketId = null;
     if (manageModal) {
       manageModal.classList.add("hidden");
       manageModal.classList.remove("grid");
     }
   }
 
-  if (btnAddCostItem) {
-    btnAddCostItem.addEventListener("click", () => {
-      if (costItemsContainer) {
-        costItemsContainer.appendChild(createCostRow("", ""));
-        if (window.lucide) window.lucide.createIcons();
-      }
-    });
-  }
-
-  if (btnGenerateSn) {
-    btnGenerateSn.addEventListener("click", () => {
-      if (!activeManageId) return;
-      const ticket = DataStore.getTickets().find((t) => t.id === activeManageId);
-      const randomSn = generateRandomSerialNumber(ticket ? ticket.device : "DEV");
-      if (manageSerialInput) manageSerialInput.value = randomSn;
-    });
-  }
-
   if (manageForm) {
     manageForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      if (!activeManageId) return;
+      if (!activeManageTicketId) return;
 
       const list = DataStore.getTickets();
-      const ticket = list.find((t) => t.id === activeManageId);
+      const ticket = list.find((t) => t.id === activeManageTicketId);
       if (!ticket) return;
 
       const tech = manageTechSelect ? manageTechSelect.value.trim() : ticket.leadTech;
@@ -1073,7 +1069,6 @@ function initDashboard() {
       const updatedEstReady = estReady || "Pending Diagnostic";
       const updatedSerial = serialVal || "Pending intake";
 
-      // Harvest updated cost items
       const costRows = document.querySelectorAll("#manage-cost-items-container .cost-item-row");
       const updatedCostItems = [];
       costRows.forEach(row => {
