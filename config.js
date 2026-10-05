@@ -32,6 +32,7 @@ const CONFIG = {
   currencySymbol: "₱",
   taxLabel: "VAT (12%)",
   taxRate: 0.12,
+  defaultDiagnosticFee: 500.0,
 
   // 5. Options & Categories
   supportedBrands: ["Apple", "Samsung", "Google", "Xiaomi", "OnePlus", "Huawei", "Other"],
@@ -56,16 +57,26 @@ const CONFIG = {
     "Ready for Pickup": "Your device is fully repaired and waiting for you to collect it."
   },
 
+  // Image mappings for verified phone models & hardware
   deviceImages: {
-    "iphone 13": "images/devices/iphone-13.jpg",
-    "samsung galaxy tab s9": "images/devices/galaxy-tab-s9.jpg",
-    "macbook pro m3 14": "images/devices/macbook-pro-14-m3.jpg",
-    "google pixel 8": "images/devices/pixel-8.jpg",
-    "apple watch ultra 2": "images/devices/apple-watch-ultra-2.jpg"
+    "xiaomi redmi turbo 3": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-turbo-3.jpg",
+    "redmi turbo 3": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-turbo-3.jpg",
+    "poco f6": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-poco-f6.jpg",
+    "iphone 13": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-13.jpg",
+    "iphone 14": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14.jpg",
+    "iphone 15": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-15.jpg",
+    "iphone 16": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-16.jpg",
+    "samsung galaxy s23": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s23-5g.jpg",
+    "samsung galaxy s24": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24-5g-sm-s921.jpg",
+    "samsung galaxy tab s9": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-tab-s9.jpg",
+    "macbook pro m3 14": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80",
+    "google pixel 8": "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-8.jpg",
+    "apple watch ultra 2": "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=800&q=80"
   },
 
   // 7. Roles & Auth
   roles: ["Owner/Admin", "Technician"],
+  technicians: ["Alex Rivera", "Carlos Mendoza", "Sarah Chen", "Mark Bautista"],
   shopCode: "DEMO-01",
   staff: [
     { email: "alex.rivera@demorepairshop.ph", password: "demo", name: "Alex Rivera", role: "Owner/Admin" },
