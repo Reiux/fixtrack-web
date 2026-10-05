@@ -10,8 +10,7 @@ This project was built as an academic case study for IT-WS02. The current demo i
 * **Real-Time Tracking & Booking:** Customers can submit repair requests online and check their repair status using a ticket ID (try demo ticket `1042`).
 * **Staff Dashboard:** A simple admin panel for technicians to update ticket statuses and add notes.
 * **Local Data Storage:** All ticket data is saved locally in your browser's `localStorage`. You can easily reset the demo data back to its original state using a button inside the dashboard.
-* **Simulated Authentication:** The login system is simulated using `sessionStorage` and is **not secure**. Passwords are saved in plain text in `config.js` for demo purposes.
-* **SEO Note:** While the site's `<title>` updates automatically using JavaScript to match the shop name, the meta and OpenGraph tags in the HTML `<head>` are static. You must update those manually if you want proper search engine indexing.
+* **Simulated Authentication:** The login system is simulated using `sessionStorage` and is **not secure**. Passwords are saved in plain text in `config.js` for demo purposes..
 
 ## Demo Logins
 
@@ -29,6 +28,8 @@ To test the staff dashboard, use these credentials:
 
 ```text
 fixtrack-web/
+├── images/           # Device imagery assets
+│   └── devices/
 ├── index.html        # Main landing page with ticket search
 ├── request.html      # Form for customers to book a repair
 ├── status.html       # Live repair tracker and cost breakdown
@@ -40,4 +41,7 @@ fixtrack-web/
 ├── 404.html          # Custom error page
 ├── config.js         # Master settings for shop name, branding, and demo data
 ├── script.js         # Main logic for data saving, auth, and interactivity
-└── styles.css        # Custom CSS and print styles
+├── styles.css        # Custom CSS and print styles
+├── favicon.svg       # SVG Wrench Favicon
+├── banner.png        # OpenGraph fallback banner
+└── LICENSE           # Project License
