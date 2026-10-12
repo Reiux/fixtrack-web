@@ -55,3 +55,12 @@ fixtrack-web/
 ├── favicon.svg       # SVG Wrench Favicon
 ├── banner.png        # OpenGraph fallback banner
 └── LICENSE           # Project License
+```
+
+## Project Planning
+
+### Sitemap
+![Fixtrack Sitemap](images/sitemap.png)
+
+### Wireframe
+![Fixtrack Wireframe](images/wireframe.png)
