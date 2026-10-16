@@ -263,6 +263,20 @@ function applyTheme(dark) {
   if (window.lucide) window.lucide.createIcons();
 }
 
+window.addEventListener("beforeprint", () => {
+  if (document.documentElement.classList.contains("dark")) {
+    document.documentElement.dataset.wasDark = "true";
+    document.documentElement.classList.remove("dark");
+  }
+});
+
+window.addEventListener("afterprint", () => {
+  if (document.documentElement.dataset.wasDark === "true") {
+    delete document.documentElement.dataset.wasDark;
+    document.documentElement.classList.add("dark");
+  }
+});
+
 function hydrateWhiteLabelConfig() {
   document.querySelectorAll("[data-bind]").forEach((el) => {
     const key = el.dataset.bind;

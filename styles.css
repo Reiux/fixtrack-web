@@ -100,17 +100,71 @@ h1, h2, h3, h4 {
 }
 
 @media print {
-  header, footer, nav, aside, button, [data-theme-toggle], #status-search-section {
+  :root,
+  html,
+  html.dark,
+  body {
+    color-scheme: light !important;
+    --background: oklch(0.985 0.003 250) !important;
+    --foreground: oklch(0.19 0.02 260) !important;
+    --surface: oklch(0.955 0.005 250) !important;
+    --card: oklch(1 0 0) !important;
+    --card-foreground: oklch(0.19 0.02 260) !important;
+    --popover: oklch(1 0 0) !important;
+    --popover-foreground: oklch(0.19 0.02 260) !important;
+    --primary: oklch(0.24 0.025 260) !important;
+    --primary-foreground: oklch(0.985 0.003 250) !important;
+    --secondary: oklch(0.94 0.006 250) !important;
+    --secondary-foreground: oklch(0.24 0.025 260) !important;
+    --muted: oklch(0.95 0.005 250) !important;
+    --muted-foreground: oklch(0.52 0.02 258) !important;
+    --accent: oklch(0.6 0.13 210) !important;
+    --accent-foreground: oklch(0.99 0 0) !important;
+    --border: oklch(0.85 0.008 250) !important;
+    --input: oklch(0.85 0.008 250) !important;
+    --shadow-panel: none !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  header,
+  footer,
+  nav,
+  button,
+  [data-theme-toggle],
+  #status-search-section,
+  [data-bind-href="email"],
+  #modal-track-link,
+  #manage-modal,
+  #note-modal {
     display: none !important;
   }
+
+  aside:not(#ticket-details aside) {
+    display: none !important;
+  }
+
   .panel {
+    background-color: #ffffff !important;
+    color: #111827 !important;
     box-shadow: none !important;
-    border-color: #000 !important;
+    border: 1px solid #cbd5e1 !important;
   }
-  body, html {
-    background: white !important;
-    color: black !important;
+
+  #booking-success-modal {
+    position: static !important;
+    display: block !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    width: 100% !important;
   }
+
+  #booking-success-modal .panel {
+    margin: 2rem auto !important;
+    max-width: 28rem !important;
+  }
+
   body:has(#booking-success-modal:not(.hidden)) main {
     display: none !important;
   }
