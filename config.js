@@ -58,13 +58,55 @@ const CONFIG = {
     },
 
     deviceImages: {
+      // Local sample assets
       "iphone 13": "images/devices/iphone-13.jpg",
       "samsung galaxy tab s9": "images/devices/galaxy-tab-s9.jpg",
       "macbook pro m3 14": "images/devices/macbook-pro-14-m3.jpg",
       "google pixel 8": "images/devices/pixel-8.jpg",
       "apple watch ultra 2": "images/devices/apple-watch-ultra-2.jpg",
-      "xiaomi redmi turbo 3": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-turbo-3.jpg",
-      "redmi turbo 3": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-turbo-3.jpg"
+
+      // Samsung Galaxy S series
+      "galaxy s20": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s20-.jpg",
+      "galaxy s21": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s21-5g-r.jpg",
+      "galaxy s22": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s22-5g.jpg",
+      "galaxy s23": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s23-5g.jpg",
+      "galaxy s24": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24-5g-sm-s921.jpg",
+      "galaxy s25": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s25-sm-s931.jpg",
+
+      // Apple iPhone series
+      "iphone 12": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-12.jpg",
+      "iphone 14": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14.jpg",
+      "iphone 15": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-15.jpg",
+      "iphone 16": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-16.jpg",
+
+      // Google Pixel series
+      "pixel 6": "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-6.jpg",
+      "pixel 7": "https://fdn2.gsmarena.com/vv/bigpic/google-pixel7.jpg",
+      "pixel 9": "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-9-.jpg",
+
+      // OnePlus series
+      "oneplus 10 pro": "https://fdn2.gsmarena.com/vv/bigpic/oneplus-10-pro.jpg",
+      "oneplus 11": "https://fdn2.gsmarena.com/vv/bigpic/oneplus-11.jpg",
+      "oneplus 12": "https://fdn2.gsmarena.com/vv/bigpic/oneplus-12.jpg",
+      "oneplus 13": "https://fdn2.gsmarena.com/vv/bigpic/oneplus-13.jpg",
+
+      // Xiaomi / Redmi / POCO
+      "xiaomi 13t": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-13t.jpg",
+      "xiaomi 14t": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-14t.jpg",
+      "xiaomi 14": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-14.jpg",
+      "xiaomi 15": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-15.jpg",
+      "redmi turbo 3": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-turbo3.jpg",
+      "turbo 3": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-turbo3.jpg",
+      "redmi note 13": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-note-13-5g.jpg",
+      "poco f6": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-poco-f6.jpg",
+
+      // Huawei P / Pura series
+      "huawei p50": "https://fdn2.gsmarena.com/vv/bigpic/huawei-p50.jpg",
+      "huawei p60": "https://fdn2.gsmarena.com/vv/bigpic/huawei-p60.jpg",
+      "p50": "https://fdn2.gsmarena.com/vv/bigpic/huawei-p50.jpg",
+      "p60": "https://fdn2.gsmarena.com/vv/bigpic/huawei-p60.jpg",
+      "pura 70": "https://fdn2.gsmarena.com/vv/bigpic/huawei-pura70.jpg",
+      "huawei pura 70": "https://fdn2.gsmarena.com/vv/bigpic/huawei-pura70.jpg"
     },
 
     // 7. Roles & Auth
@@ -132,7 +174,7 @@ const CONFIG = {
           },
           {
             timestamp: "Jul 26, 2026 • 04:15 PM",
-            title: "Device Dropped Off",
+            title: "Device Received",
             desc: "Phone received at our front counter and ticket #1042 was issued.",
           },
         ],
@@ -179,7 +221,7 @@ const CONFIG = {
           },
           {
             timestamp: "Jul 24, 2026 • 10:00 AM",
-            title: "Device Dropped Off",
+            title: "Device Received",
             desc: "Tablet checked in.",
           },
         ],
@@ -280,7 +322,7 @@ const CONFIG = {
           },
           {
             timestamp: "Jul 20, 2026 • 08:00 AM",
-            title: "Device Dropped Off",
+            title: "Device Received",
             desc: "Watch received at shop. Customer reported stuck digital crown.",
           },
         ],

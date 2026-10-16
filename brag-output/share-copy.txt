@@ -1,1 +1,0 @@
-Built FixTrack — a white-label repair tracking platform for gadget shops. Customers track their devices in real time from intake to pickup, while technicians manage bench queues, milestone updates, and itemized billing from a single dashboard.

@@ -31,7 +31,7 @@
 
           <div class="flex items-center gap-2 md:order-3">
             <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer"></button>
-            <button type="button" id="mobile-menu-btn" class="flex md:hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer">
+            <button type="button" id="mobile-menu-btn" aria-label="Toggle navigation menu" class="inline-flex md:hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer">
               <i data-lucide="menu" class="h-4 w-4"></i>
             </button>
           </div>
@@ -163,10 +163,10 @@
           </p>
 
           <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
-            <button onclick="window.print()" class="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-all hover:bg-secondary cursor-pointer">
-              Print Receipt
+            <button onclick="window.print()" class="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:shadow-sm active:translate-y-0 cursor-pointer">
+              <i data-lucide="printer" class="h-4 w-4"></i> Print Receipt
             </button>
-            <a id="modal-track-link" href="#" class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:opacity-90 cursor-pointer">
+            <a id="modal-track-link" href="#" class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer">
               Track Repair Now →
             </a>
           </div>

@@ -59,12 +59,17 @@ const DEVICE_ICONS = {
   other: "hard-drive"
 };
 
+function createDeviceSvgDataUri(pathContent) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${pathContent}</svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
 const DEVICE_IMAGES = {
-  phone: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80",
-  laptop: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=800&q=80",
-  tablet: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=800&q=80",
-  watch: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=800&q=80",
-  other: "https://images.unsplash.com/photo-1597762143003-2415170d10b7?auto=format&fit=crop&w=800&q=80"
+  phone: createDeviceSvgDataUri('<rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/>'),
+  laptop: createDeviceSvgDataUri('<path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16"/>'),
+  tablet: createDeviceSvgDataUri('<rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><line x1="12" x2="12.01" y1="18" y2="18"/>'),
+  watch: createDeviceSvgDataUri('<circle cx="12" cy="12" r="7"/><polyline points="12 9 12 12 13.5 13.5"/><path d="M16.51 17.35l-.85 3.22a1 1 0 0 1-.97.74H9.31a1 1 0 0 1-.97-.74l-.85-3.22"/><path d="M7.49 6.65l.85-3.22a1 1 0 0 1 .97-.74h5.38a1 1 0 0 1 .97.74l.85 3.22"/>'),
+  other: createDeviceSvgDataUri('<line x1="22" x2="2" y1="12" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" x2="6.01" y1="16" y2="16"/><line x1="10" x2="10.01" y1="16" y2="16"/>')
 };
 
 function normalizeModel(s) {
@@ -77,34 +82,20 @@ function resolveDeviceImage(deviceModel, deviceType) {
   }
   const model = normalizeModel(deviceModel);
 
-  if (CONFIG.deviceImages) {
-    for (const [key, url] of Object.entries(CONFIG.deviceImages)) {
+  if (CONFIG.deviceImages && model) {
+    // Sort keys by descending length so specific models match before shorter keys
+    const entries = Object.entries(CONFIG.deviceImages)
+      .sort((a, b) => b[0].length - a[0].length);
+
+    for (const [key, url] of entries) {
       const normKey = normalizeModel(key);
-      if (model === normKey || model.includes(normKey) || normKey.includes(model)) {
+      if (model.includes(normKey)) {
         return url;
       }
     }
   }
 
-  if (model.includes("turbo 3") || (model.includes("redmi") && model.includes("turbo"))) {
-    return "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-turbo-3.jpg";
-  }
-  if (model.includes("poco")) {
-    return "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-poco-f6.jpg";
-  }
-  if (model.includes("redmi") || model.includes("xiaomi")) {
-    return "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-turbo-3.jpg";
-  }
-  if (model.includes("iphone") || model.includes("apple")) {
-    return "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-15.jpg";
-  }
-  if (model.includes("samsung") || model.includes("galaxy")) {
-    return "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24-5g-sm-s921.jpg";
-  }
-  if (model.includes("pixel") || model.includes("google")) {
-    return "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-8.jpg";
-  }
-
+  // Fallback to neutral generic stock photo per deviceType (never a wrong specific device model)
   return DEVICE_IMAGES[deviceType] || DEVICE_IMAGES.other;
 }
 

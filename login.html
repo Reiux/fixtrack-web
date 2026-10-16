@@ -23,7 +23,7 @@
             </span>
             <span class="truncate font-display text-lg font-bold" data-bind="shopName"></span>
           </a>
-          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary cursor-pointer"></button>
+          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer"></button>
         </div>
       </header>
 
@@ -37,25 +37,21 @@
               <span class="font-display text-xl font-bold" data-bind="shopName"></span>
             </a>
             
-            <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight">Staff Login</h2>
+            <h1 class="mt-8 text-2xl font-bold leading-9 tracking-tight">Staff Login</h1>
             <p class="mt-2 text-sm text-muted-foreground">
               Log in to update repair tickets and manage the repair queue.
             </p>
 
             <div class="mt-8">
-              <form id="staff-login-form" class="space-y-6">
+              <form id="staff-login-form" class="space-y-4">
                 <div>
-                  <label for="login-email" class="block text-sm font-medium leading-6">Email Address</label>
-                  <div class="mt-2">
-                    <input id="login-email" name="email" type="email" value="alex.rivera@demorepairshop.ph" required class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
-                  </div>
+                  <label for="login-email" class="block text-xs font-semibold mb-1">Email Address</label>
+                  <input id="login-email" name="email" type="email" value="alex.rivera@demorepairshop.ph" required class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
                 </div>
 
                 <div>
-                  <label for="login-password" class="block text-sm font-medium leading-6">Password</label>
-                  <div class="mt-2">
-                    <input id="login-password" name="password" type="password" value="demo" required class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
-                  </div>
+                  <label for="login-password" class="block text-xs font-semibold mb-1">Password</label>
+                  <input id="login-password" name="password" type="password" value="demo" required class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
                   <div class="mt-2 flex items-center justify-end">
                     <button type="button" onclick="alert('Contact your Owner/Admin to issue a manual password reset.')" class="text-xs font-semibold text-primary hover:underline cursor-pointer">
                       Forgot password?
@@ -65,7 +61,7 @@
 
                 <p id="login-error" class="hidden text-xs font-semibold text-destructive"></p>
 
-                <div>
+                <div class="pt-2">
                   <button type="submit" class="flex w-full justify-center rounded-lg bg-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer">
                     Log In
                   </button>
@@ -81,7 +77,7 @@
           
           <div class="mx-auto mt-12 w-full max-w-sm lg:w-96">
             <a href="index.html" class="inline-flex items-center gap-2 text-sm text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:text-foreground active:translate-y-0">
-              <i data-lucide="arrow-left" class="h-4 w-4"></i> Back to website
+              ← Back to Home
             </a>
           </div>
         </div>
@@ -89,7 +85,7 @@
         <div class="relative hidden w-0 flex-1 lg:block bg-muted">
           <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1200&q=80" alt="Technician working on electronics" />
           <div class="absolute inset-0 bg-primary/20 backdrop-blur-[2px]"></div>
-          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="absolute top-4 right-4 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary cursor-pointer"></button>
+          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="absolute top-4 right-4 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer"></button>
         </div>
       </div>
       

@@ -18,12 +18,15 @@
       <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
         <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <a href="index.html" class="flex min-w-0 items-center gap-2 group">
-            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground transition-transform duration-200 group-hover:scale-105">
               <i data-lucide="wrench" class="h-4 w-4"></i>
             </span>
             <span class="truncate font-display text-lg font-bold" data-bind="shopName"></span>
           </a>
-          <a href="index.html" class="text-sm text-muted-foreground hover:text-foreground">← Back to Home</a>
+          <div class="flex items-center gap-3">
+            <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer"></button>
+            <a href="index.html" class="text-sm text-muted-foreground hover:text-foreground transition-colors">← Back to Home</a>
+          </div>
         </div>
       </header>
 

@@ -6,7 +6,7 @@
     <title>Request Staff Account | Demo Repair Shop</title>
     <meta name="description" content="Request a staff account for Demo Repair Shop." />
     
-    <link rel="icon" href="favicon.svg" type="image/x-icon" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
     <script src="config.js"></script>
     <script src="script.js" defer></script>
@@ -23,7 +23,7 @@
             </span>
             <span class="truncate font-display text-lg font-bold" data-bind="shopName"></span>
           </a>
-          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary cursor-pointer"></button>
+          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer"></button>
         </div>
       </header>
 
@@ -37,7 +37,10 @@
               <span class="font-display text-xl font-bold" data-bind="shopName"></span>
             </a>
             
-            <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight">Request Staff Access</h2>
+            <h1 class="mt-8 text-2xl font-bold leading-9 tracking-tight">Request Staff Account</h1>
+            <p class="mt-2 text-sm text-muted-foreground">
+              Required fields are marked with (<span class="text-destructive font-bold">*</span>).
+            </p>
             
             <div class="mt-4 rounded-md border border-accent/20 bg-accent/10 p-4">
               <div class="flex">
@@ -55,28 +58,28 @@
             <div class="mt-6">
               <form id="staff-register-form" class="space-y-4">
                 <div>
-                  <label for="shop_code" class="block text-xs font-semibold">Shop Code *</label>
-                  <input id="shop_code" name="shop_code" type="text" value="DEMO-01" required class="mt-1 block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm font-mono outline-none focus:ring-2 focus:ring-ring" />
+                  <label for="shop_code" class="block text-xs font-semibold mb-1">Shop Code <span class="text-destructive">*</span></label>
+                  <input id="shop_code" name="shop_code" type="text" value="DEMO-01" required class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm font-mono outline-none focus:ring-2 focus:ring-ring" />
                 </div>
 
                 <div>
-                  <label for="reg_fullname" class="block text-xs font-semibold">Full Name *</label>
-                  <input id="reg_fullname" name="fullname" type="text" placeholder="e.g. Carlos Mendoza" required class="mt-1 block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                  <label for="reg_fullname" class="block text-xs font-semibold mb-1">Full Name <span class="text-destructive">*</span></label>
+                  <input id="reg_fullname" name="fullname" type="text" placeholder="e.g. Carlos Mendoza" required class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
                 </div>
 
                 <div>
-                  <label for="reg_email" class="block text-xs font-semibold">Work Email *</label>
-                  <input id="reg_email" name="email" type="email" placeholder="carlos@demorepairshop.ph" required class="mt-1 block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                  <label for="reg_email" class="block text-xs font-semibold mb-1">Work Email <span class="text-destructive">*</span></label>
+                  <input id="reg_email" name="email" type="email" placeholder="carlos@demorepairshop.ph" required class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
                 </div>
                 
                 <div>
-                  <label for="staff_role" class="block text-xs font-semibold">Requested Role *</label>
-                  <select id="staff_role" name="role" class="mt-1 block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring cursor-pointer"></select>
+                  <label for="staff_role" class="block text-xs font-semibold mb-1">Requested Role <span class="text-destructive">*</span></label>
+                  <select id="staff_role" name="role" class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring cursor-pointer"></select>
                 </div>
 
                 <div>
-                  <label for="reg_password" class="block text-xs font-semibold">Choose a Password *</label>
-                  <input id="reg_password" name="password" type="password" required class="mt-1 block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                  <label for="reg_password" class="block text-xs font-semibold mb-1">Choose a Password <span class="text-destructive">*</span></label>
+                  <input id="reg_password" name="password" type="password" required class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
                 </div>
 
                 <p id="reg-error" class="hidden text-xs font-semibold text-destructive"></p>
@@ -94,12 +97,18 @@
               </p>
             </div>
           </div>
+          
+          <div class="mx-auto mt-12 w-full max-w-sm lg:w-96">
+            <a href="index.html" class="inline-flex items-center gap-2 text-sm text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:text-foreground active:translate-y-0">
+              ← Back to Home
+            </a>
+          </div>
         </div>
 
         <div class="relative hidden w-0 flex-1 lg:block bg-muted">
           <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=1200&q=80" alt="Technician inspecting logic board" />
           <div class="absolute inset-0 bg-primary/20 backdrop-blur-[2px]"></div>
-          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="absolute top-4 right-4 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary cursor-pointer"></button>
+          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="absolute top-4 right-4 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer"></button>
         </div>
       </div>
       
