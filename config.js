@@ -4,7 +4,7 @@
  * ========================================================================== */
 
 const CONFIG = {
-  dataVersion: "2",
+  dataVersion: "3",
 
   // 1. Shop Details
   shopName: "Demo Repair Shop",
@@ -136,7 +136,7 @@ const CONFIG = {
     // 8. Initial Sample Tickets
     initialTickets: [
       {
-        id: "1042",
+        id: "FIX-7K9P-4M2W",
         customer: "Maria Santos",
         phone: "09171112222",
         email: "maria.santos@example.ph",
@@ -175,7 +175,7 @@ const CONFIG = {
           {
             timestamp: "Jul 26, 2026 • 04:15 PM",
             title: "Device Received",
-            desc: "Phone received at our front counter and ticket #1042 was issued.",
+            desc: "Phone received at our front counter and ticket #FIX-7K9P-4M2W was issued.",
           },
         ],
         notes: [
@@ -184,7 +184,7 @@ const CONFIG = {
         ],
       },
       {
-        id: "1041",
+        id: "FIX-3R8D-9J5V",
         customer: "Elena Reyes",
         phone: "09182223333",
         email: "elena.reyes@example.ph",
@@ -228,7 +228,7 @@ const CONFIG = {
         notes: ["Tested with original fast charger. Ready for customer."],
       },
       {
-        id: "1040",
+        id: "FIX-6T2N-8L4Q",
         customer: "Juan Dela Cruz",
         phone: "09193334444",
         email: "juan.delacruz@example.ph",
@@ -267,7 +267,7 @@ const CONFIG = {
         notes: ["Customer reported liquid spill.", "Part expected to arrive next week."],
       },
       {
-        id: "1039",
+        id: "FIX-5W7C-3H9B",
         customer: "Jose Reyes",
         phone: "09185551234",
         email: "jose.reyes@example.ph",
@@ -298,7 +298,7 @@ const CONFIG = {
         notes: ["Customer reported sudden battery drops."],
       },
       {
-        id: "1038",
+        id: "FIX-9E4K-2P7X",
         customer: "Anna Mendoza",
         phone: "09215556666",
         email: "anna.mendoza@example.ph",

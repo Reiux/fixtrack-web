@@ -278,7 +278,15 @@ const DataStore = {
   findTicket(query) {
     if (!query) return null;
     const clean = query.trim().toLowerCase().replace(/^#/, "");
-    const cleanNoHyphen = clean.replace(/-/g, "");
+    const legacyAliases = {
+      "1042": "fix-7k9p-4m2w",
+      "1041": "fix-3r8d-9j5v",
+      "1040": "fix-6t2n-8l4q",
+      "1039": "fix-5w7c-3h9b",
+      "1038": "fix-9e4k-2p7x",
+    };
+    const targetClean = legacyAliases[clean] || clean;
+    const cleanNoHyphen = targetClean.replace(/-/g, "");
     const cleanPhone = query.trim().replace(/[\s-]/g, "").replace(/^0/, "+63");
 
     return this.getTickets().find((t) => {
@@ -287,9 +295,9 @@ const DataStore = {
       const tIdRaw = tId.replace(/^[a-z]+-/, "");
       const tIdRawNoHyphen = tIdRaw.replace(/-/g, "");
       const idMatch =
-        tId === clean ||
+        tId === targetClean ||
         tIdNoHyphen === cleanNoHyphen ||
-        tIdRaw === clean ||
+        tIdRaw === targetClean ||
         tIdRawNoHyphen === cleanNoHyphen;
 
       const phoneRaw = (t.phone || "").replace(/[\s-]/g, "").replace(/^0/, "+63");
@@ -588,7 +596,7 @@ function initSearchHandler(formId, inputId, errorId) {
     const matched = DataStore.findTicket(val);
     if (!matched) {
       if (errorEl) {
-        errorEl.textContent = `No repair record found matching "${val}". Try demo ticket 1042 or 09171112222.`;
+        errorEl.textContent = `No repair record found matching "${val}". Try demo ticket FIX-7K9P-4M2W or 09171112222.`;
         errorEl.classList.remove("hidden");
       }
       return;

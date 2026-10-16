@@ -7,7 +7,7 @@ This project was built as an academic case study for IT-WS02. The current demo i
 ## Features & Configuration
 
 * **Easy Rebranding (`config.js`):** You can change the shop's name, contact info, supported devices, and tax rates just by editing the `config.js` file. The whole site reads from this file and updates automatically.
-* **Real-Time Tracking & Booking:** Customers can submit repair requests online and check their repair status using a ticket ID (try demo ticket `1042`).
+* **Real-Time Tracking & Booking:** Customers can submit repair requests online and check their repair status using a ticket ID (try demo ticket `FIX-7K9P-4M2W`).
 * **Staff Workbench & Ticket Management:** A workbench console allowing staff to assign lead technicians, specify estimated turnaround times, manage device serial numbers (with random demo generator), and customize line-item cost breakdowns (parts and labor) that sync live with the customer invoice.
 * **Local Data Storage:** All ticket data is saved locally in your browser's `localStorage`. You can easily reset the demo data back to its original state using the button inside the dashboard.
 * **Simulated Authentication:** The login system is simulated using `sessionStorage` and is **not secure**. Passwords are saved in plain text in `config.js` for demo purposes.
