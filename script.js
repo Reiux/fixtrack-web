@@ -177,14 +177,83 @@ function setupStatusDeviceImage(imgEl, ticket) {
   tryNext();
 }
 
-function generateRandomSerialNumber(deviceModel) {
-  const clean = (deviceModel || "DEV")
-  .replace(/[^a-zA-Z0-9]/g, "")
-  .substring(0, 4)
-  .toUpperCase();
-  const randHex = Math.random().toString(36).substring(2, 6).toUpperCase();
-  const randNum = Math.floor(1000 + Math.random() * 9000);
-  return `SN-${clean || "DEV"}-${randHex}${randNum}`;
+function generateRandomSerialNumber() {
+  // Apple modern randomized format (early 2021 to present):
+  // Exactly 10 pseudorandom alphanumeric characters, decoupling factory/production metadata.
+  // Uses uppercase alphanumeric characters excluding ambiguous characters (I and O).
+  const chars = "0123456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+  let result = "";
+  if (typeof window !== "undefined" && window.crypto && window.crypto.getRandomValues) {
+    const values = new Uint8Array(10);
+    window.crypto.getRandomValues(values);
+    for (let i = 0; i < 10; i++) {
+      result += chars[values[i] % chars.length];
+    }
+  } else {
+    for (let i = 0; i < 10; i++) {
+      result += chars[Math.floor(Math.random() * chars.length)];
+    }
+  }
+  return result;
+}
+
+function generateUniqueTicketId(existingTickets = []) {
+  // Generates unguessable, non-sequential unique ticket IDs (e.g. FIX-7K9P-4M2W).
+  // Over 656 billion combinations (30^8), completely preventing ticket enumeration.
+  const existingIds = new Set((existingTickets || []).map(t => String(t.id).toUpperCase()));
+  const chars = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+  let id = "";
+  do {
+    let rand = "";
+    if (typeof window !== "undefined" && window.crypto && window.crypto.getRandomValues) {
+      const bytes = new Uint8Array(8);
+      window.crypto.getRandomValues(bytes);
+      for (let i = 0; i < 8; i++) {
+        rand += chars[bytes[i] % chars.length];
+      }
+    } else {
+      for (let i = 0; i < 8; i++) {
+        rand += chars[Math.floor(Math.random() * chars.length)];
+      }
+    }
+    id = `FIX-${rand.substring(0, 4)}-${rand.substring(4, 8)}`;
+  } while (existingIds.has(id));
+
+  return id;
+}
+
+function attachCopyLinkHandler(btnId, textId, getUrlFn) {
+  const btn = document.getElementById(btnId);
+  const textEl = document.getElementById(textId);
+  if (!btn || !textEl) return;
+
+  btn.addEventListener("click", async () => {
+    const url = typeof getUrlFn === "function" ? getUrlFn() : getUrlFn;
+    if (!url) return;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = url;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      const orig = textEl.textContent;
+      textEl.textContent = "Copied to Clipboard!";
+      btn.classList.add("text-success", "border-success");
+      setTimeout(() => {
+        textEl.textContent = orig;
+        btn.classList.remove("text-success", "border-success");
+      }, 2000);
+    } catch (err) {
+      console.warn("Failed to copy link:", err);
+    }
+  });
 }
 
 const DataStore = {
@@ -208,11 +277,21 @@ const DataStore = {
   },
   findTicket(query) {
     if (!query) return null;
-    const cleanId = query.trim().toLowerCase().replace("#", "");
+    const clean = query.trim().toLowerCase().replace(/^#/, "");
+    const cleanNoHyphen = clean.replace(/-/g, "");
     const cleanPhone = query.trim().replace(/[\s-]/g, "").replace(/^0/, "+63");
 
     return this.getTickets().find((t) => {
-      const idMatch = t.id.toLowerCase() === cleanId;
+      const tId = String(t.id || "").toLowerCase();
+      const tIdNoHyphen = tId.replace(/-/g, "");
+      const tIdRaw = tId.replace(/^[a-z]+-/, "");
+      const tIdRawNoHyphen = tIdRaw.replace(/-/g, "");
+      const idMatch =
+        tId === clean ||
+        tIdNoHyphen === cleanNoHyphen ||
+        tIdRaw === clean ||
+        tIdRawNoHyphen === cleanNoHyphen;
+
       const phoneRaw = (t.phone || "").replace(/[\s-]/g, "").replace(/^0/, "+63");
       const phoneMatch = phoneRaw.length > 5 && phoneRaw === cleanPhone;
       return idMatch || phoneMatch;
@@ -660,6 +739,12 @@ function initRequestForm() {
   const form = document.getElementById("repair-booking-form");
   if (!form) return;
 
+  let latestModalTicketId = null;
+  attachCopyLinkHandler("modal-copy-link-btn", "modal-copy-text", () => {
+    if (!latestModalTicketId) return "";
+    return new URL(`status.html?id=${encodeURIComponent(latestModalTicketId)}`, window.location.href).href;
+  });
+
   const dateInput = document.getElementById("preferred_date");
   const localDate = new Date();
   localDate.setMinutes(localDate.getMinutes() - localDate.getTimezoneOffset());
@@ -868,11 +953,9 @@ function initRequestForm() {
 
       const finalBrand = (brand === "Other" && customBrand) ? customBrand : brand;
 
-                        const currentTickets = DataStore.getTickets();
-    const numericIds = currentTickets
-    .map((t) => parseInt(t.id, 10))
-    .filter((n) => !isNaN(n));
-    const nextId = String(numericIds.length ? Math.max(...numericIds) + 1 : 1043);
+      const currentTickets = DataStore.getTickets();
+      const nextId = generateUniqueTicketId(currentTickets);
+      latestModalTicketId = nextId;
 
     const now = new Date();
     const formattedDate = now.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
@@ -995,6 +1078,10 @@ function initStatusPage() {
       correctLevel: window.QRCode.CorrectLevel.M
     });
   }
+
+  attachCopyLinkHandler("status-copy-link-btn", "status-copy-text", () => {
+    return new URL(`status.html?id=${encodeURIComponent(ticket.id)}`, window.location.href).href;
+  });
 
   document.getElementById("ticket-num-badge").textContent = `Ticket #${ticket.id}`;
   document.getElementById("device-title").textContent = ticket.repairTitle || `${ticket.device} Repair`;
@@ -1158,8 +1245,7 @@ let activeManageTicketId = null;
 
 window.handleGenerateSn = function() {
   if (!activeManageTicketId) return;
-  const ticket = DataStore.getTickets().find((t) => t.id === activeManageTicketId);
-  const randomSn = generateRandomSerialNumber(ticket ? ticket.device : "DEV");
+  const randomSn = generateRandomSerialNumber();
   const serialInput = document.getElementById("manage-serial");
   if (serialInput) serialInput.value = randomSn;
 };
