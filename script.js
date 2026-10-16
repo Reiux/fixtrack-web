@@ -445,10 +445,6 @@ function renderThermalReceipt(ticket) {
       colorLight: "#ffffff",
       correctLevel: window.QRCode.CorrectLevel.M
     });
-    const img = qrTarget.querySelector("img");
-    if (img && qrTarget.querySelector("canvas")) {
-      img.remove();
-    }
   }
 }
 
@@ -940,10 +936,6 @@ function initRequestForm() {
           colorLight: "#ffffff",
           correctLevel: window.QRCode.CorrectLevel.M
         });
-        const img = modalQr.querySelector("img");
-        if (img && modalQr.querySelector("canvas")) {
-          img.remove();
-        }
       }
 
       modal.classList.remove("hidden");
@@ -1002,10 +994,6 @@ function initStatusPage() {
       colorLight: "#ffffff",
       correctLevel: window.QRCode.CorrectLevel.M
     });
-    const img = statusQr.querySelector("img");
-    if (img && statusQr.querySelector("canvas")) {
-      img.remove();
-    }
   }
 
   document.getElementById("ticket-num-badge").textContent = `Ticket #${ticket.id}`;

@@ -114,6 +114,23 @@ h1, h2, h3, h4 {
   margin: 4px 0;
 }
 
+/* QR Code Display Rules: qrcodejs creates both a canvas and an img element.
+   Always show the img element and hide the canvas element everywhere. */
+#modal-qr-container canvas,
+#status-qr-container canvas,
+#thermal-receipt canvas,
+#thermal-receipt-qr-canvas canvas {
+  display: none !important;
+}
+
+#modal-qr-container img,
+#status-qr-container img,
+#thermal-receipt img,
+#thermal-receipt-qr-canvas img {
+  display: block !important;
+  margin: 0 auto !important;
+}
+
 @media print {
   @page {
     size: auto;
@@ -169,13 +186,15 @@ h1, h2, h3, h4 {
     box-shadow: none !important;
   }
 
-  body.has-receipt #thermal-receipt canvas {
-    display: block !important;
-    margin: 0 auto !important;
+  body.has-receipt #thermal-receipt canvas,
+  body.has-receipt #thermal-receipt-qr-canvas canvas {
+    display: none !important;
   }
 
-  body.has-receipt #thermal-receipt img {
-    display: none !important;
+  body.has-receipt #thermal-receipt img,
+  body.has-receipt #thermal-receipt-qr-canvas img {
+    display: block !important;
+    margin: 0 auto !important;
   }
 
   /* Fallback print styles for pages without a thermal receipt (e.g. dashboard.html table) */
