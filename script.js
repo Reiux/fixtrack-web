@@ -538,21 +538,70 @@ function initRequestForm() {
     });
   }
 
+  const DEMO_PRESETS = [
+    {
+      fullname: "Juan Dela Cruz",
+      phone: "09171234567",
+      email: "juan.delacruz@example.ph",
+      brand: "Samsung",
+      category: "smartphone",
+      model: "Galaxy S20",
+      service: "In-store Drop-off",
+      issue: "Screen cracked after accidental drop, touch still responds partially."
+    },
+    {
+      fullname: "Maria Santos",
+      phone: "09182345678",
+      email: "maria.santos@example.ph",
+      brand: "Samsung",
+      category: "tablet",
+      model: "Galaxy Tab S9",
+      service: "In-store Drop-off",
+      issue: "Charging port is loose and only fast-charges at a specific angle."
+    },
+    {
+      fullname: "Carlos Mendoza",
+      phone: "09193456789",
+      email: "carlos.mendoza@example.ph",
+      brand: "Apple",
+      category: "laptop",
+      model: 'MacBook Pro M3 14"',
+      service: "Courier Pickup / Delivery",
+      issue: "Keyboard keys sticking after small water splash; diagnostics needed."
+    },
+    {
+      fullname: "Elena Reyes",
+      phone: "09204567890",
+      email: "elena.reyes@example.ph",
+      brand: "OnePlus",
+      category: "smartphone",
+      model: "OnePlus 13",
+      service: "In-store Drop-off",
+      issue: "Battery drains quickly and phone warms up during normal browsing."
+    }
+  ];
+
+  let demoPresetIndex = 0;
   const autofillBtn = document.getElementById("secret-demo-autofill");
+
   function runAutofill() {
+    const p = DEMO_PRESETS[demoPresetIndex % DEMO_PRESETS.length];
+    demoPresetIndex++;
+
     const setVal = (id, val) => {
       const el = document.getElementById(id);
       if (el) el.value = val;
     };
-    setVal("fullname", "Juan Dela Cruz");
-    setVal("phone", "09171234567");
-    setVal("email", "juan.delacruz@example.ph");
-    setVal("device_brand", "Samsung");
-    setVal("device_type", "smartphone");
-    setVal("device_model", "Galaxy S20");
-    setVal("service_type", "In-store Drop-off");
+    setVal("fullname", p.fullname);
+    setVal("phone", p.phone);
+    setVal("email", p.email);
+    setVal("device_brand", p.brand);
+    setVal("device_type", p.category);
+    setVal("device_model", p.model);
+    setVal("service_type", p.service);
     setVal("preferred_date", localISOTime);
-    setVal("issue_desc", "Screen cracked after accidental drop, touch still responds partially.");
+    setVal("issue_desc", p.issue);
+
     const consent = document.getElementById("privacy_consent");
     if (consent) consent.checked = true;
 
