@@ -579,6 +579,29 @@ function initSearchHandler(formId, inputId, errorId) {
   const searchForm = document.getElementById(formId);
   if (!searchForm) return;
 
+  const input = document.getElementById(inputId);
+  const errorEl = document.getElementById(errorId);
+  const demoBtn = searchForm.querySelector("#secret-demo-track, #secret-demo-status-track");
+
+  const fillDemoTicket = () => {
+    if (!input) return;
+    input.value = "FIX-7K9P-4M2W";
+    input.focus();
+    if (errorEl) errorEl.classList.add("hidden");
+  };
+
+  if (demoBtn) {
+    demoBtn.addEventListener("click", fillDemoTicket);
+  }
+
+  window.addEventListener("keydown", (e) => {
+    if (e.altKey && (e.key === "d" || e.key === "D")) {
+      if (document.getElementById("repair-booking-form")) return;
+      e.preventDefault();
+      fillDemoTicket();
+    }
+  });
+
   searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const input = document.getElementById(inputId);
