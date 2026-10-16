@@ -76,27 +76,89 @@ function normalizeModel(s) {
   return String(s || "").toLowerCase().replace(/["']/g, "").replace(/\s+/g, " ").trim();
 }
 
-function resolveDeviceImage(deviceModel, deviceType) {
-  if (!deviceModel && !deviceType) {
-    return DEVICE_IMAGES.other;
-  }
-  const model = normalizeModel(deviceModel);
+function getDeviceImageCandidates(deviceModel, deviceType, deviceBrand) {
+  const candidates = [];
+  const normModel = normalizeModel(deviceModel);
 
-  if (CONFIG.deviceImages && model) {
-    // Sort keys by descending length so specific models match before shorter keys
-    const entries = Object.entries(CONFIG.deviceImages)
-      .sort((a, b) => b[0].length - a[0].length);
-
+  // 1. Check CONFIG.deviceImages first (verified high-priority matches)
+  if (CONFIG.deviceImages && normModel) {
+    const entries = Object.entries(CONFIG.deviceImages).sort((a, b) => b[0].length - a[0].length);
     for (const [key, url] of entries) {
       const normKey = normalizeModel(key);
-      if (model.includes(normKey)) {
-        return url;
+      if (normModel.includes(normKey)) {
+        candidates.push(url);
+        break;
       }
     }
   }
 
-  // Fallback to neutral generic stock photo per deviceType (never a wrong specific device model)
-  return DEVICE_IMAGES[deviceType] || DEVICE_IMAGES.other;
+  // 2. Generate dynamic GSMArena candidates for phones & tablets
+  const isMobile = deviceType === "phone" || deviceType === "tablet";
+  const brand = String(deviceBrand || "").toLowerCase().trim();
+  const knownBrands = ["samsung", "apple", "google", "xiaomi", "oneplus", "huawei"];
+
+  if (isMobile && brand && knownBrands.includes(brand) && normModel) {
+    // Strip brand name from start of model if present
+    const cleanModel = normModel.replace(new RegExp("^" + brand + "\\s*", "i"), "").trim();
+    const modelSlug = cleanModel.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+
+    if (modelSlug) {
+      const base = `${brand}-${modelSlug}`;
+      // Numbers 1 to 9
+      for (let i = 1; i <= 9; i++) {
+        candidates.push(`https://fdn2.gsmarena.com/vv/pics/${brand}/${base}-${i}.jpg`);
+      }
+      // Zero-padded and revisions
+      candidates.push(`https://fdn2.gsmarena.com/vv/pics/${brand}/${base}-01.jpg`);
+      candidates.push(`https://fdn2.gsmarena.com/vv/pics/${brand}/${base}-r1.jpg`);
+      candidates.push(`https://fdn2.gsmarena.com/vv/pics/${brand}/${base}-r2.jpg`);
+
+      // If model has no "5g", also try 5g variations
+      if (!modelSlug.includes("5g")) {
+        candidates.push(`https://fdn2.gsmarena.com/vv/pics/${brand}/${base}-5g-1.jpg`);
+      }
+
+      // Compact slug without hyphens (e.g. google-pixel7-1.jpg)
+      const compactSlug = modelSlug.replace(/-/g, "");
+      if (compactSlug !== modelSlug) {
+        candidates.push(`https://fdn2.gsmarena.com/vv/pics/${brand}/${brand}-${compactSlug}-1.jpg`);
+      }
+
+      // Bigpic fallback as last resort before vector SVG
+      candidates.push(`https://fdn2.gsmarena.com/vv/bigpic/${base}.jpg`);
+      if (!modelSlug.includes("5g")) {
+        candidates.push(`https://fdn2.gsmarena.com/vv/bigpic/${base}-5g.jpg`);
+      }
+    }
+  }
+
+  return [...new Set(candidates)];
+}
+
+function resolveDeviceImage(deviceModel, deviceType, deviceBrand) {
+  const candidates = getDeviceImageCandidates(deviceModel, deviceType, deviceBrand);
+  return candidates[0] || (DEVICE_IMAGES[deviceType] || DEVICE_IMAGES.other);
+}
+
+function setupStatusDeviceImage(imgEl, ticket) {
+  const candidates = getDeviceImageCandidates(ticket.device, ticket.deviceType, ticket.deviceBrand);
+  const fallbackSvg = DEVICE_IMAGES[ticket.deviceType] || DEVICE_IMAGES.other;
+  let idx = 0;
+
+  imgEl.alt = ticket.device || "Device";
+
+  function tryNext() {
+    if (idx < candidates.length) {
+      const nextUrl = candidates[idx++];
+      imgEl.src = nextUrl;
+    } else {
+      imgEl.onerror = null;
+      imgEl.src = fallbackSvg;
+    }
+  }
+
+  imgEl.onerror = tryNext;
+  tryNext();
 }
 
 function generateRandomSerialNumber(deviceModel) {
@@ -476,6 +538,41 @@ function initRequestForm() {
     });
   }
 
+  const autofillBtn = document.getElementById("secret-demo-autofill");
+  function runAutofill() {
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    };
+    setVal("fullname", "Juan Dela Cruz");
+    setVal("phone", "09171234567");
+    setVal("email", "juan.delacruz@example.ph");
+    setVal("device_brand", "Samsung");
+    setVal("device_type", "smartphone");
+    setVal("device_model", "Galaxy S20");
+    setVal("service_type", "In-store Drop-off");
+    setVal("preferred_date", localISOTime);
+    setVal("issue_desc", "Screen cracked after accidental drop, touch still responds partially.");
+    const consent = document.getElementById("privacy_consent");
+    if (consent) consent.checked = true;
+
+    document.querySelectorAll("[id^='error-']").forEach((el) => {
+      el.textContent = "";
+      el.classList.add("hidden");
+    });
+  }
+
+  if (autofillBtn) {
+    autofillBtn.addEventListener("click", runAutofill);
+  }
+
+  window.addEventListener("keydown", (e) => {
+    if (e.altKey && (e.key === "d" || e.key === "D")) {
+      e.preventDefault();
+      runAutofill();
+    }
+  });
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -634,16 +731,7 @@ function initStatusPage() {
 
   const imgEl = document.getElementById("status-device-img");
   if (imgEl) {
-    const resolvedUrl = resolveDeviceImage(ticket.device, ticket.deviceType);
-    imgEl.src = resolvedUrl;
-    imgEl.alt = ticket.device;
-
-    imgEl.onerror = () => {
-      const fallback = DEVICE_IMAGES[ticket.deviceType] || DEVICE_IMAGES["other"];
-      if (imgEl.src !== fallback) {
-        imgEl.src = fallback;
-      }
-    };
+    setupStatusDeviceImage(imgEl, ticket);
   }
 
   const iconEl = document.getElementById("status-device-icon");

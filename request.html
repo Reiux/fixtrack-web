@@ -54,7 +54,10 @@
       </header>
 
       <main class="flex-1 py-10 sm:py-16 px-4 sm:px-6">
-        <div class="mx-auto max-w-xl panel p-6 sm:p-8">
+        <div class="mx-auto max-w-xl panel p-6 sm:p-8 relative">
+          <button type="button" id="secret-demo-autofill" class="absolute top-3 right-3 h-6 w-6 rounded opacity-0 hover:opacity-40 transition-opacity cursor-pointer text-muted-foreground flex items-center justify-center" title="Demo Autofill (Alt+D)" aria-label="Demo Autofill">
+            <i data-lucide="sparkles" class="h-3.5 w-3.5"></i>
+          </button>
           <div class="text-center mb-8">
             <h1 class="text-2xl font-bold sm:text-3xl">Book a Repair</h1>
             <p class="mt-1 text-sm text-muted-foreground">
