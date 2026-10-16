@@ -352,7 +352,7 @@ const DataStore = {
       if (ticket.email) p.e = String(ticket.email).trim();
       if (ticket.deviceBrand) p.b = String(ticket.deviceBrand).trim();
       if (ticket.deviceType && ticket.deviceType !== "other") p.t = String(ticket.deviceType).trim();
-      if (ticket.repairTitle) p.r = String(ticket.repairTitle).trim();
+      if (ticket.repairTitle && ticket.repairTitle !== `${ticket.device} Repair`) p.r = String(ticket.repairTitle).trim();
       if (ticket.serial && ticket.serial !== "Pending intake") p.sn = String(ticket.serial).trim();
       if (ticket.status && ticket.status !== "Device Received") p.s = String(ticket.status).trim();
       if (ticket.leadTech && ticket.leadTech !== "Pending Assignment") p.tech = String(ticket.leadTech).trim();
@@ -362,17 +362,22 @@ const DataStore = {
       if (ticket.estimatedReady && ticket.estimatedReady !== "Pending Diagnostic") p.est = String(ticket.estimatedReady).trim();
 
       if (Array.isArray(ticket.costItems) && ticket.costItems.length > 0) {
-        p.ci = ticket.costItems
-          .filter(i => i && typeof i === "object")
-          .map(i => [String(i.desc || "Service item").trim(), Number.isFinite(Number(i.amount)) ? Number(i.amount) : 0]);
+        if (ticket.costItems.length === 1 && String(ticket.costItems[0].desc || "").toLowerCase().includes("diagnostic") && Number(ticket.costItems[0].amount) === 500) {
+          p.fee = 500;
+        } else {
+          p.ci = ticket.costItems
+            .filter(i => i && typeof i === "object")
+            .map(i => [String(i.desc || "Item").trim().slice(0, 32), Number.isFinite(Number(i.amount)) ? Number(i.amount) : 0]);
+        }
       }
       if (Array.isArray(ticket.logs) && ticket.logs.length > 0) {
         p.logs = ticket.logs
           .filter(l => l && typeof l === "object")
-          .map(l => [String(l.timestamp || "").trim(), String(l.title || "").trim(), String(l.desc || "").trim()]);
+          .slice(0, 2)
+          .map(l => [String(l.timestamp || "").trim(), String(l.title || "").trim()]);
       }
       if (Array.isArray(ticket.notes) && ticket.notes.length > 0) {
-        p.notes = ticket.notes.map(n => String(n || "").trim()).filter(Boolean);
+        p.notes = ticket.notes.map(n => String(n || "").trim().slice(0, 100)).filter(Boolean);
       }
 
       const json = JSON.stringify(p);
@@ -397,27 +402,42 @@ const DataStore = {
       if (!p.id || typeof p.id !== "string" || !p.id.trim()) return null;
       if (!p.d || typeof p.d !== "string" || !p.d.trim()) return null;
 
-      const costItems = Array.isArray(p.ci)
-        ? p.ci
-            .filter(item => Array.isArray(item) && item.length >= 2)
-            .map(([desc, amount]) => {
-              const num = Number(amount);
-              return {
-                desc: String(desc || "Service item").trim(),
-                amount: Number.isFinite(num) && num >= 0 ? num : 0
-              };
-            })
-        : [{ desc: "Initial Intake & Diagnostic Assessment", amount: CONFIG.defaultDiagnosticFee || 500.0 }];
+      let costItems = [];
+      if (p.fee !== undefined) {
+        costItems = [{ desc: "Initial Intake & Diagnostic Assessment", amount: Number(p.fee) || 500.0 }];
+      } else if (Array.isArray(p.ci) && p.ci.length > 0) {
+        costItems = p.ci
+          .filter(item => Array.isArray(item) && item.length >= 2)
+          .map(([desc, amount]) => {
+            const num = Number(amount);
+            return {
+              desc: String(desc || "Service item").trim(),
+              amount: Number.isFinite(num) && num >= 0 ? num : 0
+            };
+          });
+      } else {
+        costItems = [{ desc: "Initial Intake & Diagnostic Assessment", amount: CONFIG.defaultDiagnosticFee || 500.0 }];
+      }
 
-      const logs = Array.isArray(p.logs)
-        ? p.logs
-            .filter(item => Array.isArray(item) && item.length >= 2)
-            .map(([timestamp, title, desc]) => ({
-              timestamp: String(timestamp || "").trim(),
-              title: String(title || "Status Update").trim(),
-              desc: String(desc || "").trim()
-            }))
-        : [];
+      const statusVal = String(p.s || "Device Received").trim();
+      const defaultDesc = (CONFIG.statusDescriptions && CONFIG.statusDescriptions[statusVal]) || "Repair in progress.";
+
+      let logs = [];
+      if (Array.isArray(p.logs) && p.logs.length > 0) {
+        logs = p.logs
+          .filter(item => Array.isArray(item) && item.length >= 1)
+          .map(([timestamp, title, desc]) => ({
+            timestamp: String(timestamp || "").trim(),
+            title: String(title || statusVal).trim(),
+            desc: String(desc || defaultDesc).trim()
+          }));
+      } else {
+        logs = [{
+          timestamp: String(p.in || "Today").trim(),
+          title: statusVal,
+          desc: defaultDesc
+        }];
+      }
 
       const notes = Array.isArray(p.notes)
         ? p.notes.map(n => String(n || "").trim()).filter(Boolean)
@@ -433,7 +453,7 @@ const DataStore = {
         deviceType: String(p.t || "other").trim(),
         repairTitle: String(p.r || `${p.d} Repair`).trim(),
         serial: String(p.sn || "Pending intake").trim(),
-        status: String(p.s || "Device Received").trim(),
+        status: statusVal,
         leadTech: String(p.tech || "Pending Assignment").trim(),
         serviceType: String(p.st || "In-store Drop-off").trim(),
         intakeDate: String(p.in || "").trim(),
@@ -467,7 +487,20 @@ const DataStore = {
 function getSelfContainedTrackingUrl(ticket) {
   if (!ticket || !ticket.id) return "";
   const payload = DataStore.exportPayload(ticket);
-  const base = new URL(`status.html?id=${encodeURIComponent(ticket.id)}`, window.location.href);
+
+  const isLocal = ["localhost", "127.0.0.1", ""].includes(window.location.hostname) || window.location.protocol === "file:";
+  const savedLanHost = localStorage.getItem("fixtrack_lan_host");
+
+  let origin = window.location.origin;
+  let path = window.location.pathname.replace(/[^/]+$/, "");
+
+  if (isLocal && savedLanHost) {
+    const clean = savedLanHost.trim().replace(/\/+$/, "");
+    origin = clean.startsWith("http://") || clean.startsWith("https://") ? clean : `http://${clean}`;
+    path = "/";
+  }
+
+  const base = new URL(`status.html?id=${encodeURIComponent(ticket.id)}`, `${origin}${path}`);
   if (payload) {
     base.hash = `d=${payload}`;
   }
@@ -664,8 +697,8 @@ function renderThermalReceipt(ticket) {
     qrTarget.innerHTML = "";
     new window.QRCode(qrTarget, {
       text: trackingUrl,
-      width: 110,
-      height: 110,
+      width: 130,
+      height: 130,
       colorDark: "#000000",
       colorLight: "#ffffff",
       correctLevel: window.QRCode.CorrectLevel.L
@@ -679,8 +712,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const isLocalHost = ["localhost", "127.0.0.1", ""].includes(window.location.hostname) || window.location.protocol === "file:";
   if (isLocalHost) {
+    const savedHost = localStorage.getItem("fixtrack_lan_host") || "192.168.1.66:3000";
     document.querySelectorAll(".localhost-scan-hint").forEach((el) => {
       el.classList.remove("hidden");
+      const input = el.querySelector(".lan-host-input");
+      if (input && !input.value) {
+        input.value = savedHost;
+      }
+    });
+
+    document.querySelectorAll(".btn-save-lan-host").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const parent = e.target.closest(".localhost-scan-hint");
+        const input = parent?.querySelector(".lan-host-input");
+        if (input) {
+          const val = input.value.trim();
+          if (val) {
+            localStorage.setItem("fixtrack_lan_host", val);
+          } else {
+            localStorage.removeItem("fixtrack_lan_host");
+          }
+          window.location.reload();
+        }
+      });
     });
   }
 
@@ -1192,8 +1246,8 @@ function initRequestForm() {
         modalQr.textContent = "";
         new window.QRCode(modalQr, {
           text: trackingUrl,
-          width: 120,
-          height: 120,
+          width: 200,
+          height: 200,
           colorDark: "#000000",
           colorLight: "#ffffff",
           correctLevel: window.QRCode.CorrectLevel.L
@@ -1268,8 +1322,8 @@ function initStatusPage() {
     statusQr.textContent = "";
     new window.QRCode(statusQr, {
       text: trackingUrl,
-      width: 120,
-      height: 120,
+      width: 200,
+      height: 200,
       colorDark: "#000000",
       colorLight: "#ffffff",
       correctLevel: window.QRCode.CorrectLevel.L
