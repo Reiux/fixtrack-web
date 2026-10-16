@@ -65,48 +65,48 @@ const CONFIG = {
       "google pixel 8": "images/devices/pixel-8.jpg",
       "apple watch ultra 2": "images/devices/apple-watch-ultra-2.jpg",
 
-      // Samsung Galaxy S series
-      "galaxy s20": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s20-.jpg",
-      "galaxy s21": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s21-5g-r.jpg",
-      "galaxy s22": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s22-5g.jpg",
-      "galaxy s23": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s23-5g.jpg",
-      "galaxy s24": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24-5g-sm-s921.jpg",
-      "galaxy s25": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s25-sm-s931.jpg",
+      // Samsung Galaxy S series (HD)
+      "galaxy s20": "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s20-1.jpg",
+      "galaxy s21": "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s21-5g-1.jpg",
+      "galaxy s22": "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s22-5g-1.jpg",
+      "galaxy s23": "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s23-5g-1.jpg",
+      "galaxy s24": "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s24-5g-sm-s921-1.jpg",
+      "galaxy s25": "https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s25-sm-s931-1.jpg",
 
-      // Apple iPhone series
-      "iphone 12": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-12.jpg",
-      "iphone 14": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14.jpg",
-      "iphone 15": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-15.jpg",
-      "iphone 16": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-16.jpg",
+      // Apple iPhone series (HD)
+      "iphone 12": "https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-12-r1.jpg",
+      "iphone 14": "https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-14-1.jpg",
+      "iphone 15": "https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-15-1.jpg",
+      "iphone 16": "https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-16-1.jpg",
 
-      // Google Pixel series
-      "pixel 6": "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-6.jpg",
-      "pixel 7": "https://fdn2.gsmarena.com/vv/bigpic/google-pixel7.jpg",
-      "pixel 9": "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-9-.jpg",
+      // Google Pixel series (HD)
+      "pixel 6": "https://fdn2.gsmarena.com/vv/pics/google/google-pixel-6-1.jpg",
+      "pixel 7": "https://fdn2.gsmarena.com/vv/pics/google/google-pixel7-1.jpg",
+      "pixel 9": "https://fdn2.gsmarena.com/vv/pics/google/google-pixel-9-1.jpg",
 
-      // OnePlus series
-      "oneplus 10 pro": "https://fdn2.gsmarena.com/vv/bigpic/oneplus-10-pro.jpg",
-      "oneplus 11": "https://fdn2.gsmarena.com/vv/bigpic/oneplus-11.jpg",
-      "oneplus 12": "https://fdn2.gsmarena.com/vv/bigpic/oneplus-12.jpg",
-      "oneplus 13": "https://fdn2.gsmarena.com/vv/bigpic/oneplus-13.jpg",
+      // OnePlus series (HD)
+      "oneplus 10 pro": "https://fdn2.gsmarena.com/vv/pics/oneplus/oneplus-10-pro-1.jpg",
+      "oneplus 11": "https://fdn2.gsmarena.com/vv/pics/oneplus/oneplus-11-1.jpg",
+      "oneplus 12": "https://fdn2.gsmarena.com/vv/pics/oneplus/oneplus-12-1.jpg",
+      "oneplus 13": "https://fdn2.gsmarena.com/vv/pics/oneplus/oneplus-13-1.jpg",
 
-      // Xiaomi / Redmi / POCO
-      "xiaomi 13t": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-13t.jpg",
-      "xiaomi 14t": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-14t.jpg",
-      "xiaomi 14": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-14.jpg",
-      "xiaomi 15": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-15.jpg",
-      "redmi turbo 3": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-turbo3.jpg",
-      "turbo 3": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-turbo3.jpg",
-      "redmi note 13": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-note-13-5g.jpg",
-      "poco f6": "https://fdn2.gsmarena.com/vv/bigpic/xiaomi-poco-f6.jpg",
+      // Xiaomi / Redmi / POCO (HD)
+      "xiaomi 13t": "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-13t-1.jpg",
+      "xiaomi 14t": "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-14t-1.jpg",
+      "xiaomi 14": "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-14-1.jpg",
+      "xiaomi 15": "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-15-1.jpg",
+      "redmi turbo 3": "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-redmi-turbo3-1.jpg",
+      "turbo 3": "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-redmi-turbo3-1.jpg",
+      "redmi note 13": "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-redmi-note-13-5g-1.jpg",
+      "poco f6": "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-poco-f6-1.jpg",
 
-      // Huawei P / Pura series
-      "huawei p50": "https://fdn2.gsmarena.com/vv/bigpic/huawei-p50.jpg",
-      "huawei p60": "https://fdn2.gsmarena.com/vv/bigpic/huawei-p60.jpg",
-      "p50": "https://fdn2.gsmarena.com/vv/bigpic/huawei-p50.jpg",
-      "p60": "https://fdn2.gsmarena.com/vv/bigpic/huawei-p60.jpg",
-      "pura 70": "https://fdn2.gsmarena.com/vv/bigpic/huawei-pura70.jpg",
-      "huawei pura 70": "https://fdn2.gsmarena.com/vv/bigpic/huawei-pura70.jpg"
+      // Huawei P / Pura series (HD)
+      "huawei p50": "https://fdn2.gsmarena.com/vv/pics/huawei/huawei-p50-1.jpg",
+      "huawei p60": "https://fdn2.gsmarena.com/vv/pics/huawei/huawei-p60-1.jpg",
+      "p50": "https://fdn2.gsmarena.com/vv/pics/huawei/huawei-p50-1.jpg",
+      "p60": "https://fdn2.gsmarena.com/vv/pics/huawei/huawei-p60-1.jpg",
+      "pura 70": "https://fdn2.gsmarena.com/vv/pics/huawei/huawei-pura70-1.jpg",
+      "huawei pura 70": "https://fdn2.gsmarena.com/vv/pics/huawei/huawei-pura70-1.jpg"
     },
 
     // 7. Roles & Auth
