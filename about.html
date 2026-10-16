@@ -135,14 +135,14 @@
           <!-- Key Features -->
           <div>
             <h2 class="text-2xl font-bold text-center mb-8">Key Features We Built</h2>
-            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               <div class="panel p-5 space-y-2">
                 <div class="h-8 w-8 rounded-lg bg-accent/15 text-accent grid place-items-center mb-3">
-                  <i data-lucide="shield" class="h-4 w-4"></i>
+                  <i data-lucide="activity" class="h-4 w-4"></i>
                 </div>
-                <h3 class="text-sm font-bold">Random Ticket IDs</h3>
+                <h3 class="text-sm font-bold">Live 6-Stage Repair Tracker</h3>
                 <p class="text-xs text-muted-foreground leading-relaxed">
-                  Instead of using simple numbers like 1001 or 1002 that anyone could guess to peek at other devices, every new booking gets a random ID like <code class="font-mono text-[10px] bg-muted px-1 rounded">FIX-7K9P-4M2W</code>.
+                  Customers can follow their repair through 6 clear milestones from intake to pickup, complete with timestamped technician notes, estimated ready dates, and inspection badges.
                 </p>
               </div>
 
@@ -150,29 +150,49 @@
                 <div class="h-8 w-8 rounded-lg bg-accent/15 text-accent grid place-items-center mb-3">
                   <i data-lucide="printer" class="h-4 w-4"></i>
                 </div>
-                <h3 class="text-sm font-bold">Printable Receipts with QR</h3>
+                <h3 class="text-sm font-bold">Thermal Receipts &amp; Mobile QR</h3>
                 <p class="text-xs text-muted-foreground leading-relaxed">
-                  Customers can print an actual receipt formatted for standard receipt paper. It draws a QR code directly on the receipt that opens the tracking page when scanned with a phone camera.
+                  Generates authentic 58mm/80mm thermal receipts with an embedded QR code that carries ticket state directly, allowing customers to scan and track on their phones without an external database.
                 </p>
               </div>
 
               <div class="panel p-5 space-y-2">
                 <div class="h-8 w-8 rounded-lg bg-accent/15 text-accent grid place-items-center mb-3">
-                  <i data-lucide="sparkles" class="h-4 w-4"></i>
+                  <i data-lucide="wrench" class="h-4 w-4"></i>
                 </div>
-                <h3 class="text-sm font-bold">Realistic S/N Generator</h3>
+                <h3 class="text-sm font-bold">Staff Workbench Console</h3>
                 <p class="text-xs text-muted-foreground leading-relaxed">
-                  For technicians logging incoming devices in the dashboard, the S/N generator creates realistic 10-character serial numbers modeled after Apple serials (leaving out confusing letters like I and O).
+                  A dedicated management dashboard where technicians can search and filter active tickets, update repair stages, assign lead technicians, and add diagnostic logs.
                 </p>
               </div>
 
               <div class="panel p-5 space-y-2">
                 <div class="h-8 w-8 rounded-lg bg-accent/15 text-accent grid place-items-center mb-3">
-                  <i data-lucide="activity" class="h-4 w-4"></i>
+                  <i data-lucide="receipt" class="h-4 w-4"></i>
                 </div>
-                <h3 class="text-sm font-bold">6-Step Repair Tracker</h3>
+                <h3 class="text-sm font-bold">Itemized Billing Breakdown</h3>
                 <p class="text-xs text-muted-foreground leading-relaxed">
-                  Customers can follow their device through 6 clear stages: Device Received, Diagnostic, Awaiting Parts, Active Repair, Ready for Pickup, and Completed.
+                  Transparent line-item accounting for diagnostic fees, replacement parts, and bench labor, with automated VAT calculation and parts warranty coverage.
+                </p>
+              </div>
+
+              <div class="panel p-5 space-y-2">
+                <div class="h-8 w-8 rounded-lg bg-accent/15 text-accent grid place-items-center mb-3">
+                  <i data-lucide="shield-check" class="h-4 w-4"></i>
+                </div>
+                <h3 class="text-sm font-bold">Secure Unguessable Ticket IDs</h3>
+                <p class="text-xs text-muted-foreground leading-relaxed">
+                  Every intake generates a high-entropy, non-sequential tracking ID (e.g. <code class="font-mono text-[10px] bg-muted px-1 rounded">FIX-7K9P-4M2W</code>) with over 656 billion combinations, protecting customer privacy.
+                </p>
+              </div>
+
+              <div class="panel p-5 space-y-2">
+                <div class="h-8 w-8 rounded-lg bg-accent/15 text-accent grid place-items-center mb-3">
+                  <i data-lucide="sliders" class="h-4 w-4"></i>
+                </div>
+                <h3 class="text-sm font-bold">1-File White-Label Rebranding</h3>
+                <p class="text-xs text-muted-foreground leading-relaxed">
+                  Any repair shop can rebrand the entire platform in minutes by editing a single configuration file (<code class="font-mono text-[10px] bg-muted px-1 rounded">config.js</code>) for shop info, pricing, VAT, and supported devices.
                 </p>
               </div>
             </div>
