@@ -98,7 +98,12 @@
                     <select id="device_brand" name="device_brand" class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring cursor-pointer">
                       <option value="" disabled selected>Select brand...</option>
                     </select>
+                    <div id="custom-brand-container" class="hidden mt-2">
+                      <label for="custom_brand" class="block text-[11px] font-semibold text-muted-foreground mb-1">Specify Brand <span class="text-destructive">*</span></label>
+                      <input id="custom_brand" name="custom_brand" type="text" placeholder="e.g. Realme, Sony, Motorola..." class="w-full rounded-lg border border-input bg-background py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+                    </div>
                     <p id="error-device_brand" class="hidden mt-1 text-xs text-destructive"></p>
+                    <p id="error-custom_brand" class="hidden mt-1 text-xs text-destructive"></p>
                   </div>
                   <div>
                     <label for="device_type" class="block text-xs font-semibold mb-1">Device Type <span class="text-destructive">*</span></label>

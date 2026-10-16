@@ -60,7 +60,7 @@ const DEVICE_ICONS = {
 };
 
 function createDeviceSvgDataUri(pathContent) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${pathContent}</svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="100%" height="100%" fill="none" stroke="#94a3b8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(12, 12)">${pathContent}</g></svg>`;
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 }
 
@@ -92,12 +92,11 @@ function getDeviceImageCandidates(deviceModel, deviceType, deviceBrand) {
     }
   }
 
-  // 2. Generate dynamic GSMArena candidates for phones & tablets
+  // 2. Generate dynamic GSMArena candidates for phones & tablets (supports standard or custom typed brands)
   const isMobile = deviceType === "phone" || deviceType === "tablet";
-  const brand = String(deviceBrand || "").toLowerCase().trim();
-  const knownBrands = ["samsung", "apple", "google", "xiaomi", "oneplus", "huawei"];
+  const brand = String(deviceBrand || "").toLowerCase().trim().replace(/[^a-z0-9]+/g, "");
 
-  if (isMobile && brand && knownBrands.includes(brand) && normModel) {
+  if (isMobile && brand && brand !== "other" && normModel) {
     // Strip brand name from start of model if present
     const cleanModel = normModel.replace(new RegExp("^" + brand + "\\s*", "i"), "").trim();
     const modelSlug = cleanModel.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
@@ -528,6 +527,25 @@ function initRequestForm() {
     });
   }
 
+  const customBrandContainer = document.getElementById("custom-brand-container");
+  if (brandSelect && customBrandContainer) {
+    brandSelect.addEventListener("change", () => {
+      const isOther = brandSelect.value === "Other";
+      customBrandContainer.classList.toggle("hidden", !isOther);
+      if (isOther) {
+        document.getElementById("custom_brand")?.focus();
+      } else {
+        const customInput = document.getElementById("custom_brand");
+        if (customInput) customInput.value = "";
+        const errEl = document.getElementById("error-custom_brand");
+        if (errEl) {
+          errEl.textContent = "";
+          errEl.classList.add("hidden");
+        }
+      }
+    });
+  }
+
   const serviceSelect = document.getElementById("service_type");
   if (serviceSelect && serviceSelect.options.length === 0) {
     CONFIG.serviceTypes.forEach((s) => {
@@ -602,6 +620,9 @@ function initRequestForm() {
     setVal("preferred_date", localISOTime);
     setVal("issue_desc", p.issue);
 
+    if (customBrandContainer) customBrandContainer.classList.add("hidden");
+    setVal("custom_brand", "");
+
     const consent = document.getElementById("privacy_consent");
     if (consent) consent.checked = true;
 
@@ -651,6 +672,13 @@ function initRequestForm() {
       const brand = getVal("device_brand");
       setError("device_brand", brand ? "" : "Please select your device brand.");
 
+      const customBrand = getVal("custom_brand");
+      if (brand === "Other") {
+        setError("custom_brand", customBrand.length >= 2 ? "" : "Please specify your device brand.");
+      } else {
+        setError("custom_brand", "");
+      }
+
       const category = getVal("device_type");
       setError("device_type", category ? "" : "Please select a device category.");
 
@@ -677,6 +705,8 @@ function initRequestForm() {
 
       if (!valid) return;
 
+      const finalBrand = (brand === "Other" && customBrand) ? customBrand : brand;
+
                         const currentTickets = DataStore.getTickets();
     const numericIds = currentTickets
     .map((t) => parseInt(t.id, 10))
@@ -700,8 +730,8 @@ function initRequestForm() {
       customer: fullname,
       phone: cleanPhone,
       email: email,
-      deviceBrand: brand,
-      device: `${brand} ${model}`,
+      deviceBrand: finalBrand,
+      device: `${finalBrand} ${model}`,
       deviceType: iconKey,
       repairTitle: "Diagnostic Request",
       serial: "Pending intake",
