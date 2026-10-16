@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>About & The Team | FixTrack</title>
-    <meta name="description" content="About FixTrack and the IT-WS02 student development team." />
+    <meta name="description" content="About FixTrack and our IT-WS02 student group." />
 
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
@@ -15,7 +15,7 @@
   </head>
   <body class="bg-background">
     <div class="flex min-h-screen flex-col">
-      <!-- Sticky Navigation Header -->
+      <!-- Top Navigation Bar -->
       <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
         <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <a href="index.html" class="flex min-w-0 items-center gap-2 group">
@@ -53,21 +53,21 @@
       </header>
 
       <main class="flex-1">
-        <!-- Hero Section -->
+        <!-- Hero Header -->
         <section class="border-b border-border bg-surface py-12 sm:py-16 text-center">
           <div class="mx-auto max-w-3xl px-4 sm:px-6">
             <span class="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1 text-xs font-semibold text-muted-foreground shadow-sm">
               <i data-lucide="graduation-cap" class="h-3.5 w-3.5 text-accent"></i>
-              IT-WS02 Academic Case Study
+              IT-WS02 Web Systems Project
             </span>
             <h1 class="mt-5 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-              About FixTrack &amp; The Team
+              About FixTrack &amp; Our Team
             </h1>
             <p class="mx-auto mt-4 max-w-2xl text-sm text-muted-foreground sm:text-base leading-relaxed">
-              FixTrack is a front-end white-label repair tracking platform that empowers gadget repair shops with real-time customer transparency and workshop bench management.
+              FixTrack is a repair tracking website we created for our IT-WS02 class. It lets customers check their repair progress online in real time and gives shop staff a clean dashboard to manage orders.
             </p>
 
-            <!-- Accessible Tab Switcher -->
+            <!-- Tab Switcher -->
             <div class="mt-8 flex justify-center">
               <div role="tablist" aria-label="About Page Sections" class="inline-flex rounded-xl border border-border bg-card p-1 shadow-sm">
                 <button
@@ -78,7 +78,7 @@
                   aria-controls="panel-platform"
                   class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs sm:text-sm font-semibold text-primary-foreground shadow-sm transition-all cursor-pointer"
                 >
-                  <i data-lucide="layers" class="h-4 w-4"></i> Platform &amp; Shop
+                  <i data-lucide="layers" class="h-4 w-4"></i> About The Project
                 </button>
                 <button
                   type="button"
@@ -88,30 +88,30 @@
                   aria-controls="panel-team"
                   class="inline-flex items-center gap-2 rounded-lg border border-transparent bg-transparent px-4 py-2 text-xs sm:text-sm font-medium text-muted-foreground transition-all hover:bg-secondary hover:text-foreground cursor-pointer"
                 >
-                  <i data-lucide="users" class="h-4 w-4"></i> Meet The Team (4)
+                  <i data-lucide="users" class="h-4 w-4"></i> Our Team (4)
                 </button>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- Tab 1: Platform & Shop Overview -->
+        <!-- Tab 1: Project Overview -->
         <section id="panel-platform" role="tabpanel" aria-labelledby="tab-btn-platform" class="mx-auto max-w-5xl px-4 py-12 sm:px-6 space-y-12">
-          <!-- Two-Card Architecture Comparison -->
+          <!-- Two-Card Setup -->
           <div class="grid gap-6 md:grid-cols-2">
             <div class="panel p-6 sm:p-8 space-y-3">
               <div class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-accent/15 text-accent">
-                <i data-lucide="cpu" class="h-5 w-5"></i>
+                <i data-lucide="code-2" class="h-5 w-5"></i>
               </div>
-              <h2 class="text-xl font-bold">FixTrack (The Platform)</h2>
-              <p class="text-xs font-mono text-muted-foreground">Software Architecture &amp; Core Engine</p>
+              <h2 class="text-xl font-bold">FixTrack (The System)</h2>
+              <p class="text-xs font-mono text-muted-foreground">The Website Template</p>
               <p class="text-sm text-muted-foreground leading-relaxed">
-                FixTrack acts as a turnkey SaaS template for repair shops. It provides an intake booking wizard, automated non-sequential ticket ID generation, offline canvas-based QR thermal printing, and a multi-stage status tracker with live cost breakdowns.
+                FixTrack is the core website template. We built it so any repair shop can rebrand it just by editing one settings file (<code class="font-mono text-[11px] bg-muted px-1.5 py-0.5 rounded">config.js</code>). It handles customer booking, generates unguessable ticket IDs, and prints receipts with QR codes without needing any database or backend server.
               </p>
               <ul class="space-y-2 pt-2 text-xs text-muted-foreground">
-                <li class="flex items-center gap-2"><i data-lucide="check" class="h-3.5 w-3.5 text-success"></i> 100% Client-Side zero-backend dependency</li>
-                <li class="flex items-center gap-2"><i data-lucide="check" class="h-3.5 w-3.5 text-success"></i> Centralized white-label configuration (<code class="font-mono text-[11px] bg-muted px-1.5 py-0.5 rounded">config.js</code>)</li>
-                <li class="flex items-center gap-2"><i data-lucide="check" class="h-3.5 w-3.5 text-success"></i> Robust localStorage state with automatic cache versioning</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="h-3.5 w-3.5 text-success"></i> Runs completely in the browser using plain JavaScript</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="h-3.5 w-3.5 text-success"></i> Easy to rebrand: change the shop name and contact info in config.js</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="h-3.5 w-3.5 text-success"></i> Saves tickets in the browser so data isn't lost on refresh</li>
               </ul>
             </div>
 
@@ -119,30 +119,30 @@
               <div class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/15 text-primary">
                 <i data-lucide="store" class="h-5 w-5"></i>
               </div>
-              <h2 class="text-xl font-bold"><span data-bind="shopName">Demo Repair Shop</span> (The Pilot Client)</h2>
-              <p class="text-xs font-mono text-muted-foreground">Fictional Case Study Implementation</p>
+              <h2 class="text-xl font-bold"><span data-bind="shopName">Demo Repair Shop</span> (Our Test Shop)</h2>
+              <p class="text-xs font-mono text-muted-foreground">Sample Shop for Presentation</p>
               <p class="text-sm text-muted-foreground leading-relaxed">
-                To demonstrate the system under real-world conditions, the platform is configured for "Demo Repair Shop", a fictional electronics repair center in Cabanatuan City specializing in smartphones, laptops, tablets, and smartwatches.
+                To test and demonstrate FixTrack for our presentation, we set up the site for "Demo Repair Shop", a fictional repair shop in Cabanatuan City that fixes smartphones, laptops, tablets, and smartwatches.
               </p>
               <ul class="space-y-2 pt-2 text-xs text-muted-foreground">
-                <li class="flex items-center gap-2"><i data-lucide="check" class="h-3.5 w-3.5 text-success"></i> Real-time intake for walk-in and courier drop-offs</li>
-                <li class="flex items-center gap-2"><i data-lucide="check" class="h-3.5 w-3.5 text-success"></i> Transparent parts &amp; labor billing with Philippine Peso (₱)</li>
-                <li class="flex items-center gap-2"><i data-lucide="check" class="h-3.5 w-3.5 text-success"></i> <span data-bind="warrantyDays"></span>-days parts warranty and inspection logs</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="h-3.5 w-3.5 text-success"></i> Handles walk-in repairs and courier drop-offs</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="h-3.5 w-3.5 text-success"></i> Clear pricing breakdown for parts and labor in Philippine Peso (₱)</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="h-3.5 w-3.5 text-success"></i> Includes <span data-bind="warrantyDays"></span>-days warranty coverage on all replacement parts</li>
               </ul>
             </div>
           </div>
 
-          <!-- Key Technical Pillars -->
+          <!-- Key Features -->
           <div>
-            <h2 class="text-2xl font-bold text-center mb-8">Key Engineering Highlights</h2>
+            <h2 class="text-2xl font-bold text-center mb-8">Key Features We Built</h2>
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               <div class="panel p-5 space-y-2">
                 <div class="h-8 w-8 rounded-lg bg-accent/15 text-accent grid place-items-center mb-3">
                   <i data-lucide="shield" class="h-4 w-4"></i>
                 </div>
-                <h3 class="text-sm font-bold">Untraceable Ticket IDs</h3>
+                <h3 class="text-sm font-bold">Random Ticket IDs</h3>
                 <p class="text-xs text-muted-foreground leading-relaxed">
-                  Generates non-sequential IDs like <code class="font-mono text-[10px] bg-muted px-1 rounded">FIX-7K9P-4M2W</code> from over 656 billion combinations, eliminating guessable ID enumeration.
+                  Instead of using simple numbers like 1001 or 1002 that anyone could guess to peek at other devices, every new booking gets a random ID like <code class="font-mono text-[10px] bg-muted px-1 rounded">FIX-7K9P-4M2W</code>.
                 </p>
               </div>
 
@@ -150,9 +150,9 @@
                 <div class="h-8 w-8 rounded-lg bg-accent/15 text-accent grid place-items-center mb-3">
                   <i data-lucide="printer" class="h-4 w-4"></i>
                 </div>
-                <h3 class="text-sm font-bold">Thermal Print Engine</h3>
+                <h3 class="text-sm font-bold">Printable Receipts with QR</h3>
                 <p class="text-xs text-muted-foreground leading-relaxed">
-                  Generates offline receipts formatted for A5/A6 thermal printers with embedded QR tracking, dark-mode print protection, and zero duplicate canvases.
+                  Customers can print an actual receipt formatted for standard receipt paper. It draws a QR code directly on the receipt that opens the tracking page when scanned with a phone camera.
                 </p>
               </div>
 
@@ -160,9 +160,9 @@
                 <div class="h-8 w-8 rounded-lg bg-accent/15 text-accent grid place-items-center mb-3">
                   <i data-lucide="sparkles" class="h-4 w-4"></i>
                 </div>
-                <h3 class="text-sm font-bold">Apple-Style S/N Logic</h3>
+                <h3 class="text-sm font-bold">Realistic S/N Generator</h3>
                 <p class="text-xs text-muted-foreground leading-relaxed">
-                  Emulates Apple's modern 2021+ randomized 10-character serial number schema using cryptographically random values with ambiguous character exclusion.
+                  For technicians logging incoming devices in the dashboard, the S/N generator creates realistic 10-character serial numbers modeled after Apple serials (leaving out confusing letters like I and O).
                 </p>
               </div>
 
@@ -170,22 +170,22 @@
                 <div class="h-8 w-8 rounded-lg bg-accent/15 text-accent grid place-items-center mb-3">
                   <i data-lucide="activity" class="h-4 w-4"></i>
                 </div>
-                <h3 class="text-sm font-bold">6-Stage Milestone Sync</h3>
+                <h3 class="text-sm font-bold">6-Step Repair Tracker</h3>
                 <p class="text-xs text-muted-foreground leading-relaxed">
-                  Staff actions in the workbench immediately reflect on the customer tracking view, dynamically rendering device images and timeline logs.
+                  Customers can follow their device through 6 clear stages: Device Received, Diagnostic, Awaiting Parts, Active Repair, Ready for Pickup, and Completed.
                 </p>
               </div>
             </div>
           </div>
 
-          <!-- Academic Tech Stack -->
+          <!-- Tech Stack -->
           <div class="panel p-6 text-center space-y-3">
-            <h3 class="text-sm font-bold uppercase tracking-wider text-muted-foreground">Technology Stack (IT-WS02)</h3>
+            <h3 class="text-sm font-bold uppercase tracking-wider text-muted-foreground">What We Used for IT-WS02</h3>
             <div class="flex flex-wrap justify-center gap-2 pt-1">
               <span class="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold">HTML5 Semantic Web</span>
               <span class="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold">Tailwind CSS v4</span>
               <span class="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold">Vanilla JavaScript (ES6+)</span>
-              <span class="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold">Browser LocalStorage API</span>
+              <span class="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold">Browser LocalStorage</span>
               <span class="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold">QRCode.js Canvas Library</span>
               <span class="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold">Lucide Icon Suite</span>
             </div>
@@ -195,24 +195,21 @@
         <!-- Tab 2: Development Team -->
         <section id="panel-team" role="tabpanel" aria-labelledby="tab-btn-team" class="hidden mx-auto max-w-5xl px-4 py-12 sm:px-6 space-y-8">
           <div class="text-center max-w-xl mx-auto">
-            <h2 class="text-2xl font-bold">Meet The Development Team</h2>
+            <h2 class="text-2xl font-bold">Our Team</h2>
             <p class="mt-2 text-sm text-muted-foreground">
-              The 4-member student team behind the design, architecture, and implementation of FixTrack for IT-WS02.
+              The 4 group members behind the FixTrack project for IT-WS02.
             </p>
           </div>
 
           <!-- Dynamic Team Cards Container -->
           <div id="team-cards-container" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <!-- Hydrated dynamically from CONFIG.team in script.js -->
+            <!-- Rendered from CONFIG.team in script.js -->
           </div>
 
-          <!-- Presentation Role Summary Box -->
-          <div class="panel p-6 max-w-3xl mx-auto space-y-2 border-border/70 text-xs text-muted-foreground">
-            <h4 class="font-bold text-foreground flex items-center gap-1.5 text-sm">
-              <i data-lucide="info" class="h-4 w-4 text-accent"></i> Project Presentation Note
-            </h4>
+          <!-- Simple Presentation Note -->
+          <div class="panel p-5 max-w-2xl mx-auto text-center border-border/70 text-xs text-muted-foreground">
             <p>
-              This case study was engineered from scratch with a modular single-source configuration architecture. All team member profiles, roles, and avatar images can be updated in real time via <code class="font-mono bg-muted px-1.5 py-0.5 rounded text-foreground">config.js</code>.
+              Note for presentation: Member names, roles, and photos can be updated anytime inside <code class="font-mono bg-muted px-1.5 py-0.5 rounded text-foreground">config.js</code>.
             </p>
           </div>
         </section>
