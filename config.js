@@ -329,4 +329,48 @@ const CONFIG = {
         notes: [],
       },
     ],
+
+    // 9. Development Team (IT-WS02 Group)
+    team: [
+      {
+        name: "Rei",
+        role: "Lead Developer & System Architect",
+        badge: "Lead Developer",
+        bio: "Spearheaded application architecture, state engine, real-time ticket tracking, thermal receipt printing, and responsive UI.",
+        photo: "",
+        initials: "RE",
+        isLead: true,
+        skills: ["Vanilla JS", "Tailwind CSS", "Architecture", "State Engine"],
+      },
+      {
+        name: "Team Member 2",
+        role: "Quality Assurance & Testing",
+        badge: "QA & Testing",
+        bio: "Assisted with end-to-end user workflow testing, mobile responsiveness inspection, edge-case validation, and usability review.",
+        photo: "",
+        initials: "M2",
+        isLead: false,
+        skills: ["Manual Testing", "Edge Cases", "Usability Review"],
+      },
+      {
+        name: "Team Member 3",
+        role: "Technical Documentation",
+        badge: "Documentation",
+        bio: "Assisted with project documentation, system requirements mapping, IT-WS02 case study reporting, and user guide preparation.",
+        photo: "",
+        initials: "M3",
+        isLead: false,
+        skills: ["Technical Writing", "Requirements Analysis", "Case Study"],
+      },
+      {
+        name: "Team Member 4",
+        role: "UI/UX & Asset Research",
+        badge: "UI/UX Research",
+        bio: "Assisted with brand styling research, dark/light contrast evaluation, device catalog assets, and user journey optimization.",
+        photo: "",
+        initials: "M4",
+        isLead: false,
+        skills: ["Asset Research", "Visual Evaluation", "User Journey"],
+      },
+    ],
 };

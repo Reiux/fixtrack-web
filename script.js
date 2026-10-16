@@ -571,6 +571,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initStatusPage();
   initDashboard();
   initAuthForms();
+  initAboutPage();
 
   if (window.lucide) window.lucide.createIcons();
 });
@@ -1687,3 +1688,75 @@ function initAuthForms() {
     });
   }
 }
+
+function initAboutPage() {
+  const tabPlatform = document.getElementById("tab-btn-platform");
+  const tabTeam = document.getElementById("tab-btn-team");
+  const panelPlatform = document.getElementById("panel-platform");
+  const panelTeam = document.getElementById("panel-team");
+
+  if (!tabPlatform || !tabTeam || !panelPlatform || !panelTeam) return;
+
+  function switchTab(target) {
+    const isPlatform = target === "platform";
+    tabPlatform.setAttribute("aria-selected", isPlatform ? "true" : "false");
+    tabTeam.setAttribute("aria-selected", isPlatform ? "false" : "true");
+
+    if (isPlatform) {
+      tabPlatform.className = "inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs sm:text-sm font-semibold text-primary-foreground shadow-sm transition-all cursor-pointer";
+      tabTeam.className = "inline-flex items-center gap-2 rounded-lg border border-transparent bg-transparent px-4 py-2 text-xs sm:text-sm font-medium text-muted-foreground transition-all hover:bg-secondary hover:text-foreground cursor-pointer";
+      panelPlatform.classList.remove("hidden");
+      panelTeam.classList.add("hidden");
+    } else {
+      tabTeam.className = "inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs sm:text-sm font-semibold text-primary-foreground shadow-sm transition-all cursor-pointer";
+      tabPlatform.className = "inline-flex items-center gap-2 rounded-lg border border-transparent bg-transparent px-4 py-2 text-xs sm:text-sm font-medium text-muted-foreground transition-all hover:bg-secondary hover:text-foreground cursor-pointer";
+      panelTeam.classList.remove("hidden");
+      panelPlatform.classList.add("hidden");
+    }
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  tabPlatform.addEventListener("click", () => switchTab("platform"));
+  tabTeam.addEventListener("click", () => switchTab("team"));
+
+  if (window.location.hash === "#team") {
+    switchTab("team");
+  }
+
+  const teamContainer = document.getElementById("team-cards-container");
+  if (teamContainer && Array.isArray(CONFIG.team)) {
+    teamContainer.innerHTML = CONFIG.team
+      .map((m) => {
+        const isLead = Boolean(m.isLead);
+        const leadBadge = isLead
+          ? `<span class="inline-flex items-center gap-1 rounded-full border border-accent/40 bg-accent/15 px-2.5 py-0.5 text-xs font-bold text-accent"><i data-lucide="crown" class="h-3 w-3"></i> Project Lead</span>`
+          : `<span class="inline-flex items-center rounded-full border border-border bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">${escapeHtml(m.badge || "Contributor")}</span>`;
+
+        const initials = escapeHtml(m.initials || m.name.substring(0, 2).toUpperCase());
+        const avatarContent = m.photo
+          ? `<img src="${escapeHtml(m.photo)}" alt="Photo of ${escapeHtml(m.name)}" class="h-20 w-20 rounded-full object-cover border-2 border-border" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" /><div class="hidden grid h-20 w-20 place-items-center rounded-full ${isLead ? 'bg-primary text-primary-foreground ring-4 ring-primary/20' : 'bg-secondary text-secondary-foreground border border-border'} font-display text-xl font-bold shadow-sm">${initials}</div>`
+          : `<div class="grid h-20 w-20 place-items-center rounded-full ${isLead ? 'bg-primary text-primary-foreground ring-4 ring-primary/20' : 'bg-secondary text-secondary-foreground border border-border'} font-display text-xl font-bold shadow-sm">${initials}</div>`;
+
+        const skillsList = Array.isArray(m.skills)
+          ? `<div class="mt-4 flex flex-wrap gap-1.5 justify-center">${m.skills.map((s) => `<span class="rounded-md border border-border bg-background px-2 py-0.5 text-[11px] font-mono text-muted-foreground">${escapeHtml(s)}</span>`).join("")}</div>`
+          : "";
+
+        return `
+          <div class="panel p-6 flex flex-col items-center text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${isLead ? 'border-primary/40 ring-1 ring-primary/20' : ''}">
+            <div class="relative mb-3 flex justify-center">
+              ${avatarContent}
+            </div>
+            <div class="mb-2">
+              ${leadBadge}
+            </div>
+            <h3 class="font-display text-lg font-bold">${escapeHtml(m.name)}</h3>
+            <p class="text-xs font-medium text-accent mt-0.5">${escapeHtml(m.role)}</p>
+            <p class="mt-3 text-xs text-muted-foreground leading-relaxed flex-1">${escapeHtml(m.bio)}</p>
+            ${skillsList}
+          </div>
+        `;
+      })
+      .join("");
+  }
+}
+
