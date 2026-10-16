@@ -99,33 +99,50 @@ function getDeviceImageCandidates(deviceModel, deviceType, deviceBrand) {
   if (isMobile && brand && brand !== "other" && normModel) {
     // Strip brand name from start of model if present
     const cleanModel = normModel.replace(new RegExp("^" + brand + "\\s*", "i"), "").trim();
-    const modelSlug = cleanModel.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 
-    if (modelSlug) {
-      const base = `${brand}-${modelSlug}`;
-      // Numbers 1 to 9
-      for (let i = 1; i <= 9; i++) {
-        candidates.push(`https://fdn2.gsmarena.com/vv/pics/${brand}/${base}-${i}.jpg`);
+    // Generate slug variants (standard hyphenated, collapsed alphanumeric like gt30-pro, and compact)
+    const slugVariants = [];
+    const addSlug = (s) => {
+      const clean = String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+      if (clean && !slugVariants.includes(clean)) slugVariants.push(clean);
+    };
+
+    // 1. Direct standard slug (e.g. "gt-30-pro")
+    addSlug(cleanModel);
+
+    // 2. Collapse letters followed by numbers (e.g. "gt 30 pro" -> "gt30-pro", "s 20" -> "s20", "note 12" -> "note12")
+    addSlug(cleanModel.replace(/([a-z]+)[\s-]+(\d+)/gi, "$1$2"));
+
+    // 3. Collapse numbers followed by single letters (e.g. "13 t pro" -> "13t-pro")
+    addSlug(cleanModel.replace(/(\d+)[\s-]+([a-z])(?:\s+|$)/gi, "$1$2 "));
+
+    // 4. Compact slug without hyphens (e.g. "gt30pro")
+    const std = cleanModel.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    if (std) addSlug(std.replace(/-/g, ""));
+
+    // Probe high-probability suffixes (1, 0, 2-9, plus zero-padded and revisions) across all slug variants
+    const suffixes = [1, 0, 2, 3, 4, 5, 6, 7, 8, 9, "01", "00", "r1", "r2"];
+    for (const suffix of suffixes) {
+      for (const slug of slugVariants) {
+        const base = `${brand}-${slug}`;
+        candidates.push(`https://fdn2.gsmarena.com/vv/pics/${brand}/${base}-${suffix}.jpg`);
       }
-      // Zero-padded and revisions
-      candidates.push(`https://fdn2.gsmarena.com/vv/pics/${brand}/${base}-01.jpg`);
-      candidates.push(`https://fdn2.gsmarena.com/vv/pics/${brand}/${base}-r1.jpg`);
-      candidates.push(`https://fdn2.gsmarena.com/vv/pics/${brand}/${base}-r2.jpg`);
+    }
 
-      // If model has no "5g", also try 5g variations
-      if (!modelSlug.includes("5g")) {
+    // 5G variants
+    for (const slug of slugVariants) {
+      if (!slug.includes("5g")) {
+        const base = `${brand}-${slug}`;
         candidates.push(`https://fdn2.gsmarena.com/vv/pics/${brand}/${base}-5g-1.jpg`);
+        candidates.push(`https://fdn2.gsmarena.com/vv/pics/${brand}/${base}-5g-0.jpg`);
       }
+    }
 
-      // Compact slug without hyphens (e.g. google-pixel7-1.jpg)
-      const compactSlug = modelSlug.replace(/-/g, "");
-      if (compactSlug !== modelSlug) {
-        candidates.push(`https://fdn2.gsmarena.com/vv/pics/${brand}/${brand}-${compactSlug}-1.jpg`);
-      }
-
-      // Bigpic fallback as last resort before vector SVG
+    // Bigpic fallback as last resort before vector SVG
+    for (const slug of slugVariants) {
+      const base = `${brand}-${slug}`;
       candidates.push(`https://fdn2.gsmarena.com/vv/bigpic/${base}.jpg`);
-      if (!modelSlug.includes("5g")) {
+      if (!slug.includes("5g")) {
         candidates.push(`https://fdn2.gsmarena.com/vv/bigpic/${base}-5g.jpg`);
       }
     }
