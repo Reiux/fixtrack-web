@@ -169,10 +169,13 @@ h1, h2, h3, h4 {
     box-shadow: none !important;
   }
 
-  body.has-receipt #thermal-receipt canvas,
-  body.has-receipt #thermal-receipt img {
+  body.has-receipt #thermal-receipt canvas {
     display: block !important;
     margin: 0 auto !important;
+  }
+
+  body.has-receipt #thermal-receipt img {
+    display: none !important;
   }
 
   /* Fallback print styles for pages without a thermal receipt (e.g. dashboard.html table) */
