@@ -14,6 +14,7 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
     <script src="config.js"></script>
+    <script src="qrcode.min.js"></script>
     <script src="script.js" defer></script>
     <script src="https://unpkg.com/lucide@0.292.0/dist/umd/lucide.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -171,6 +172,11 @@
             (Demo note: No email is actually sent). You can print this page or track your repair immediately.
           </p>
 
+          <div class="my-4 flex flex-col items-center justify-center">
+            <div id="modal-qr-container" class="rounded-lg border border-border bg-white p-2 shadow-sm inline-block"></div>
+            <p class="mt-1.5 text-xs text-muted-foreground">Scan with phone to track status</p>
+          </div>
+
           <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
             <button onclick="window.print()" class="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:shadow-sm active:translate-y-0 cursor-pointer">
               <i data-lucide="printer" class="h-4 w-4"></i> Print Receipt
@@ -186,5 +192,6 @@
         © <span id="year"></span> <span data-bind="shopName"></span>. All rights reserved. • Powered by <span class="font-bold text-foreground" data-bind="vendorName"></span>
       </footer>
     </div>
+    <div id="thermal-receipt" aria-hidden="true"></div>
   </body>
 </html>

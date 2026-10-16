@@ -14,6 +14,7 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
     <script src="config.js"></script>
+    <script src="qrcode.min.js"></script>
     <script src="script.js" defer></script>
     <script src="https://unpkg.com/lucide@0.292.0/dist/umd/lucide.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -156,6 +157,15 @@
                 </div>
               </div>
 
+              <!-- Quick Scan Mobile Tracking Card -->
+              <div class="panel p-6 text-center transition-all duration-200 hover:shadow-md">
+                <p class="font-mono text-[11px] font-bold tracking-widest text-muted-foreground uppercase">Mobile Tracking</p>
+                <div class="my-3 flex justify-center">
+                  <div id="status-qr-container" class="inline-block rounded-lg border border-border bg-white p-2 shadow-sm"></div>
+                </div>
+                <p class="text-xs text-muted-foreground">Scan with phone camera to track on mobile</p>
+              </div>
+
               <div class="panel p-6 transition-all duration-200 hover:shadow-md">
                 <h3 class="flex items-center gap-2 text-base font-semibold">
                   <i data-lucide="circle-dollar-sign" class="h-4 w-4"></i> Cost Breakdown
@@ -189,5 +199,6 @@
         © <span id="year"></span> <span data-bind="shopName"></span>. All rights reserved. • Powered by <span class="font-bold text-foreground" data-bind="vendorName"></span>
       </footer>
     </div>
+    <div id="thermal-receipt" aria-hidden="true"></div>
   </body>
 </html>

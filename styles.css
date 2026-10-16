@@ -99,7 +99,27 @@ h1, h2, h3, h4 {
   display: inline-block;
 }
 
+/* Thermal Receipt Component */
+#thermal-receipt {
+  display: none;
+}
+
+.thermal-divider-dashed {
+  border-top: 1px dashed #000000;
+  margin: 6px 0;
+}
+
+.thermal-divider-dotted {
+  border-top: 1px dotted #000000;
+  margin: 4px 0;
+}
+
 @media print {
+  @page {
+    size: auto;
+    margin: 6mm;
+  }
+
   :root,
   html,
   html.dark,
@@ -127,31 +147,60 @@ h1, h2, h3, h4 {
     color: #111827 !important;
   }
 
-  header,
-  footer,
-  nav,
-  button,
-  [data-theme-toggle],
-  #status-search-section,
-  [data-bind-href="email"],
-  #modal-track-link,
-  #manage-modal,
-  #note-modal {
+  /* When an authentic thermal receipt is present, print ONLY the receipt slip */
+  body.has-receipt > :not(#thermal-receipt) {
     display: none !important;
   }
 
-  aside:not(#ticket-details aside) {
+  body.has-receipt #thermal-receipt {
+    display: block !important;
+    position: static !important;
+    width: 290px !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 10px 12px !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-family: "JetBrains Mono", ui-monospace, "Courier New", monospace !important;
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+    border: 1px dashed #000000 !important;
+    box-sizing: border-box !important;
+    box-shadow: none !important;
+  }
+
+  body.has-receipt #thermal-receipt canvas,
+  body.has-receipt #thermal-receipt img {
+    display: block !important;
+    margin: 0 auto !important;
+  }
+
+  /* Fallback print styles for pages without a thermal receipt (e.g. dashboard.html table) */
+  body:not(.has-receipt) header,
+  body:not(.has-receipt) footer,
+  body:not(.has-receipt) nav,
+  body:not(.has-receipt) button,
+  body:not(.has-receipt) [data-theme-toggle],
+  body:not(.has-receipt) #status-search-section,
+  body:not(.has-receipt) [data-bind-href="email"],
+  body:not(.has-receipt) #modal-track-link,
+  body:not(.has-receipt) #manage-modal,
+  body:not(.has-receipt) #note-modal {
     display: none !important;
   }
 
-  .panel {
+  body:not(.has-receipt) aside:not(#ticket-details aside) {
+    display: none !important;
+  }
+
+  body:not(.has-receipt) .panel {
     background-color: #ffffff !important;
     color: #111827 !important;
     box-shadow: none !important;
     border: 1px solid #cbd5e1 !important;
   }
 
-  #booking-success-modal {
+  body:not(.has-receipt) #booking-success-modal {
     position: static !important;
     display: block !important;
     background: transparent !important;
@@ -160,12 +209,12 @@ h1, h2, h3, h4 {
     width: 100% !important;
   }
 
-  #booking-success-modal .panel {
+  body:not(.has-receipt) #booking-success-modal .panel {
     margin: 2rem auto !important;
     max-width: 28rem !important;
   }
 
-  body:has(#booking-success-modal:not(.hidden)) main {
+  body:not(.has-receipt):has(#booking-success-modal:not(.hidden)) main {
     display: none !important;
   }
 }

@@ -318,6 +318,136 @@ function escapeHtml(value) {
   );
 }
 
+function renderThermalReceipt(ticket) {
+  if (!ticket) return;
+
+  const receiptEl = document.getElementById("thermal-receipt");
+  if (!receiptEl) return;
+
+  document.body.classList.add("has-receipt");
+
+  const currency = CONFIG.currencySymbol || "₱";
+  const costItems = Array.isArray(ticket.costItems) ? ticket.costItems : [];
+  let subtotal = 0;
+  costItems.forEach((item) => {
+    subtotal += Number(item.amount || 0);
+  });
+  const taxRate = typeof CONFIG.taxRate === "number" ? CONFIG.taxRate : 0.12;
+  const taxAmount = subtotal * taxRate;
+  const total = subtotal + taxAmount;
+  const taxLabel = CONFIG.taxLabel || "VAT (12%)";
+
+  const trackingUrl = new URL(`status.html?id=${encodeURIComponent(ticket.id)}`, window.location.href).href;
+  const trackingUrlDisplay = trackingUrl.replace(/^https?:\/\//, "");
+
+  let itemsHtml = "";
+  if (costItems.length > 0) {
+    itemsHtml = `
+      <div class="thermal-divider-dashed"></div>
+      <div style="font-weight: 700; margin-bottom: 4px; text-transform: uppercase;">Service & Parts Breakdown:</div>
+      ${costItems.map(item => `
+        <div style="display: flex; justify-content: space-between; gap: 8px;">
+          <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(item.desc || "Service item")}</span>
+          <span style="white-space: nowrap; font-weight: 500;">${currency}${Number(item.amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+        </div>
+      `).join("")}
+      <div class="thermal-divider-dotted"></div>
+      <div style="display: flex; justify-content: space-between;">
+        <span>Subtotal:</span>
+        <span>${currency}${subtotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span>${escapeHtml(taxLabel)}:</span>
+        <span>${currency}${taxAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 13px; margin-top: 4px; border-top: 1px solid #000; padding-top: 3px;">
+        <span>TOTAL:</span>
+        <span>${currency}${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+      </div>
+    `;
+  }
+
+  receiptEl.innerHTML = `
+    <div style="text-align: center; margin-bottom: 6px;">
+      <div style="font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">${escapeHtml(CONFIG.shopName || "Demo Repair Shop")}</div>
+      <div style="font-size: 10px; margin-top: 2px;">${escapeHtml(CONFIG.address || "")}</div>
+      <div style="font-size: 10px;">Tel: ${escapeHtml(CONFIG.phone || "")}</div>
+      <div style="font-size: 10px;">${escapeHtml(CONFIG.email || "")}</div>
+    </div>
+
+    <div class="thermal-divider-dashed"></div>
+    <div style="text-align: center; font-weight: 700; letter-spacing: 0.08em; font-size: 11px; margin: 3px 0;">*** REPAIR SERVICE RECEIPT ***</div>
+    <div class="thermal-divider-dashed"></div>
+
+    <div style="margin: 5px 0; font-size: 11px; line-height: 1.35;">
+      <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 900; padding-bottom: 2px;">
+        <span>TICKET #:</span>
+        <span>#${escapeHtml(ticket.id)}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span>Date:</span>
+        <span>${escapeHtml(ticket.intakeDate || new Date().toLocaleDateString())}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span>Customer:</span>
+        <span style="font-weight: 600;">${escapeHtml(ticket.customer || "Walk-in Customer")}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span>Contact:</span>
+        <span>${escapeHtml(ticket.phone || "N/A")}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span>Device:</span>
+        <span style="font-weight: 600;">${escapeHtml(ticket.device || "Device")}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span>Service:</span>
+        <span>${escapeHtml(ticket.serviceType || "In-store Drop-off")}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span>Technician:</span>
+        <span>${escapeHtml(ticket.leadTech || "Bench Tech")}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span>Status:</span>
+        <span style="font-weight: 700;">${escapeHtml(ticket.status || "Received")}</span>
+      </div>
+    </div>
+
+    ${itemsHtml}
+
+    <div class="thermal-divider-dashed"></div>
+
+    <div style="text-align: center; margin: 6px 0;">
+      <div id="thermal-receipt-qr-canvas" style="display: inline-block; padding: 4px; background: #ffffff;"></div>
+      <div style="font-weight: 700; font-size: 9px; letter-spacing: 0.08em; margin-top: 4px;">SCAN TO TRACK REPAIR STATUS</div>
+      <div style="font-size: 8px; color: #333333; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin: 2px auto 0;">${escapeHtml(trackingUrlDisplay)}</div>
+    </div>
+
+    <div class="thermal-divider-dashed"></div>
+
+    <div style="text-align: center; font-size: 9px; line-height: 1.3; margin-top: 5px;">
+      <div>Please present this slip when claiming device.</div>
+      <div>Warranty: ${CONFIG.warrantyDays || 90} days on replacement parts.</div>
+      <div style="font-weight: 700; margin-top: 3px;">THANK YOU FOR YOUR PATRONAGE!</div>
+      <div style="margin-top: 6px; letter-spacing: 0.12em; font-size: 8px;">- - - - - [ TEAR HERE ] - - - - -</div>
+    </div>
+  `;
+
+  const qrTarget = document.getElementById("thermal-receipt-qr-canvas");
+  if (qrTarget && window.QRCode) {
+    qrTarget.innerHTML = "";
+    new window.QRCode(qrTarget, {
+      text: trackingUrl,
+      width: 100,
+      height: 100,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: window.QRCode.CorrectLevel.M
+    });
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   applyTheme(isDark());
   hydrateWhiteLabelConfig();
@@ -787,10 +917,27 @@ function initRequestForm() {
 
     DataStore.addTicket(newTicket);
 
+    renderThermalReceipt(newTicket);
+
     const modal = document.getElementById("booking-success-modal");
     if (modal) {
       document.getElementById("modal-generated-id").textContent = `#${nextId}`;
       document.getElementById("modal-track-link").href = `status.html?id=${nextId}`;
+
+      const modalQr = document.getElementById("modal-qr-container");
+      if (modalQr && window.QRCode) {
+        modalQr.textContent = "";
+        const trackingUrl = new URL(`status.html?id=${encodeURIComponent(nextId)}`, window.location.href).href;
+        new window.QRCode(modalQr, {
+          text: trackingUrl,
+          width: 110,
+          height: 110,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: window.QRCode.CorrectLevel.M
+        });
+      }
+
       modal.classList.remove("hidden");
       modal.classList.add("grid");
     } else {
@@ -811,6 +958,7 @@ function initStatusPage() {
   const detailState = document.getElementById("ticket-details");
 
   if (!ticketId) {
+    document.body.classList.remove("has-receipt");
     if (searchState) searchState.classList.remove("hidden");
     if (notFoundState) notFoundState.classList.add("hidden");
     if (detailState) detailState.classList.add("hidden");
@@ -820,6 +968,7 @@ function initStatusPage() {
   const ticket = DataStore.findTicket(ticketId);
 
   if (!ticket) {
+    document.body.classList.remove("has-receipt");
     if (searchState) searchState.classList.add("hidden");
     if (notFoundState) notFoundState.classList.remove("hidden");
     if (detailState) detailState.classList.add("hidden");
@@ -830,6 +979,22 @@ function initStatusPage() {
   if (searchState) searchState.classList.add("hidden");
   if (notFoundState) notFoundState.classList.add("hidden");
   if (detailState) detailState.classList.remove("hidden");
+
+  renderThermalReceipt(ticket);
+
+  const statusQr = document.getElementById("status-qr-container");
+  if (statusQr && window.QRCode) {
+    statusQr.textContent = "";
+    const trackingUrl = new URL(`status.html?id=${encodeURIComponent(ticket.id)}`, window.location.href).href;
+    new window.QRCode(statusQr, {
+      text: trackingUrl,
+      width: 110,
+      height: 110,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: window.QRCode.CorrectLevel.M
+    });
+  }
 
   document.getElementById("ticket-num-badge").textContent = `Ticket #${ticket.id}`;
   document.getElementById("device-title").textContent = ticket.repairTitle || `${ticket.device} Repair`;
