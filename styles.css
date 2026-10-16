@@ -114,21 +114,45 @@ h1, h2, h3, h4 {
   margin: 4px 0;
 }
 
-/* QR Code Display Rules: qrcodejs creates both a canvas and an img element.
-   Always show the img element and hide the canvas element everywhere. */
-#modal-qr-container canvas,
-#status-qr-container canvas,
-#thermal-receipt canvas,
-#thermal-receipt-qr-canvas canvas {
-  display: none !important;
-}
-
+/* QR Code Display Rules: ensure QR renders reliably across mobile, desktop, and print */
 #modal-qr-container img,
 #status-qr-container img,
 #thermal-receipt img,
 #thermal-receipt-qr-canvas img {
-  display: block !important;
-  margin: 0 auto !important;
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+
+#modal-qr-container canvas,
+#status-qr-container canvas,
+#thermal-receipt canvas,
+#thermal-receipt-qr-canvas canvas {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+
+/* If the image has loaded a valid data URL or source, hide the duplicate canvas */
+#modal-qr-container:has(img[src^="data:"]) canvas,
+#status-qr-container:has(img[src^="data:"]) canvas,
+#thermal-receipt:has(img[src^="data:"]) canvas,
+#thermal-receipt-qr-canvas:has(img[src^="data:"]) canvas {
+  display: none !important;
+}
+
+/* If the image does not have a source yet or failed, hide the blank image */
+#modal-qr-container img:not([src]),
+#modal-qr-container img[src=""],
+#status-qr-container img:not([src]),
+#status-qr-container img[src=""],
+#thermal-receipt img:not([src]),
+#thermal-receipt img[src=""],
+#thermal-receipt-qr-canvas img:not([src]),
+#thermal-receipt-qr-canvas img[src=""] {
+  display: none !important;
 }
 
 @media print {
@@ -188,13 +212,26 @@ h1, h2, h3, h4 {
 
   body.has-receipt #thermal-receipt canvas,
   body.has-receipt #thermal-receipt-qr-canvas canvas {
-    display: none !important;
+    display: block !important;
+    margin: 0 auto !important;
   }
 
   body.has-receipt #thermal-receipt img,
   body.has-receipt #thermal-receipt-qr-canvas img {
     display: block !important;
     margin: 0 auto !important;
+  }
+
+  body.has-receipt #thermal-receipt:has(img[src^="data:"]) canvas,
+  body.has-receipt #thermal-receipt-qr-canvas:has(img[src^="data:"]) canvas {
+    display: none !important;
+  }
+
+  body.has-receipt #thermal-receipt img:not([src]),
+  body.has-receipt #thermal-receipt img[src=""],
+  body.has-receipt #thermal-receipt-qr-canvas img:not([src]),
+  body.has-receipt #thermal-receipt-qr-canvas img[src=""] {
+    display: none !important;
   }
 
   /* Fallback print styles for pages without a thermal receipt (e.g. dashboard.html table) */
