@@ -178,6 +178,9 @@
           <div class="my-4 flex flex-col items-center justify-center">
             <div id="modal-qr-container" class="rounded-lg border border-border bg-white p-2 shadow-sm inline-block"></div>
             <p class="mt-1.5 text-xs text-muted-foreground">Scan with phone to track status</p>
+            <p class="localhost-scan-hint hidden mt-1 text-[11px] text-muted-foreground/75 text-center max-w-[240px]">
+              Note: On localhost, phone cameras can't reach your PC directly. Use "Copy Tracking Link" or host via LAN IP/GitHub Pages.
+            </p>
             <button type="button" id="modal-copy-link-btn" class="mt-2.5 inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground shadow-sm transition-all hover:bg-secondary active:scale-95 cursor-pointer">
               <i data-lucide="copy" class="h-3.5 w-3.5"></i>
               <span id="modal-copy-text">Copy Tracking Link</span>

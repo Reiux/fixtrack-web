@@ -273,7 +273,11 @@ const DataStore = {
     }
   },
   saveTickets(tickets) {
-    localStorage.setItem(STORE_KEY_TICKETS, JSON.stringify(tickets));
+    try {
+      localStorage.setItem(STORE_KEY_TICKETS, JSON.stringify(tickets));
+    } catch (err) {
+      console.warn("Failed to persist tickets to localStorage:", err);
+    }
   },
   findTicket(query) {
     if (!query) return null;
@@ -321,6 +325,130 @@ const DataStore = {
     }
     return null;
   },
+  upsertTicket(ticket) {
+    if (!ticket || !ticket.id) return null;
+    const list = this.getTickets();
+    const cleanId = String(ticket.id).trim().toUpperCase();
+    const index = list.findIndex(t => String(t.id).trim().toUpperCase() === cleanId);
+    if (index !== -1) {
+      list[index] = { ...list[index], ...ticket };
+      this.saveTickets(list);
+      return list[index];
+    } else {
+      list.unshift(ticket);
+      this.saveTickets(list);
+      return ticket;
+    }
+  },
+  exportPayload(ticket) {
+    if (!ticket || !ticket.id || !ticket.device) return "";
+    try {
+      const p = {
+        id: String(ticket.id).trim(),
+        c: String(ticket.customer || "Customer").trim(),
+        p: String(ticket.phone || "").trim(),
+        d: String(ticket.device).trim()
+      };
+      if (ticket.email) p.e = String(ticket.email).trim();
+      if (ticket.deviceBrand) p.b = String(ticket.deviceBrand).trim();
+      if (ticket.deviceType && ticket.deviceType !== "other") p.t = String(ticket.deviceType).trim();
+      if (ticket.repairTitle) p.r = String(ticket.repairTitle).trim();
+      if (ticket.serial && ticket.serial !== "Pending intake") p.sn = String(ticket.serial).trim();
+      if (ticket.status && ticket.status !== "Device Received") p.s = String(ticket.status).trim();
+      if (ticket.leadTech && ticket.leadTech !== "Pending Assignment") p.tech = String(ticket.leadTech).trim();
+      if (ticket.serviceType && ticket.serviceType !== "In-store Drop-off") p.st = String(ticket.serviceType).trim();
+      if (ticket.intakeDate) p.in = String(ticket.intakeDate).trim();
+      if (ticket.preferredDate) p.pref = String(ticket.preferredDate).trim();
+      if (ticket.estimatedReady && ticket.estimatedReady !== "Pending Diagnostic") p.est = String(ticket.estimatedReady).trim();
+
+      if (Array.isArray(ticket.costItems) && ticket.costItems.length > 0) {
+        p.ci = ticket.costItems
+          .filter(i => i && typeof i === "object")
+          .map(i => [String(i.desc || "Service item").trim(), Number.isFinite(Number(i.amount)) ? Number(i.amount) : 0]);
+      }
+      if (Array.isArray(ticket.logs) && ticket.logs.length > 0) {
+        p.logs = ticket.logs
+          .filter(l => l && typeof l === "object")
+          .map(l => [String(l.timestamp || "").trim(), String(l.title || "").trim(), String(l.desc || "").trim()]);
+      }
+      if (Array.isArray(ticket.notes) && ticket.notes.length > 0) {
+        p.notes = ticket.notes.map(n => String(n || "").trim()).filter(Boolean);
+      }
+
+      const json = JSON.stringify(p);
+      return btoa(encodeURIComponent(json).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+        return String.fromCharCode(parseInt(p1, 16));
+      }));
+    } catch (e) {
+      console.warn("Failed to export ticket payload:", e);
+      return "";
+    }
+  },
+  importPayload(b64) {
+    if (!b64 || typeof b64 !== "string") return null;
+    const cleanB64 = b64.trim();
+    if (!cleanB64) return null;
+    try {
+      const raw = decodeURIComponent(Array.prototype.map.call(atob(cleanB64), (c) => {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(""));
+      const p = JSON.parse(raw);
+      if (!p || typeof p !== "object") return null;
+      if (!p.id || typeof p.id !== "string" || !p.id.trim()) return null;
+      if (!p.d || typeof p.d !== "string" || !p.d.trim()) return null;
+
+      const costItems = Array.isArray(p.ci)
+        ? p.ci
+            .filter(item => Array.isArray(item) && item.length >= 2)
+            .map(([desc, amount]) => {
+              const num = Number(amount);
+              return {
+                desc: String(desc || "Service item").trim(),
+                amount: Number.isFinite(num) && num >= 0 ? num : 0
+              };
+            })
+        : [{ desc: "Initial Intake & Diagnostic Assessment", amount: CONFIG.defaultDiagnosticFee || 500.0 }];
+
+      const logs = Array.isArray(p.logs)
+        ? p.logs
+            .filter(item => Array.isArray(item) && item.length >= 2)
+            .map(([timestamp, title, desc]) => ({
+              timestamp: String(timestamp || "").trim(),
+              title: String(title || "Status Update").trim(),
+              desc: String(desc || "").trim()
+            }))
+        : [];
+
+      const notes = Array.isArray(p.notes)
+        ? p.notes.map(n => String(n || "").trim()).filter(Boolean)
+        : [];
+
+      const imported = {
+        id: String(p.id).trim().toUpperCase(),
+        customer: String(p.c || "Customer").trim(),
+        phone: String(p.p || "").trim(),
+        email: String(p.e || "").trim(),
+        deviceBrand: String(p.b || "").trim(),
+        device: String(p.d).trim(),
+        deviceType: String(p.t || "other").trim(),
+        repairTitle: String(p.r || `${p.d} Repair`).trim(),
+        serial: String(p.sn || "Pending intake").trim(),
+        status: String(p.s || "Device Received").trim(),
+        leadTech: String(p.tech || "Pending Assignment").trim(),
+        serviceType: String(p.st || "In-store Drop-off").trim(),
+        intakeDate: String(p.in || "").trim(),
+        preferredDate: String(p.pref || "").trim(),
+        estimatedReady: String(p.est || "Pending Diagnostic").trim(),
+        costItems: costItems.length > 0 ? costItems : [{ desc: "Initial Intake & Diagnostic Assessment", amount: CONFIG.defaultDiagnosticFee || 500.0 }],
+        logs: logs,
+        notes: notes
+      };
+      return this.upsertTicket(imported);
+    } catch (e) {
+      console.warn("Failed to import ticket payload:", e);
+      return null;
+    }
+  },
   getSession() {
     try {
       return JSON.parse(sessionStorage.getItem(STORE_KEY_SESSION));
@@ -335,6 +463,16 @@ const DataStore = {
     sessionStorage.removeItem(STORE_KEY_SESSION);
   },
 };
+
+function getSelfContainedTrackingUrl(ticket) {
+  if (!ticket || !ticket.id) return "";
+  const payload = DataStore.exportPayload(ticket);
+  const base = new URL(`status.html?id=${encodeURIComponent(ticket.id)}`, window.location.href);
+  if (payload) {
+    base.hash = `d=${payload}`;
+  }
+  return base.href;
+}
 
 function isDark() {
   const stored = localStorage.getItem(THEME_KEY);
@@ -424,8 +562,8 @@ function renderThermalReceipt(ticket) {
   const total = subtotal + taxAmount;
   const taxLabel = CONFIG.taxLabel || "VAT (12%)";
 
-  const trackingUrl = new URL(`status.html?id=${encodeURIComponent(ticket.id)}`, window.location.href).href;
-  const trackingUrlDisplay = trackingUrl.replace(/^https?:\/\//, "");
+  const trackingUrl = getSelfContainedTrackingUrl(ticket);
+  const trackingUrlDisplay = trackingUrl.split("#")[0].replace(/^https?:\/\//, "");
 
   let itemsHtml = "";
   if (costItems.length > 0) {
@@ -526,11 +664,11 @@ function renderThermalReceipt(ticket) {
     qrTarget.innerHTML = "";
     new window.QRCode(qrTarget, {
       text: trackingUrl,
-      width: 100,
-      height: 100,
+      width: 110,
+      height: 110,
       colorDark: "#000000",
       colorLight: "#ffffff",
-      correctLevel: window.QRCode.CorrectLevel.M
+      correctLevel: window.QRCode.CorrectLevel.L
     });
   }
 }
@@ -538,6 +676,13 @@ function renderThermalReceipt(ticket) {
 document.addEventListener("DOMContentLoaded", () => {
   applyTheme(isDark());
   hydrateWhiteLabelConfig();
+
+  const isLocalHost = ["localhost", "127.0.0.1", ""].includes(window.location.hostname) || window.location.protocol === "file:";
+  if (isLocalHost) {
+    document.querySelectorAll(".localhost-scan-hint").forEach((el) => {
+      el.classList.remove("hidden");
+    });
+  }
 
   document.querySelectorAll("[data-theme-toggle]").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -771,10 +916,10 @@ function initRequestForm() {
   const form = document.getElementById("repair-booking-form");
   if (!form) return;
 
-  let latestModalTicketId = null;
+  let latestModalTicket = null;
   attachCopyLinkHandler("modal-copy-link-btn", "modal-copy-text", () => {
-    if (!latestModalTicketId) return "";
-    return new URL(`status.html?id=${encodeURIComponent(latestModalTicketId)}`, window.location.href).href;
+    if (!latestModalTicket) return "";
+    return getSelfContainedTrackingUrl(latestModalTicket);
   });
 
   const dateInput = document.getElementById("preferred_date");
@@ -1031,32 +1176,34 @@ function initRequestForm() {
     };
 
     DataStore.addTicket(newTicket);
+    latestModalTicket = newTicket;
 
     renderThermalReceipt(newTicket);
+
+    const trackingUrl = getSelfContainedTrackingUrl(newTicket);
 
     const modal = document.getElementById("booking-success-modal");
     if (modal) {
       document.getElementById("modal-generated-id").textContent = `#${nextId}`;
-      document.getElementById("modal-track-link").href = `status.html?id=${nextId}`;
+      document.getElementById("modal-track-link").href = trackingUrl;
 
       const modalQr = document.getElementById("modal-qr-container");
       if (modalQr && window.QRCode) {
         modalQr.textContent = "";
-        const trackingUrl = new URL(`status.html?id=${encodeURIComponent(nextId)}`, window.location.href).href;
         new window.QRCode(modalQr, {
           text: trackingUrl,
-          width: 110,
-          height: 110,
+          width: 120,
+          height: 120,
           colorDark: "#000000",
           colorLight: "#ffffff",
-          correctLevel: window.QRCode.CorrectLevel.M
+          correctLevel: window.QRCode.CorrectLevel.L
         });
       }
 
       modal.classList.remove("hidden");
       modal.classList.add("grid");
     } else {
-      window.location.href = `status.html?id=${nextId}`;
+      window.location.href = trackingUrl;
     }
   });
 }
@@ -1066,7 +1213,24 @@ function initStatusPage() {
   if (!container) return;
 
   const urlParams = new URLSearchParams(window.location.search);
-  const ticketId = urlParams.get("id");
+  let ticketId = urlParams.get("id");
+
+  let hashPayload = "";
+  if (window.location.hash && window.location.hash.startsWith("#d=")) {
+    hashPayload = window.location.hash.slice(3);
+  } else if (window.location.hash && window.location.hash.includes("d=")) {
+    const m = window.location.hash.match(/[#&]d=([^&]+)/);
+    if (m) hashPayload = decodeURIComponent(m[1]);
+  }
+  if (!hashPayload) {
+    hashPayload = urlParams.get("d") || "";
+  }
+  if (hashPayload) {
+    const imported = DataStore.importPayload(hashPayload);
+    if (imported && imported.id && !ticketId) {
+      ticketId = imported.id;
+    }
+  }
 
   const searchState = document.getElementById("status-search-section");
   const notFoundState = document.getElementById("ticket-not-found");
@@ -1097,22 +1261,23 @@ function initStatusPage() {
 
   renderThermalReceipt(ticket);
 
+  const trackingUrl = getSelfContainedTrackingUrl(ticket);
+
   const statusQr = document.getElementById("status-qr-container");
   if (statusQr && window.QRCode) {
     statusQr.textContent = "";
-    const trackingUrl = new URL(`status.html?id=${encodeURIComponent(ticket.id)}`, window.location.href).href;
     new window.QRCode(statusQr, {
       text: trackingUrl,
-      width: 110,
-      height: 110,
+      width: 120,
+      height: 120,
       colorDark: "#000000",
       colorLight: "#ffffff",
-      correctLevel: window.QRCode.CorrectLevel.M
+      correctLevel: window.QRCode.CorrectLevel.L
     });
   }
 
   attachCopyLinkHandler("status-copy-link-btn", "status-copy-text", () => {
-    return new URL(`status.html?id=${encodeURIComponent(ticket.id)}`, window.location.href).href;
+    return getSelfContainedTrackingUrl(ticket);
   });
 
   document.getElementById("ticket-num-badge").textContent = `Ticket #${ticket.id}`;
