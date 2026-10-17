@@ -117,6 +117,7 @@ h1, h2, h3, h4 {
 /* QR Code Display Rules: ensure QR renders reliably across mobile, desktop, and print */
 #modal-qr-container img,
 #status-qr-container img,
+#status-qr-zoom-container img,
 #thermal-receipt img,
 #thermal-receipt-qr-canvas img {
   display: block;
@@ -127,6 +128,7 @@ h1, h2, h3, h4 {
 
 #modal-qr-container canvas,
 #status-qr-container canvas,
+#status-qr-zoom-container canvas,
 #thermal-receipt canvas,
 #thermal-receipt-qr-canvas canvas {
   display: block;
@@ -138,6 +140,7 @@ h1, h2, h3, h4 {
 /* If the image has loaded a valid data URL or source, hide the duplicate canvas */
 #modal-qr-container:has(img[src^="data:"]) canvas,
 #status-qr-container:has(img[src^="data:"]) canvas,
+#status-qr-zoom-container:has(img[src^="data:"]) canvas,
 #thermal-receipt:has(img[src^="data:"]) canvas,
 #thermal-receipt-qr-canvas:has(img[src^="data:"]) canvas {
   display: none !important;
@@ -148,6 +151,8 @@ h1, h2, h3, h4 {
 #modal-qr-container img[src=""],
 #status-qr-container img:not([src]),
 #status-qr-container img[src=""],
+#status-qr-zoom-container img:not([src]),
+#status-qr-zoom-container img[src=""],
 #thermal-receipt img:not([src]),
 #thermal-receipt img[src=""],
 #thermal-receipt-qr-canvas img:not([src]),

@@ -166,8 +166,8 @@ function setupStatusDeviceImage(imgEl, ticket) {
   imgEl.src = primaryUrl;
 }
 
-function renderQrCode(container, text, size = 200) {
-  if (!container || !window.QRCode) return;
+function renderQrCode(container, text, size = 240) {
+  if (!container || !window.QRCode || !text) return;
   container.innerHTML = "";
   new window.QRCode(container, {
     text: text,
@@ -175,7 +175,7 @@ function renderQrCode(container, text, size = 200) {
     height: size,
     colorDark: "#000000",
     colorLight: "#ffffff",
-    correctLevel: window.QRCode.CorrectLevel.L
+    correctLevel: window.QRCode.CorrectLevel.M
   });
 
   // Ensure synchronous image availability across all mobile webviews and thermal print engines
@@ -505,7 +505,14 @@ const DataStore = {
 
 function getSelfContainedTrackingUrl(ticket) {
   if (!ticket || !ticket.id) return "";
-  const payload = DataStore.exportPayload(ticket);
+
+  // Check if ticket is unmodified from preloaded seed data (e.g. demo ticket FIX-7K9P-4M2W)
+  const isPreloaded = Array.isArray(CONFIG.initialTickets) && CONFIG.initialTickets.find(t => t.id === ticket.id);
+  const isCleanInitial = isPreloaded && JSON.stringify(ticket) === JSON.stringify(isPreloaded);
+
+  // If identical to initial ticket, omit heavy #d= hash payload so the QR code generates
+  // a clean Version 3 matrix (29x29 dots) that smartphone cameras detect instantaneously.
+  const payload = isCleanInitial ? "" : DataStore.exportPayload(ticket);
 
   const isLocal = ["localhost", "127.0.0.1", ""].includes(window.location.hostname) || window.location.protocol === "file:";
   const savedLanHost = localStorage.getItem("fixtrack_lan_host");
@@ -1317,7 +1324,9 @@ function initStatusPage() {
   const trackingUrl = getSelfContainedTrackingUrl(ticket);
 
   const statusQr = document.getElementById("status-qr-container");
-  renderQrCode(statusQr, trackingUrl, 200);
+  renderQrCode(statusQr, trackingUrl, 240);
+
+  setupQrZoomModal(ticket, trackingUrl);
 
   attachCopyLinkHandler("status-copy-link-btn", "status-copy-text", () => {
     return getSelfContainedTrackingUrl(ticket);
@@ -1449,6 +1458,72 @@ function initStatusPage() {
   }
 
   if (window.lucide) window.lucide.createIcons();
+}
+
+function setupQrZoomModal(ticket, trackingUrl) {
+  const trigger = document.getElementById("status-qr-trigger");
+  const modal = document.getElementById("qr-zoom-modal");
+  const card = document.getElementById("qr-zoom-card");
+  const zoomContainer = document.getElementById("status-qr-zoom-container");
+  const closeBtn = document.getElementById("close-qr-zoom-btn");
+  const closeBtnSec = document.getElementById("close-qr-zoom-btn-secondary");
+  const ticketIdEl = document.getElementById("qr-modal-ticket-id");
+
+  if (!trigger || !modal || !card || !zoomContainer) return;
+
+  if (ticketIdEl && ticket && ticket.id) {
+    ticketIdEl.textContent = `Ticket #${ticket.id}`;
+  }
+
+  let isRendered = false;
+
+  const openModal = () => {
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+
+    if (!isRendered) {
+      renderQrCode(zoomContainer, trackingUrl, 300);
+      isRendered = true;
+    }
+
+    requestAnimationFrame(() => {
+      card.classList.remove("scale-95", "opacity-0");
+      card.classList.add("scale-100", "opacity-100");
+    });
+
+    if (closeBtn) closeBtn.focus();
+    document.addEventListener("keydown", onKeyDown);
+  };
+
+  const closeModal = () => {
+    card.classList.remove("scale-100", "opacity-100");
+    card.classList.add("scale-95", "opacity-0");
+
+    setTimeout(() => {
+      modal.classList.remove("flex");
+      modal.classList.add("hidden");
+      trigger.focus();
+    }, 150);
+
+    document.removeEventListener("keydown", onKeyDown);
+  };
+
+  const onKeyDown = (e) => {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      closeModal();
+    }
+  };
+
+  trigger.addEventListener("click", openModal);
+  if (closeBtn) closeBtn.addEventListener("click", closeModal);
+  if (closeBtnSec) closeBtnSec.addEventListener("click", closeModal);
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
 }
 
 function createCostRow(desc = "", amount = "") {
