@@ -370,56 +370,34 @@ const DataStore = {
       };
       if (ticket.email) p.e = String(ticket.email).trim();
 
-      // Only serialize non-default fields to keep QR code matrix low-density (V4/V5)
-      if (ticket.deviceBrand && !p.d.toLowerCase().includes(ticket.deviceBrand.toLowerCase())) {
-        p.b = String(ticket.deviceBrand).trim();
-      }
-      if (ticket.deviceType && ticket.deviceType !== "other" && ticket.deviceType !== "phone") {
-        p.t = String(ticket.deviceType).trim();
-      }
-      if (ticket.repairTitle && ticket.repairTitle !== `${ticket.device} Repair` && ticket.repairTitle !== "Diagnostic Request") {
-        p.r = String(ticket.repairTitle).trim();
-      }
-      if (ticket.serial && ticket.serial !== "Pending intake") {
-        p.sn = String(ticket.serial).trim();
-      }
-      if (ticket.status && ticket.status !== "Device Received") {
-        p.s = String(ticket.status).trim();
-      }
-      if (ticket.leadTech && ticket.leadTech !== "Pending Assignment") {
-        p.tech = String(ticket.leadTech).trim();
-      }
-      if (ticket.serviceType && ticket.serviceType !== "In-store Drop-off") {
-        p.st = String(ticket.serviceType).trim();
-      }
-      if (ticket.estimatedReady && ticket.estimatedReady !== "Pending Diagnostic") {
-        p.est = String(ticket.estimatedReady).trim();
-      }
+      if (ticket.deviceBrand) p.b = String(ticket.deviceBrand).trim();
+      if (ticket.deviceType && ticket.deviceType !== "other") p.t = String(ticket.deviceType).trim();
+      if (ticket.repairTitle && ticket.repairTitle !== `${ticket.device} Repair`) p.r = String(ticket.repairTitle).trim();
+      if (ticket.serial && ticket.serial !== "Pending intake") p.sn = String(ticket.serial).trim();
+      if (ticket.status && ticket.status !== "Device Received") p.s = String(ticket.status).trim();
+      if (ticket.leadTech && ticket.leadTech !== "Pending Assignment") p.tech = String(ticket.leadTech).trim();
+      if (ticket.serviceType && ticket.serviceType !== "In-store Drop-off") p.st = String(ticket.serviceType).trim();
+      if (ticket.intakeDate) p.in = String(ticket.intakeDate).trim();
+      if (ticket.preferredDate) p.pref = String(ticket.preferredDate).trim();
+      if (ticket.estimatedReady && ticket.estimatedReady !== "Pending Diagnostic") p.est = String(ticket.estimatedReady).trim();
 
-      // Cost items: if standard diagnostic fee 500, omit (importPayload defaults to 500 automatically)
       if (Array.isArray(ticket.costItems) && ticket.costItems.length > 0) {
-        const isDefaultDiagnostic = ticket.costItems.length === 1 &&
-          Number(ticket.costItems[0].amount) === 500 &&
-          String(ticket.costItems[0].desc || "").toLowerCase().includes("diagnostic");
-        if (!isDefaultDiagnostic) {
+        if (ticket.costItems.length === 1 && String(ticket.costItems[0].desc || "").toLowerCase().includes("diagnostic") && Number(ticket.costItems[0].amount) === 500) {
+          p.fee = 500;
+        } else {
           p.ci = ticket.costItems
             .filter(i => i && typeof i === "object")
-            .map(i => [String(i.desc || "Item").trim().slice(0, 24), Number.isFinite(Number(i.amount)) ? Number(i.amount) : 0]);
+            .map(i => [String(i.desc || "Item").trim().slice(0, 32), Number.isFinite(Number(i.amount)) ? Number(i.amount) : 0]);
         }
       }
-
-      // Logs: if only 1 initial intake log, omit (importPayload generates initial log automatically)
-      if (Array.isArray(ticket.logs) && ticket.logs.length > 1) {
+      if (Array.isArray(ticket.logs) && ticket.logs.length > 0) {
         p.logs = ticket.logs
           .filter(l => l && typeof l === "object")
           .slice(0, 2)
-          .map(l => [String(l.timestamp || "").trim().slice(0, 24), String(l.title || "").trim().slice(0, 24)]);
+          .map(l => [String(l.timestamp || "").trim(), String(l.title || "").trim()]);
       }
-
-      // Notes: compact single string note without redundant prefix
       if (Array.isArray(ticket.notes) && ticket.notes.length > 0) {
-        const noteText = String(ticket.notes[0] || "").replace(/^Customer intake notes:\s*/i, "").trim().slice(0, 50);
-        if (noteText) p.n = noteText;
+        p.notes = ticket.notes.map(n => String(n || "").trim().slice(0, 100)).filter(Boolean);
       }
 
       const json = JSON.stringify(p);
@@ -528,14 +506,7 @@ const DataStore = {
 
 function getSelfContainedTrackingUrl(ticket) {
   if (!ticket || !ticket.id) return "";
-
-  // Check if ticket is unmodified from preloaded seed data (e.g. demo ticket FIX-7K9P-4M2W)
-  const isPreloaded = Array.isArray(CONFIG.initialTickets) && CONFIG.initialTickets.find(t => t.id === ticket.id);
-  const isCleanInitial = isPreloaded && JSON.stringify(ticket) === JSON.stringify(isPreloaded);
-
-  // If identical to initial ticket, omit heavy #d= hash payload so the QR code generates
-  // a clean Version 3 matrix (29x29 dots) that smartphone cameras detect instantaneously.
-  const payload = isCleanInitial ? "" : DataStore.exportPayload(ticket);
+  const payload = DataStore.exportPayload(ticket);
 
   const isLocal = ["localhost", "127.0.0.1", ""].includes(window.location.hostname) || window.location.protocol === "file:";
   const savedLanHost = localStorage.getItem("fixtrack_lan_host");
