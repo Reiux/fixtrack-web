@@ -95,10 +95,6 @@ h1, h2, h3, h4 {
   box-shadow: var(--shadow-panel);
 }
 
-.hidden {
-  display: none !important;
-}
-
 [data-lucide] {
   display: inline-block;
 }
