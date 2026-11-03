@@ -3,413 +3,1241 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Track Your Repair | Demo Repair Shop</title>
-    <meta name="description" content="Check your device repair status in real time with Demo Repair Shop. Phone, laptop, tablet, and smartwatch repairs." />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("fixtrack-theme");
+          if (t === "dark" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+            document.documentElement.classList.add("dark");
+          } else {
+            document.documentElement.classList.remove("dark");
+          }
+        } catch (_) {}
+      })();
+    </script>
+    <title>FixTrack - Free Repair Tracking & Website for Device Repair Shops</title>
+    <meta name="description" content="A free website and live repair tracker for phone and computer repair shops. Print thermal receipts with QR codes and update repair stages with zero monthly fees." />
 
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Track Your Repair | Demo Repair Shop" />
-    <meta property="og:description" content="See live updates, technician notes, and turnaround times for your repair." />
-    <meta property="og:image" content="https://reiux.github.io/fixtrack-web/banner.png" />
-    <meta name="twitter:card" content="summary_large_image" />
-
-    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="logo.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
     <script src="config.js"></script>
     <script src="lucide.min.js"></script>
     <script src="tailwind.browser.js"></script>
     <script src="script.js" defer></script>
   </head>
-  <body>
+  <body class="bg-background text-foreground antialiased selection:bg-accent/20">
     <div class="flex min-h-screen flex-col">
+      <!-- 1. Top Notice Bar -->
+      <aside aria-label="Version Notice" class="border-b border-border bg-surface/90 py-2 px-4 text-center text-xs text-muted-foreground transition-colors">
+        <div class="mx-auto flex max-w-6xl items-center justify-center gap-2">
+          <span class="inline-flex h-2 w-2 rounded-full bg-success animate-pulse"></span>
+          <span>FixTrack: Free repair tracking and website for phone and laptop repair shops</span>
+          <span class="text-border">•</span>
+          <a href="signup.html" class="font-bold text-accent hover:underline inline-flex items-center gap-1">
+            <span>Create your shop free</span>
+            <i data-lucide="arrow-right" class="h-3 w-3"></i>
+          </a>
+        </div>
+      </aside>
+
+      <!-- 2. Header -->
       <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
         <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <a href="index.html" class="flex min-w-0 items-center gap-2 group">
-            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground transition-transform duration-200 group-hover:scale-105">
-              <i data-lucide="wrench" class="h-4 w-4"></i>
-            </span>
-            <span class="truncate font-display text-lg font-bold" data-bind="shopName"></span>
+          <!-- Left: Brand -->
+          <a href="index.html" class="flex min-w-0 items-center gap-2.5 group">
+            <img src="logo.svg" alt="FixTrack Logo" class="h-8 w-8 rounded-lg shadow-sm transition-transform duration-200 group-hover:scale-105" />
+            <div class="flex items-baseline gap-1.5">
+              <span class="font-display text-xl font-bold tracking-tight text-foreground">FixTrack</span>
+              <span class="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[10px] font-semibold text-muted-foreground uppercase">Free Tool</span>
+            </div>
           </a>
 
+          <!-- Right: Actions -->
           <div class="flex items-center gap-2 md:order-3">
             <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer"></button>
+            <a href="login.html" class="hidden sm:inline-flex items-center justify-center rounded-lg border border-border bg-card px-3.5 py-2 text-xs font-semibold text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer">
+              Staff Login
+            </a>
+            <a href="signup.html" class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer">
+              <span>Create Your Shop</span>
+              <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>
+            </a>
             <button type="button" id="mobile-menu-btn" aria-label="Toggle navigation menu" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 md:hidden cursor-pointer">
               <i data-lucide="menu" class="h-4 w-4"></i>
             </button>
           </div>
 
-          <nav id="mobile-menu" class="hidden w-full flex-col items-stretch gap-2 border-t border-border pt-4 pb-2 md:order-2 md:flex md:w-auto md:flex-row md:gap-2 md:border-0 md:p-0">
-            <a href="index.html" class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-secondary px-3 py-2 text-sm font-semibold text-foreground shadow-sm transition-all duration-200 md:w-auto" aria-current="page">
-              <i data-lucide="home" class="h-4 w-4"></i> Home
-            </a>
-            <a href="about.html" class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-muted-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-md active:translate-y-0 md:w-auto">
-              <i data-lucide="info" class="h-4 w-4"></i> About
-            </a>
-            <a href="status.html" class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-muted-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-md active:translate-y-0 md:w-auto">
-              <i data-lucide="search" class="h-4 w-4"></i> Track
-            </a>
-            <a href="request.html" class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-muted-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-md active:translate-y-0 md:w-auto">
-              <i data-lucide="calendar-plus" class="h-4 w-4"></i> Book a Repair
-            </a>
-            <a href="login.html" class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-muted-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-md active:translate-y-0 md:w-auto">
-              <i data-lucide="log-in" class="h-4 w-4"></i> Staff Login
+          <!-- Center Navigation -->
+          <nav id="mobile-menu" class="hidden w-full flex-col items-stretch gap-2 border-t border-border pt-4 pb-2 md:order-2 md:flex md:w-auto md:flex-row md:items-center md:gap-6 md:border-0 md:p-0">
+            <a href="#features" class="text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground">Features</a>
+            <a href="#how-it-works" class="text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground">How It Works</a>
+            <a href="#pricing-comparison" class="text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground">Why FixTrack</a>
+            <a href="store.html?demo=true" class="text-xs font-semibold text-accent transition-colors hover:underline flex items-center gap-1">
+              <span>Demo Store</span>
+              <i data-lucide="external-link" class="h-3 w-3"></i>
             </a>
           </nav>
         </div>
       </header>
 
       <main class="flex-1">
-        <section class="border-b border-border bg-surface">
-          <div class="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6">
-            <span class="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
-              <i data-lucide="shield-check" class="h-3.5 w-3.5 text-accent"></i>
-              Trusted by <span data-bind="trustedCount"></span> customers
-            </span>
+        <!-- 3. Hero Section -->
+        <section class="border-b border-border bg-surface/30 py-16 sm:py-24 relative overflow-hidden">
+          <div class="mx-auto max-w-5xl px-4 sm:px-6 text-center space-y-6">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/15 px-3 py-1 text-xs font-semibold text-accent shadow-sm">
+              <i data-lucide="wrench" class="h-3.5 w-3.5"></i>
+              <span>Simple repair tracking for independent shops</span>
+            </div>
 
-            <h1 class="mt-6 text-4xl font-bold sm:text-5xl tracking-tight">
-              Track Your Device Repair<br class="hidden sm:block" />
-              In Real Time
+            <!-- Headline with Downward Rotating Text -->
+            <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.2]">
+              Run your repair shop without<br class="hidden sm:inline" />
+              <span class="inline-grid overflow-hidden align-bottom text-accent h-[1.3em]">
+                <span id="headline-ticker" class="inline-block transform translate-y-0 opacity-100 will-change-transform">
+                  monthly software fees.
+                </span>
+              </span>
             </h1>
-            <p class="mx-auto mt-4 max-w-xl text-sm text-muted-foreground sm:text-base">
-              Want to see how your repair is going? Enter your ticket number or phone number below for live updates.
+
+            <!-- Subhead -->
+            <p class="mx-auto max-w-2xl text-base sm:text-lg text-muted-foreground leading-relaxed">
+              Give your customers live repair updates so they stop calling to ask if their phone is ready. Print thermal claim slips with QR codes, track jobs on your bench, and make the website your own. Free to use, with no servers to set up.
             </p>
 
-            <form id="track-form" class="mx-auto mt-8 flex max-w-xl flex-col gap-2 sm:flex-row">
-              <div class="relative flex-1">
-                <i data-lucide="search" class="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground"></i>
-                <label for="ticket-search" class="sr-only">Enter Ticket ID or Phone Number</label>
-                <input id="ticket-search" name="ticket_id" type="text" required placeholder="Enter Ticket ID or phone (try FIX-7K9P-4M2W)" class="w-full rounded-lg border border-input bg-card py-3 pr-10 pl-9 text-sm outline-none focus:ring-2 focus:ring-ring" />
-                <button type="button" id="secret-demo-track" class="absolute top-1/2 right-2.5 -translate-y-1/2 h-6 w-6 rounded opacity-0 hover:opacity-40 transition-opacity cursor-pointer text-muted-foreground flex items-center justify-center" title="Autofill Demo Ticket (Alt+D)" aria-label="Autofill Demo Ticket">
-                  <i data-lucide="sparkles" class="h-3.5 w-3.5"></i>
+            <!-- Quick-Start Bar + CLI Pill -->
+            <div class="mx-auto max-w-xl pt-2 space-y-4">
+              <div class="panel p-2 flex flex-col sm:flex-row items-center gap-2 shadow-panel bg-card border border-border">
+                <div class="relative flex-1 w-full flex items-center">
+                  <i data-lucide="store" class="absolute left-3.5 h-4 w-4 text-muted-foreground pointer-events-none"></i>
+                  <input
+                    id="hero-shop-name"
+                    type="text"
+                    placeholder="Enter your shop name (e.g. TechSpot Mobile &amp; Laptop Care)..."
+                    class="w-full rounded-lg border-0 bg-transparent py-2.5 pl-10 pr-3 text-sm text-foreground outline-none placeholder:text-muted-foreground/70"
+                  />
+                </div>
+                <button
+                  type="button"
+                  id="hero-create-btn"
+                  class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer shrink-0"
+                >
+                  <span>Create your shop</span>
+                  <i data-lucide="arrow-right" class="h-4 w-4"></i>
                 </button>
               </div>
-              <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer">
-                Track Repair <i data-lucide="arrow-right" class="h-4 w-4"></i>
-              </button>
-            </form>
-            <p id="search-error" class="hidden mt-3 text-center text-xs font-semibold text-destructive"></p>
 
-            <div class="mt-5 flex justify-center">
-              <a href="request.html" class="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-primary hover:shadow-md active:translate-y-0 cursor-pointer">
-                <i data-lucide="calendar-plus" class="h-4 w-4 text-primary"></i>
-                <span>Need a new repair? <strong>Book a Repair</strong></span>
-              </a>
+              <!-- Quick Start CLI Pill -->
+              <div class="flex flex-wrap items-center justify-center gap-2 text-xs">
+                <span class="text-muted-foreground font-medium">Run locally in your shop:</span>
+                <div class="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-2.5 py-1 font-mono text-[11px] text-muted-foreground">
+                  <span class="text-foreground">git clone fixtrack &amp;&amp; python3 server.py</span>
+                  <button
+                    type="button"
+                    id="copy-cli-btn"
+                    class="inline-flex items-center gap-1 rounded bg-secondary px-1.5 py-0.5 font-sans text-[10px] font-semibold text-foreground transition-colors hover:bg-secondary/80 cursor-pointer"
+                    title="Copy command to clipboard"
+                  >
+                    <i data-lucide="copy" class="h-3 w-3"></i>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Proof Points Row -->
+              <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 pt-2 text-xs text-muted-foreground">
+                <div class="flex items-center gap-1.5">
+                  <i data-lucide="check" class="h-3.5 w-3.5 text-success"></i>
+                  <span>Free forever</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <i data-lucide="check" class="h-3.5 w-3.5 text-success"></i>
+                  <span>Works without internet</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <i data-lucide="check" class="h-3.5 w-3.5 text-success"></i>
+                  <span>No credit card required</span>
+                </div>
+              </div>
             </div>
 
-            <div class="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
-              <span class="inline-flex items-center gap-1.5"><i data-lucide="badge-check" class="h-3.5 w-3.5"></i> Live Step-by-Step Updates</span>
-              <span class="inline-flex items-center gap-1.5"><i data-lucide="shield-check" class="h-3.5 w-3.5"></i> <span data-bind="warrantyDays"></span>-days Warranty on All Parts</span>
+            <!-- 4. Hero Visual Mockup: The Split Live Repair System -->
+            <div id="interactive-demo" class="pt-8 max-w-4xl mx-auto text-left">
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+                <!-- Left: Interactive Milestone Tracker (7 cols) -->
+                <div class="lg:col-span-7 panel p-5 shadow-panel border border-border bg-card flex flex-col justify-between">
+                  <div>
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-3 mb-4">
+                      <div class="flex items-center gap-2.5">
+                        <div class="h-8 w-8 rounded-lg bg-accent/15 text-accent grid place-items-center">
+                          <i data-lucide="smartphone" class="h-4 w-4"></i>
+                        </div>
+                        <div>
+                          <h4 class="font-display text-sm font-bold text-foreground">iPhone 14 Pro - Screen &amp; Battery</h4>
+                          <p class="font-mono text-[11px] text-muted-foreground">Ticket #FIX-7K9P-4M2W • Tech: Alex Rivera</p>
+                        </div>
+                      </div>
+                      <div id="demo-status-badge" class="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-xs font-bold text-accent">
+                        <span class="h-1.5 w-1.5 rounded-full bg-accent animate-pulse"></span>
+                        <span id="demo-status-text">Repairing</span>
+                      </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="space-y-1.5 mb-4">
+                      <div class="flex justify-between text-[11px] font-mono text-muted-foreground">
+                        <span>Repair Progress</span>
+                        <span id="demo-progress-percent" class="font-bold text-foreground">75%</span>
+                      </div>
+                      <div class="h-2 w-full rounded-full bg-surface overflow-hidden border border-border">
+                        <div id="demo-progress-fill" class="h-full bg-accent transition-all duration-300" style="width: 75%"></div>
+                      </div>
+                    </div>
+
+                    <!-- Interactive Stage Selector -->
+                    <div class="mb-4">
+                      <div class="text-[11px] font-mono font-bold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1">
+                        <i data-lucide="mouse-pointer-click" class="h-3.5 w-3.5 text-accent"></i>
+                        <span>Click any stage to test the live tracking view:</span>
+                      </div>
+                      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <button
+                          type="button"
+                          data-milestone="Received"
+                          class="demo-milestone-pill text-xs font-semibold py-1.5 px-2 rounded-lg border border-border bg-surface text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer text-center"
+                        >
+                          1. Received
+                        </button>
+                        <button
+                          type="button"
+                          data-milestone="Diagnostic"
+                          class="demo-milestone-pill text-xs font-semibold py-1.5 px-2 rounded-lg border border-border bg-surface text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer text-center"
+                        >
+                          2. Diagnosing
+                        </button>
+                        <button
+                          type="button"
+                          data-milestone="Active Repair"
+                          class="demo-milestone-pill text-xs font-semibold py-1.5 px-2 rounded-lg border border-accent bg-accent/15 text-accent font-bold cursor-pointer text-center"
+                        >
+                          3. Repairing
+                        </button>
+                        <button
+                          type="button"
+                          data-milestone="Ready for Pickup"
+                          class="demo-milestone-pill text-xs font-semibold py-1.5 px-2 rounded-lg border border-border bg-surface text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer text-center"
+                        >
+                          4. Ready
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Real-time Technician Notes Log -->
+                  <div class="rounded-lg bg-surface/70 border border-border p-3 flex items-start gap-2.5 mt-2">
+                    <i data-lucide="info" class="h-4 w-4 text-accent shrink-0 mt-0.5"></i>
+                    <div class="text-xs">
+                      <span class="font-mono text-[10px] text-muted-foreground uppercase block" id="demo-log-timestamp">Today • 02:15 PM</span>
+                      <p class="text-muted-foreground font-sans mt-0.5" id="demo-log-text">
+                        Tech Alex Rivera: Screen replaced and battery installed. Running display touch test.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right: Live Thermal QR Receipt Card (5 cols) -->
+                <div class="lg:col-span-5 panel p-4 shadow-panel border border-border bg-card flex flex-col justify-between font-mono text-xs">
+                  <div class="space-y-3">
+                    <div class="text-center border-b border-dashed border-border pb-3">
+                      <div class="font-display font-bold text-sm tracking-tight text-foreground uppercase">TechSpot Mobile &amp; Laptop Care</div>
+                      <div class="text-[10px] text-muted-foreground">Phone &amp; Laptop Repair • Cabanatuan City</div>
+                      <div class="mt-1 text-[11px] font-bold text-accent">CLAIM RECEIPT #FIX-7K9P-4M2W</div>
+                    </div>
+
+                    <div class="space-y-1 text-[11px]">
+                      <div class="flex justify-between">
+                        <span class="text-muted-foreground">Customer:</span>
+                        <span class="font-semibold text-foreground">Juan Dela Cruz</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-muted-foreground">Device:</span>
+                        <span class="font-semibold text-foreground">iPhone 14 Pro Max</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-muted-foreground">Serial:</span>
+                        <span class="font-semibold text-foreground">356789104421098</span>
+                      </div>
+                    </div>
+
+                    <!-- Line items -->
+                    <div class="border-t border-b border-dashed border-border py-2 space-y-1 text-[11px]">
+                      <div class="flex justify-between">
+                        <span>Diagnostic &amp; Labor</span>
+                        <span class="font-semibold">₱600.00</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span>OLED Screen Assembly</span>
+                        <span class="font-semibold">₱5,800.00</span>
+                      </div>
+                      <div class="flex justify-between text-muted-foreground text-[10px]">
+                        <span>VAT (12% Included)</span>
+                        <span>₱685.71</span>
+                      </div>
+                      <div class="flex justify-between font-bold text-foreground pt-1 border-t border-border">
+                        <span>Total Due</span>
+                        <span class="text-accent">₱6,400.00</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- QR Stamp -->
+                  <div class="pt-3 text-center border-t border-dashed border-border mt-3">
+                    <div class="inline-flex items-center justify-center p-2 rounded bg-surface border border-border">
+                      <i data-lucide="qr-code" class="h-10 w-10 text-foreground"></i>
+                    </div>
+                    <p class="text-[10px] text-muted-foreground mt-1">Scan this QR code with your phone camera to check repair status</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        <section class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-          <div class="text-center">
-            <h2 class="text-3xl font-bold">How It Works</h2>
-            <p class="mx-auto mt-2 max-w-lg text-sm text-muted-foreground">
-              Here is how we handle your repair. We track 6 clear milestones from intake to pickup so you are never left guessing.
+        <!-- 5. Merchant Showcase Strip -->
+        <section class="border-b border-border bg-surface/50 py-8">
+          <div class="mx-auto max-w-6xl px-4 sm:px-6">
+            <p class="text-center font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-6">
+              Used by repair shops across the country
             </p>
-          </div>
-
-          <div class="mt-10 grid gap-6 md:grid-cols-3">
-            <div class="panel p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-              <div class="flex items-center justify-between">
-                <span class="grid h-8 w-8 place-items-center rounded-md border border-border font-mono text-sm font-bold">1</span>
-                <i data-lucide="clipboard-list" class="h-6 w-6 text-muted-foreground"></i>
+            <div class="flex flex-wrap items-center justify-center gap-6 sm:gap-10 opacity-80">
+              <div class="flex items-center gap-2 font-display text-sm font-bold text-foreground">
+                <i data-lucide="shield-check" class="h-4 w-4 text-accent"></i>
+                <span>TechSpot Mobile &amp; Laptop Care</span>
+                <span class="text-[10px] font-mono text-muted-foreground font-normal">Nueva Ecija</span>
               </div>
-              <h3 class="mt-6 text-lg font-semibold">Drop Off or Book Online</h3>
-              <p class="mt-2 text-sm text-muted-foreground">
-                Bring your device to our shop or submit a repair request on our website.
-              </p>
-            </div>
-
-            <div class="panel p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-              <div class="flex items-center justify-between">
-                <span class="grid h-8 w-8 place-items-center rounded-md border border-border font-mono text-sm font-bold">2</span>
-                <i data-lucide="wrench" class="h-6 w-6 text-muted-foreground"></i>
+              <div class="flex items-center gap-2 font-display text-sm font-bold text-foreground">
+                <i data-lucide="cpu" class="h-4 w-4 text-accent"></i>
+                <span>ReviveTech Electronics</span>
+                <span class="text-[10px] font-mono text-muted-foreground font-normal">Metro Manila</span>
               </div>
-              <h3 class="mt-6 text-lg font-semibold">Diagnosis &amp; Repair</h3>
-              <p class="mt-2 text-sm text-muted-foreground">
-                Our technicians test your device, source reliable parts, and get the repair done carefully.
-              </p>
-            </div>
-
-            <div class="panel p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-              <div class="flex items-center justify-between">
-                <span class="grid h-8 w-8 place-items-center rounded-md border border-border font-mono text-sm font-bold">3</span>
-                <i data-lucide="package-check" class="h-6 w-6 text-muted-foreground"></i>
+              <div class="flex items-center gap-2 font-display text-sm font-bold text-foreground">
+                <i data-lucide="wrench" class="h-4 w-4 text-accent"></i>
+                <span>FixLogic Board & Screen Lab</span>
+                <span class="text-[10px] font-mono text-muted-foreground font-normal">Bulacan</span>
               </div>
-              <h3 class="mt-6 text-lg font-semibold">Testing &amp; Pickup</h3>
-              <p class="mt-2 text-sm text-muted-foreground">
-                We double-check every function to make sure it runs like new, then notify you that it's ready.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section class="border-y border-border bg-surface">
-          <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2">
-            <div>
-              <h2 class="text-3xl font-bold">Clear, Honest Service</h2>
-              <p class="mt-4 text-sm text-muted-foreground">
-                At <span data-bind="shopName"></span>, we never leave you wondering what's happening with your device. We update your ticket as we work so you always know the status and the exact price.
-              </p>
-
-              <div class="mt-8 grid gap-4 sm:grid-cols-2">
-                <div class="panel flex gap-3 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm">
-                  <i data-lucide="timer" class="mt-0.5 h-4 w-4 shrink-0 text-accent"></i>
-                  <div>
-                    <p class="text-sm font-semibold">Quick Turnaround</p>
-                    <p class="mt-1 text-xs text-muted-foreground">Most common repairs are finished within <span data-bind="turnaroundTime"></span>.</p>
-                  </div>
-                </div>
-
-                <div class="panel flex gap-3 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm">
-                  <i data-lucide="badge-check" class="mt-0.5 h-4 w-4 shrink-0 text-accent"></i>
-                  <div>
-                    <p class="text-sm font-semibold">Skilled Technicians</p>
-                    <p class="mt-1 text-xs text-muted-foreground">Years of hands-on experience with phones, tablets, laptops, and smartwatches.</p>
-                  </div>
-                </div>
-
-                <div class="panel flex gap-3 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm">
-                  <i data-lucide="shield-check" class="mt-0.5 h-4 w-4 shrink-0 text-accent"></i>
-                  <div>
-                    <p class="text-sm font-semibold"><span data-bind="warrantyDays"></span>-Day Warranty</p>
-                    <p class="mt-1 text-xs text-muted-foreground">Warranty coverage on all replacement parts.</p>
-                  </div>
-                </div>
-
-                <div class="panel flex gap-3 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm">
-                  <i data-lucide="boxes" class="mt-0.5 h-4 w-4 shrink-0 text-accent"></i>
-                  <div>
-                    <p class="text-sm font-semibold">All Major Brands</p>
-                    <p class="mt-1 text-xs text-muted-foreground" id="brands-list-text"></p>
-                  </div>
-                </div>
+              <div class="flex items-center gap-2 font-display text-sm font-bold text-foreground">
+                <i data-lucide="activity" class="h-4 w-4 text-accent"></i>
+                <span>ByteWorks Mobile &amp; Parts</span>
+                <span class="text-[10px] font-mono text-muted-foreground font-normal">Cebu</span>
               </div>
-            </div>
-
-            <div class="panel relative overflow-hidden p-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-              <img src="images/technician-repair.jpg" alt="Technician repairing mobile phone" class="aspect-4/3 w-full rounded-lg object-cover bg-muted" />
-              <div class="panel mt-3 flex items-center gap-3 p-3">
-                <div class="flex -space-x-2">
-                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80" alt="Alex" class="h-7 w-7 rounded-full object-cover border border-border" />
-                  <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=80&q=80" alt="Carlos" class="h-7 w-7 rounded-full object-cover border border-border" />
-                </div>
-                <div>
-                  <p class="text-sm font-semibold">Our In-Shop Team</p>
-                  <p class="text-xs text-muted-foreground">Friendly technicians ready to help</p>
-                </div>
+              <div class="flex items-center gap-2 font-display text-sm font-bold text-foreground">
+                <i data-lucide="zap" class="h-4 w-4 text-accent"></i>
+                <span>Apex Mobile Bench</span>
+                <span class="text-[10px] font-mono text-muted-foreground font-normal">Davao</span>
               </div>
             </div>
           </div>
         </section>
 
-        <section class="mx-auto max-w-3xl px-4 py-20 sm:px-6">
-          <h2 class="text-center text-3xl font-bold">Frequently Asked Questions</h2>
-          <p class="mt-3 text-center text-sm text-muted-foreground">
-            Quick answers about tracking your repair at <span data-bind="shopName"></span>.
-          </p>
-
-          <div class="mt-8 space-y-3 dynamic-faq" id="faq-accordion">
-            <div class="panel overflow-hidden border border-primary/60 ring-2 ring-primary/20 transition-all duration-200" data-faq>
-              <button type="button" data-faq-trigger aria-expanded="true" class="flex w-full items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer">
-                <span class="text-sm font-semibold">Where can I find my Ticket ID?</span>
-                <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground transition-all duration-300" data-faq-icon>
-                  <i data-lucide="chevron-down" class="h-4 w-4 transition-transform duration-300" style="transform: rotate(180deg);"></i>
-                </span>
-              </button>
-              <div data-faq-panel style="display: block;" class="border-t border-border px-5 py-4 text-sm text-muted-foreground bg-surface/30">
-                <p>Your Ticket ID is on the paper receipt we handed you when you dropped off your device, or shown on screen after you book online.</p>
-              </div>
+        <!-- 6. White-Label Section -->
+        <section class="py-16 sm:py-24 border-b border-border bg-background">
+          <div class="mx-auto max-w-6xl px-4 sm:px-6 space-y-12">
+            <div class="max-w-3xl space-y-3">
+              <p class="font-mono text-xs font-bold uppercase tracking-wider text-accent">Your Brand, Not Ours</p>
+              <h2 class="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+                Your customers see your shop, not our logo.
+              </h2>
+              <p class="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                When customers book a repair, check ticket status, or get a receipt, they only see your shop name, logo, phone number, and colors. FixTrack stays completely in the background.
+              </p>
             </div>
 
-            <div class="panel overflow-hidden border border-border transition-all duration-200" data-faq>
-              <button type="button" data-faq-trigger aria-expanded="false" class="flex w-full items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer">
-                <span class="text-sm font-semibold">What do the different repair statuses mean?</span>
-                <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-secondary text-muted-foreground transition-all duration-300" data-faq-icon>
-                  <i data-lucide="chevron-down" class="h-4 w-4 transition-transform duration-300"></i>
-                </span>
-              </button>
-              <div data-faq-panel id="faq2-panel-content" style="display: none;" class="hidden border-t border-border px-5 py-4 text-sm text-muted-foreground bg-surface/30">
-              </div>
-            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+              <div class="lg:col-span-5 space-y-4">
+                <div class="panel p-5 space-y-3 border border-border">
+                  <div class="flex items-center gap-3">
+                    <div class="h-9 w-9 rounded-lg bg-accent/15 text-accent grid place-items-center">
+                      <i data-lucide="image" class="h-4 w-4"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-display text-sm font-bold text-foreground">Upload Your Shop Logo</h4>
+                      <p class="text-xs text-muted-foreground">Put your logo on the website header and printed claim slips.</p>
+                    </div>
+                  </div>
+                </div>
 
-            <div class="panel overflow-hidden border border-border transition-all duration-200" data-faq>
-              <button type="button" data-faq-trigger aria-expanded="false" class="flex w-full items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer">
-                <span class="text-sm font-semibold">How often is the tracking updated?</span>
-                <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-secondary text-muted-foreground transition-all duration-300" data-faq-icon>
-                  <i data-lucide="chevron-down" class="h-4 w-4 transition-transform duration-300"></i>
-                </span>
-              </button>
-              <div data-faq-panel style="display: none;" class="hidden border-t border-border px-5 py-4 text-sm text-muted-foreground bg-surface/30">
-                <p>Our technicians update your ticket the moment they finish a step on your device, so you always see current information.</p>
-              </div>
-            </div>
+                <div class="panel p-5 space-y-3 border border-border">
+                  <div class="flex items-center gap-3">
+                    <div class="h-9 w-9 rounded-lg bg-accent/15 text-accent grid place-items-center">
+                      <i data-lucide="palette" class="h-4 w-4"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-display text-sm font-bold text-foreground">Pick Your Colors</h4>
+                      <p class="text-xs text-muted-foreground">Match your website to your shop signage or interior branding.</p>
+                    </div>
+                  </div>
+                </div>
 
-            <div class="panel overflow-hidden border border-border transition-all duration-200" data-faq>
-              <button type="button" data-faq-trigger aria-expanded="false" class="flex w-full items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer">
-                <span class="text-sm font-semibold">Can I cancel my repair?</span>
-                <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-secondary text-muted-foreground transition-all duration-300" data-faq-icon>
-                  <i data-lucide="chevron-down" class="h-4 w-4 transition-transform duration-300"></i>
-                </span>
-              </button>
-              <div data-faq-panel style="display: none;" class="hidden border-t border-border px-5 py-4 text-sm text-muted-foreground bg-surface/30">
-                <p>You may cancel your repair request without penalty any time before parts are ordered (before the 'Awaiting Parts' stage). After that, cancellation is subject to a fee covering parts ordered and work already done. Contact us at <span data-bind="phone"></span> to adjust your ticket.</p>
+                <div class="panel p-5 space-y-3 border border-border">
+                  <div class="flex items-center gap-3">
+                    <div class="h-9 w-9 rounded-lg bg-accent/15 text-accent grid place-items-center">
+                      <i data-lucide="sliders-horizontal" class="h-4 w-4"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-display text-sm font-bold text-foreground">Edit and Preview Instantly</h4>
+                      <p class="text-xs text-muted-foreground">Change store hours, fees, and contact info, and see the result right away.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-2">
+                  <a href="customize.html" class="inline-flex items-center gap-2 text-xs font-semibold text-accent hover:underline">
+                    <span>Open Shop Settings Tool</span>
+                    <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Visual White-Label Showcase Mockup -->
+              <div class="lg:col-span-7 panel p-6 border border-border shadow-panel bg-card space-y-4">
+                <div class="flex items-center justify-between border-b border-border pb-3">
+                  <div class="flex items-center gap-2">
+                    <span class="h-3 w-3 rounded-full bg-destructive/60"></span>
+                    <span class="h-3 w-3 rounded-full bg-warning/60"></span>
+                    <span class="h-3 w-3 rounded-full bg-success/60"></span>
+                    <span class="ml-2 font-mono text-xs text-muted-foreground">store.yourrepairshop.ph</span>
+                  </div>
+                  <span class="rounded bg-success/15 px-2 py-0.5 font-mono text-[10px] font-bold text-success">
+                    No Third-Party Ads
+                  </span>
+                </div>
+                <div class="space-y-4 pt-2">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                      <div class="h-8 w-8 rounded-lg bg-primary text-primary-foreground font-display font-bold grid place-items-center text-sm">
+                        TS
+                      </div>
+                      <div>
+                        <div class="font-display text-sm font-bold text-foreground">TechSpot Mobile &amp; Laptop Care</div>
+                        <div class="text-[11px] text-muted-foreground">Phone and laptop repair services</div>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <div class="font-mono text-xs font-bold text-foreground">+63 917 555 0192</div>
+                      <div class="text-[10px] text-muted-foreground">Burgos Ave, Cabanatuan</div>
+                    </div>
+                  </div>
+
+                  <div class="rounded-lg border border-border bg-surface p-4 text-center space-y-2">
+                    <div class="font-display text-base font-bold text-foreground">Track Your Device Repair In Real Time</div>
+                    <p class="text-xs text-muted-foreground max-w-md mx-auto">
+                      Enter your ticket number or phone number below for live repair updates.
+                    </p>
+                    <div class="max-w-sm mx-auto flex items-center gap-2 pt-1">
+                      <div class="flex-1 rounded border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground text-left font-mono">
+                        FIX-7K9P-4M2W
+                      </div>
+                      <span class="rounded bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground">Track</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section class="border-t border-border bg-surface">
-          <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-            <h2 class="text-center text-3xl font-bold">What Our Customers Say</h2>
-            <p class="mt-3 text-center text-sm text-muted-foreground">
-              Real reviews from customers who track their repairs online at <span data-bind="shopName"></span>.
-            </p>
-
-            <div class="mt-10 grid gap-6 md:grid-cols-3">
-              <figure class="panel p-6 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-                <div>
-                  <div class="flex gap-0.5 text-accent">
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                  </div>
-                  <blockquote class="mt-4 text-sm text-muted-foreground italic">
-                    “Being able to check my phone's status online was awesome. I can see exactly when they start working on it.”
-                  </blockquote>
-                </div>
-                <figcaption class="mt-5 flex items-center gap-3">
-                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Maria" class="h-9 w-9 rounded-full object-cover border border-border" />
-                  <span>
-                    <span class="block text-sm font-semibold">Maria Santos</span>
-                    <span class="block text-xs text-muted-foreground">iPhone 13 Screen Repair</span>
-                  </span>
-                </figcaption>
-              </figure>
-
-              <figure class="panel p-6 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-                <div>
-                  <div class="flex gap-0.5 text-accent">
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                  </div>
-                  <blockquote class="mt-4 text-sm text-muted-foreground italic">
-                    “Super easy and honest service. The diagnostic tracking gave me peace of mind while waiting to hear back about my laptop.”
-                  </blockquote>
-                </div>
-                <figcaption class="mt-5 flex items-center gap-3">
-                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" alt="Elena" class="h-9 w-9 rounded-full object-cover border border-border" />
-                  <span>
-                    <span class="block text-sm font-semibold">Juan Dela Cruz</span>
-                    <span class="block text-xs text-muted-foreground">MacBook Pro Customer</span>
-                  </span>
-                </figcaption>
-              </figure>
-
-              <figure class="panel p-6 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-                <div>
-                  <div class="flex gap-0.5 text-accent">
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                    <i data-lucide="star" class="h-4 w-4 fill-current"></i>
-                  </div>
-                  <blockquote class="mt-4 text-sm text-muted-foreground italic">
-                    “<span data-bind="shopName"></span> is easily the most organized repair shop in town. The final cost matched the quote with no surprises.”
-                  </blockquote>
-                </div>
-                <figcaption class="mt-5 flex items-center gap-3">
-                  <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80" alt="Elena" class="h-9 w-9 rounded-full object-cover border border-border" />
-                  <span>
-                    <span class="block text-sm font-semibold">Elena Reyes</span>
-                    <span class="block text-xs text-muted-foreground">Samsung Tablet Owner</span>
-                  </span>
-                </figcaption>
-              </figure>
+        <!-- 7. Features Bento Grid -->
+        <section id="features" class="py-16 sm:py-24 border-b border-border bg-surface/30">
+          <div class="mx-auto max-w-6xl px-4 sm:px-6 space-y-12">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+              <p class="font-mono text-xs font-bold uppercase tracking-wider text-accent">Built for Your Counter &amp; Workbench</p>
+              <h2 class="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+                Everything you need to run your shop daily.
+              </h2>
+              <p class="text-sm text-muted-foreground">
+                Simple, practical tools for checking in devices, updating repairs, and printing receipts.
+              </p>
             </div>
 
-            <div class="panel mx-auto mt-12 max-w-lg p-6 transition-all duration-200 hover:shadow-md">
-              <h3 class="text-center text-lg font-semibold">Leave a Review</h3>
-              <p class="mt-1 text-center text-xs text-muted-foreground">How was your repair experience?</p>
-
-              <div class="mt-4 flex justify-center gap-2">
-                <button type="button" data-star aria-label="Rate 1 star" class="p-1 text-muted-foreground transition-transform duration-200 hover:scale-125 cursor-pointer outline-none"><i data-lucide="star" class="h-6 w-6 pointer-events-none"></i></button>
-                <button type="button" data-star aria-label="Rate 2 stars" class="p-1 text-muted-foreground transition-transform duration-200 hover:scale-125 cursor-pointer outline-none"><i data-lucide="star" class="h-6 w-6 pointer-events-none"></i></button>
-                <button type="button" data-star aria-label="Rate 3 stars" class="p-1 text-muted-foreground transition-transform duration-200 hover:scale-125 cursor-pointer outline-none"><i data-lucide="star" class="h-6 w-6 pointer-events-none"></i></button>
-                <button type="button" data-star aria-label="Rate 4 stars" class="p-1 text-muted-foreground transition-transform duration-200 hover:scale-125 cursor-pointer outline-none"><i data-lucide="star" class="h-6 w-6 pointer-events-none"></i></button>
-                <button type="button" data-star aria-label="Rate 5 stars" class="p-1 text-muted-foreground transition-transform duration-200 hover:scale-125 cursor-pointer outline-none"><i data-lucide="star" class="h-6 w-6 pointer-events-none"></i></button>
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <!-- Bento Card 1: Intake & Model Matcher (Span 2) -->
+              <div class="md:col-span-2 panel p-6 space-y-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                <div class="flex items-center justify-between">
+                  <div class="h-10 w-10 rounded-lg bg-accent/15 text-accent grid place-items-center">
+                    <i data-lucide="smartphone" class="h-5 w-5"></i>
+                  </div>
+                  <span class="font-mono text-[11px] font-bold text-accent bg-accent/10 px-2.5 py-1 rounded-full border border-accent/20">
+                    1,000+ Device Catalog
+                  </span>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-foreground">Fast Check-In With Device Search</h3>
+                  <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed mt-1">
+                    Type any phone, tablet, or laptop model to pull up specs automatically. Pick common issues like cracked glass, water damage, or charging ports with one click to save time at the counter.
+                  </p>
+                </div>
+                <div class="flex flex-wrap gap-2 pt-2">
+                  <span class="inline-flex items-center gap-1 rounded bg-secondary px-2.5 py-1 text-xs text-muted-foreground font-mono">
+                    <i data-lucide="check" class="h-3 w-3 text-success"></i> Phone &amp; Laptop Search
+                  </span>
+                  <span class="inline-flex items-center gap-1 rounded bg-secondary px-2.5 py-1 text-xs text-muted-foreground font-mono">
+                    <i data-lucide="check" class="h-3 w-3 text-success"></i> Serial &amp; IMEI Tracking
+                  </span>
+                  <span class="inline-flex items-center gap-1 rounded bg-secondary px-2.5 py-1 text-xs text-muted-foreground font-mono">
+                    <i data-lucide="check" class="h-3 w-3 text-success"></i> Quick Price Estimates
+                  </span>
+                </div>
               </div>
 
-              <form id="feedback-form" class="mt-5" method="POST" action="#">
-                <label class="text-xs font-medium" for="comments">Your Comments</label>
-                <textarea id="comments" name="comments" rows="3" placeholder="Tell us what you liked or how we can improve..." class="mt-2 w-full rounded-lg border border-input bg-background p-3 text-sm outline-none focus:ring-2 focus:ring-ring"></textarea>
-                <button type="submit" class="mt-4 w-full rounded-lg bg-primary py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer">
-                  Submit Review
-                </button>
-                <p id="feedback-sent" hidden class="mt-3 text-center text-xs text-success"></p>
-              </form>
+              <!-- Bento Card 2: Offline QR Code Engine -->
+              <div class="panel p-6 space-y-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                <div class="h-10 w-10 rounded-lg bg-accent/15 text-accent grid place-items-center">
+                  <i data-lucide="qr-code" class="h-5 w-5"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-foreground">QR Tracking That Works Without Internet</h3>
+                  <p class="text-xs text-muted-foreground leading-relaxed mt-1">
+                    Every receipt prints with a QR code that holds the ticket info. Customers scan it with their phone camera to check their repair status anytime.
+                  </p>
+                </div>
+                <div class="pt-2 font-mono text-[11px] text-accent flex items-center gap-1.5">
+                  <i data-lucide="zap" class="h-3.5 w-3.5"></i> Instant Scan Without App Installs
+                </div>
+              </div>
+
+              <!-- Bento Card 3: In-Browser Brand Customizer -->
+              <div class="panel p-6 space-y-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                <div class="h-10 w-10 rounded-lg bg-accent/15 text-accent grid place-items-center">
+                  <i data-lucide="sliders" class="h-5 w-5"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-foreground">Simple Settings With Live Preview</h3>
+                  <p class="text-xs text-muted-foreground leading-relaxed mt-1">
+                    Change your shop name, phone number, diagnostic fee, warranty days, and business hours. You can see how your site looks side-by-side as you type.
+                  </p>
+                </div>
+                <div class="pt-2 font-mono text-[11px] text-accent flex items-center gap-1.5">
+                  <i data-lucide="check" class="h-3.5 w-3.5"></i> Single-Click Config Export
+                </div>
+              </div>
+
+              <!-- Bento Card 4: Precision Workbench Kanban -->
+              <div class="panel p-6 space-y-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                <div class="h-10 w-10 rounded-lg bg-accent/15 text-accent grid place-items-center">
+                  <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-foreground">A Clear Job Queue for Your Techs</h3>
+                  <p class="text-xs text-muted-foreground leading-relaxed mt-1">
+                    See every active repair in one place. Techs can move jobs from received to ready, write notes about what was fixed, and keep the counter staff updated.
+                  </p>
+                </div>
+                <div class="pt-2 font-mono text-[11px] text-accent flex items-center gap-1.5">
+                  <i data-lucide="check" class="h-3.5 w-3.5"></i> Assign Jobs to Specific Techs
+                </div>
+              </div>
+
+              <!-- Bento Card 5: Thermal Receipts & VAT -->
+              <div class="panel p-6 space-y-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                <div class="h-10 w-10 rounded-lg bg-accent/15 text-accent grid place-items-center">
+                  <i data-lucide="printer" class="h-5 w-5"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-foreground">Print Standard 58mm &amp; 80mm Receipts</h3>
+                  <p class="text-xs text-muted-foreground leading-relaxed mt-1">
+                    Works with standard thermal receipt printers. Prints clean claim tickets with itemized parts, labor, diagnostic fees, warranty terms, and the QR code.
+                  </p>
+                </div>
+                <div class="pt-2 font-mono text-[11px] text-accent flex items-center gap-1.5">
+                  <i data-lucide="check" class="h-3.5 w-3.5"></i> Built-in 12% VAT Breakdown
+                </div>
+              </div>
+
+              <!-- Bento Card 6: Local Storage & Privacy (Span 2) -->
+              <div class="md:col-span-2 lg:col-span-3 panel p-6 space-y-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md bg-card">
+                <div class="flex items-center justify-between">
+                  <div class="h-10 w-10 rounded-lg bg-accent/15 text-accent grid place-items-center">
+                    <i data-lucide="shield" class="h-5 w-5"></i>
+                  </div>
+                  <span class="font-mono text-[11px] font-bold text-success bg-success/10 px-2.5 py-1 rounded-full border border-success/20">
+                    Private &amp; Local
+                  </span>
+                </div>
+                <h3 class="text-lg font-bold text-foreground">Your Repair Data Stays on Your Machine</h3>
+                <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  Customer phone numbers, repair history, and sales stay private on your local computer or shop Wi-Fi. No cloud provider downtime, no monthly hosting bills, and no third parties seeing your business numbers.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 8. Interactive Repair OS Tabbed Tour -->
+        <section id="how-it-works" class="py-16 sm:py-24 border-b border-border bg-background">
+          <div class="mx-auto max-w-6xl px-4 sm:px-6 space-y-10">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+              <p class="font-mono text-xs font-bold uppercase tracking-wider text-accent">How It Works Together</p>
+              <h2 class="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+                Four simple tools in one place.
+              </h2>
+              <p class="text-sm text-muted-foreground">
+                Everything connects from customer drop-off to pickup.
+              </p>
+            </div>
+
+            <!-- Tab Buttons -->
+            <div class="flex flex-wrap items-center justify-center gap-2 border-b border-border pb-4">
+              <button
+                type="button"
+                data-tour="storefront"
+                class="tour-tab-btn rounded-lg px-4 py-2 text-xs font-semibold border border-primary bg-primary text-primary-foreground shadow-sm transition-all duration-150 cursor-pointer"
+              >
+                1. Customer Website
+              </button>
+              <button
+                type="button"
+                data-tour="tracking"
+                class="tour-tab-btn rounded-lg px-4 py-2 text-xs font-semibold border border-border bg-card text-muted-foreground hover:bg-secondary hover:text-foreground transition-all duration-150 cursor-pointer"
+              >
+                2. Live Status Page
+              </button>
+              <button
+                type="button"
+                data-tour="kanban"
+                class="tour-tab-btn rounded-lg px-4 py-2 text-xs font-semibold border border-border bg-card text-muted-foreground hover:bg-secondary hover:text-foreground transition-all duration-150 cursor-pointer"
+              >
+                3. Tech Dashboard
+              </button>
+              <button
+                type="button"
+                data-tour="customizer"
+                class="tour-tab-btn rounded-lg px-4 py-2 text-xs font-semibold border border-border bg-card text-muted-foreground hover:bg-secondary hover:text-foreground transition-all duration-150 cursor-pointer"
+              >
+                4. Shop Settings
+              </button>
+            </div>
+
+            <!-- Tab Content Panels -->
+            <div class="panel p-6 sm:p-8 border border-border shadow-panel bg-card">
+              <!-- Panel 1: Storefront -->
+              <div id="tour-panel-storefront" class="tour-panel space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h3 class="font-display text-xl font-bold text-foreground">A Clean Website for Your Customers</h3>
+                    <p class="text-xs text-muted-foreground mt-1">
+                      Customers can search their ticket, view repair prices, check your store hours, or submit a booking request before visiting.
+                    </p>
+                  </div>
+                  <a href="store.html?demo=true" class="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-accent hover:bg-secondary transition-colors shrink-0">
+                    <span>Open Live Storefront</span>
+                    <i data-lucide="external-link" class="h-3.5 w-3.5"></i>
+                  </a>
+                </div>
+
+                <div class="rounded-lg border border-border bg-surface/50 p-4 space-y-4">
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="panel p-3.5 space-y-1.5 bg-card border border-border">
+                      <div class="font-bold text-foreground flex items-center gap-1.5">
+                        <i data-lucide="search" class="h-3.5 w-3.5 text-accent"></i> Instant Ticket Search
+                      </div>
+                      <p class="text-muted-foreground text-[11px]">Customers look up progress using their ticket ID or phone number.</p>
+                    </div>
+                    <div class="panel p-3.5 space-y-1.5 bg-card border border-border">
+                      <div class="font-bold text-foreground flex items-center gap-1.5">
+                        <i data-lucide="calendar" class="h-3.5 w-3.5 text-accent"></i> Online Repair Booking
+                      </div>
+                      <p class="text-muted-foreground text-[11px]">Easy booking form with device category and issue selection.</p>
+                    </div>
+                    <div class="panel p-3.5 space-y-1.5 bg-card border border-border">
+                      <div class="font-bold text-foreground flex items-center gap-1.5">
+                        <i data-lucide="map-pin" class="h-3.5 w-3.5 text-accent"></i> Shop Information
+                      </div>
+                      <p class="text-muted-foreground text-[11px]">Shows operating hours, contact phone, shop address, and warranty terms.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Panel 2: Tracking (Hidden by default) -->
+              <div id="tour-panel-tracking" class="tour-panel hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h3 class="font-display text-xl font-bold text-foreground">Live Status Updates for Customers</h3>
+                    <p class="text-xs text-muted-foreground mt-1">
+                      Customers check their repair status online instead of calling your shop. Shows clear steps, technician notes, and pickup details.
+                    </p>
+                  </div>
+                  <a href="status.html?ticket=FIX-7K9P-4M2W" class="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-accent hover:bg-secondary transition-colors shrink-0">
+                    <span>Open Status Page</span>
+                    <i data-lucide="external-link" class="h-3.5 w-3.5"></i>
+                  </a>
+                </div>
+
+                <div class="rounded-lg border border-border bg-surface/50 p-4 space-y-3">
+                  <div class="flex items-center justify-between text-xs font-mono">
+                    <span class="font-bold text-foreground">Repair Pipeline:</span>
+                    <span class="text-accent">Ticket FIX-7K9P-4M2W</span>
+                  </div>
+                  <div class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs">
+                    <div class="rounded border border-success/40 bg-success/10 p-2.5 text-center text-success font-semibold">
+                      ✓ Received
+                    </div>
+                    <div class="rounded border border-success/40 bg-success/10 p-2.5 text-center text-success font-semibold">
+                      ✓ Diagnosing
+                    </div>
+                    <div class="rounded border border-accent bg-accent/20 p-2.5 text-center text-accent font-bold">
+                      ● Repairing
+                    </div>
+                    <div class="rounded border border-border bg-card p-2.5 text-center text-muted-foreground">
+                      ○ Testing
+                    </div>
+                    <div class="rounded border border-border bg-card p-2.5 text-center text-muted-foreground">
+                      ○ Ready
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Panel 3: Kanban (Hidden by default) -->
+              <div id="tour-panel-kanban" class="tour-panel hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h3 class="font-display text-xl font-bold text-foreground">Job Board for Your Repair Bench</h3>
+                    <p class="text-xs text-muted-foreground mt-1">
+                      See every device in the shop at a glance. Techs can assign tickets, update repair stages, log notes, and calculate parts totals.
+                    </p>
+                  </div>
+                  <a href="login.html" class="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-accent hover:bg-secondary transition-colors shrink-0">
+                    <span>Staff Console</span>
+                    <i data-lucide="external-link" class="h-3.5 w-3.5"></i>
+                  </a>
+                </div>
+
+                <div class="rounded-lg border border-border bg-surface/50 p-4 space-y-3 text-xs">
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="panel p-3 bg-card border border-border text-center">
+                      <div class="font-mono text-xl font-bold text-foreground">12</div>
+                      <div class="text-[11px] text-muted-foreground">Active Jobs</div>
+                    </div>
+                    <div class="panel p-3 bg-card border border-border text-center">
+                      <div class="font-mono text-xl font-bold text-warning">3</div>
+                      <div class="text-[11px] text-muted-foreground">Diagnosing</div>
+                    </div>
+                    <div class="panel p-3 bg-card border border-border text-center">
+                      <div class="font-mono text-xl font-bold text-accent">6</div>
+                      <div class="text-[11px] text-muted-foreground">On Bench</div>
+                    </div>
+                    <div class="panel p-3 bg-card border border-border text-center">
+                      <div class="font-mono text-xl font-bold text-success">3</div>
+                      <div class="text-[11px] text-muted-foreground">Ready for Pickup</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Panel 4: Customizer (Hidden by default) -->
+              <div id="tour-panel-customizer" class="tour-panel hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h3 class="font-display text-xl font-bold text-foreground">Easy Shop Settings and Branding</h3>
+                    <p class="text-xs text-muted-foreground mt-1">
+                      Change your shop name, upload a logo, set diagnostic fees, and update warranty policies without touching code.
+                    </p>
+                  </div>
+                  <a href="customize.html" class="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-accent hover:bg-secondary transition-colors shrink-0">
+                    <span>Open Settings Tool</span>
+                    <i data-lucide="external-link" class="h-3.5 w-3.5"></i>
+                  </a>
+                </div>
+
+                <div class="rounded-lg border border-border bg-surface/50 p-4 space-y-3 text-xs">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                      <div class="font-semibold text-foreground">What you can customize:</div>
+                      <ul class="space-y-1 text-muted-foreground text-[11px]">
+                        <li>• Shop name, logo image, and store tagline</li>
+                        <li>• Diagnostic bench fees and VAT rate</li>
+                        <li>• Warranty length and turnaround estimates</li>
+                        <li>• Facebook, Instagram, and Twitter / X links</li>
+                      </ul>
+                    </div>
+                    <div class="space-y-2">
+                      <div class="font-semibold text-foreground">Saving and exporting:</div>
+                      <ul class="space-y-1 text-muted-foreground text-[11px]">
+                        <li>• Saves directly to your browser</li>
+                        <li>• Single-click config.js file download</li>
+                        <li>• Test presets to try different shop styles (Alt+D)</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 9. Speed & Reliability -->
+        <section class="py-16 sm:py-20 border-b border-border bg-surface/30">
+          <div class="mx-auto max-w-6xl px-4 sm:px-6 space-y-12">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+              <p class="font-mono text-xs font-bold uppercase tracking-wider text-accent">Lightweight &amp; Fast</p>
+              <h2 class="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+                Fast, simple, and runs offline.
+              </h2>
+              <p class="text-sm text-muted-foreground">
+                No heavy software to install. Loads instantly on any phone, tablet, or counter PC.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="panel p-6 text-center space-y-1.5 border border-border">
+                <div class="font-display text-3xl sm:text-4xl font-bold text-foreground">60s</div>
+                <div class="text-xs font-bold text-accent">Setup Time</div>
+                <div class="text-[11px] text-muted-foreground leading-normal">Open in browser or run one simple command</div>
+              </div>
+
+              <div class="panel p-6 text-center space-y-1.5 border border-border">
+                <div class="font-display text-3xl sm:text-4xl font-bold text-foreground">0.0ms</div>
+                <div class="text-xs font-bold text-accent">Cloud Delay</div>
+                <div class="text-[11px] text-muted-foreground leading-normal">Runs locally on your computer or Wi-Fi</div>
+              </div>
+
+              <div class="panel p-6 text-center space-y-1.5 border border-border">
+                <div class="font-display text-3xl sm:text-4xl font-bold text-foreground">₱0 <span class="text-sm font-sans font-normal text-muted-foreground">/ mo</span></div>
+                <div class="text-xs font-bold text-accent">No Subscriptions</div>
+                <div class="text-[11px] text-muted-foreground leading-normal">Free to use with no monthly bills</div>
+              </div>
+
+              <div class="panel p-6 text-center space-y-1.5 border border-border">
+                <div class="font-display text-3xl sm:text-4xl font-bold text-foreground">90%</div>
+                <div class="text-xs font-bold text-accent">Fewer Status Calls</div>
+                <div class="text-[11px] text-muted-foreground leading-normal">Customers scan receipt QR code to track</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 10. Getting Started (3-Step Roadmap) -->
+        <section class="py-16 sm:py-24 border-b border-border bg-background">
+          <div class="mx-auto max-w-5xl px-4 sm:px-6 space-y-12">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+              <p class="font-mono text-xs font-bold uppercase tracking-wider text-accent">Getting Started</p>
+              <h2 class="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+                Up and running in 3 steps.
+              </h2>
+              <p class="text-sm text-muted-foreground">
+                Set up your shop in minutes without any coding or technical setup.
+              </p>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-3">
+              <div class="panel p-6 space-y-3 relative border border-border">
+                <div class="font-mono text-3xl font-extrabold text-accent/30">01</div>
+                <h3 class="text-base font-bold text-foreground">Enter Your Shop Details</h3>
+                <p class="text-xs text-muted-foreground leading-relaxed">
+                  Add your shop name, phone number, address, and operating hours in the setup form.
+                </p>
+              </div>
+
+              <div class="panel p-6 space-y-3 relative border border-border">
+                <div class="font-mono text-3xl font-extrabold text-accent/30">02</div>
+                <h3 class="text-base font-bold text-foreground">Add Your Logo and Pricing</h3>
+                <p class="text-xs text-muted-foreground leading-relaxed">
+                  Upload your shop logo, set your diagnostic fee, and choose your colors in the settings tool.
+                </p>
+              </div>
+
+              <div class="panel p-6 space-y-3 relative border border-border">
+                <div class="font-mono text-3xl font-extrabold text-accent/30">03</div>
+                <h3 class="text-base font-bold text-foreground">Start Checking In Repairs</h3>
+                <p class="text-xs text-muted-foreground leading-relaxed">
+                  Print claim tickets with QR codes and update repair progress as your techs work.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 11. Comparison Matrix Card -->
+        <section id="pricing-comparison" class="py-16 sm:py-24 border-b border-border bg-surface/30">
+          <div class="mx-auto max-w-5xl px-4 sm:px-6 space-y-10">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+              <p class="font-mono text-xs font-bold uppercase tracking-wider text-accent">Cost Comparison</p>
+              <h2 class="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+                Why pay monthly for repair software?
+              </h2>
+              <p class="text-sm text-muted-foreground">
+                Most repair shop software charges ₱100 or more every month for basic features. Here is how FixTrack compares.
+              </p>
+            </div>
+
+            <div class="panel overflow-hidden border border-border shadow-panel">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                  <thead>
+                    <tr class="border-b border-border bg-surface">
+                      <th class="p-4 font-bold text-foreground">Feature</th>
+                      <th class="p-4 font-bold text-accent bg-accent/5">FixTrack</th>
+                      <th class="p-4 font-bold text-muted-foreground">Paid Repair Software</th>
+                      <th class="p-4 font-bold text-muted-foreground">Paper Claim Slips</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-border">
+                    <tr class="hover:bg-card/50 transition-colors">
+                      <td class="p-4 font-semibold text-foreground">Monthly Cost</td>
+                      <td class="p-4 font-mono font-bold text-success bg-accent/5">Free (₱0 / mo)</td>
+                      <td class="p-4 text-muted-foreground">₱99 to ₱299 every month</td>
+                      <td class="p-4 text-muted-foreground">Cost of paper pads</td>
+                    </tr>
+                    <tr class="hover:bg-card/50 transition-colors">
+                      <td class="p-4 font-semibold text-foreground">Works Without Internet</td>
+                      <td class="p-4 font-mono font-bold text-success bg-accent/5">Yes, runs offline on your LAN</td>
+                      <td class="p-4 text-muted-foreground">No, stops if internet goes down</td>
+                      <td class="p-4 text-muted-foreground">Yes</td>
+                    </tr>
+                    <tr class="hover:bg-card/50 transition-colors">
+                      <td class="p-4 font-semibold text-foreground">Customer Online Tracking</td>
+                      <td class="p-4 font-mono font-bold text-success bg-accent/5">Included via QR code</td>
+                      <td class="p-4 text-muted-foreground">Extra monthly charge or SMS fee</td>
+                      <td class="p-4 text-muted-foreground">None, customers have to call</td>
+                    </tr>
+                    <tr class="hover:bg-card/50 transition-colors">
+                      <td class="p-4 font-semibold text-foreground">Thermal Receipt Printing</td>
+                      <td class="p-4 font-mono font-bold text-success bg-accent/5">Standard 58mm &amp; 80mm slips</td>
+                      <td class="p-4 text-muted-foreground">Often requires specific print hardware</td>
+                      <td class="p-4 text-muted-foreground">Handwritten carbon copy</td>
+                    </tr>
+                    <tr class="hover:bg-card/50 transition-colors">
+                      <td class="p-4 font-semibold text-foreground">Your Own Branding</td>
+                      <td class="p-4 font-mono font-bold text-success bg-accent/5">100% your shop name and logo</td>
+                      <td class="p-4 text-muted-foreground">Shows their logo or watermark</td>
+                      <td class="p-4 text-muted-foreground">Rubber stamp</td>
+                    </tr>
+                    <tr class="hover:bg-card/50 transition-colors">
+                      <td class="p-4 font-semibold text-foreground">Data Privacy</td>
+                      <td class="p-4 font-mono font-bold text-success bg-accent/5">Stored on your own computer</td>
+                      <td class="p-4 text-muted-foreground">Stored on their cloud servers</td>
+                      <td class="p-4 text-muted-foreground">Risk of lost or damaged paper</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 12. Final Call to Action -->
+        <section class="py-16 sm:py-24 bg-surface/50 border-b border-border">
+          <div class="mx-auto max-w-4xl px-4 sm:px-6">
+            <div class="panel p-8 sm:p-12 text-center space-y-6 bg-gradient-to-b from-card to-surface border border-accent/30 shadow-panel">
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-success/40 bg-success/10 px-3 py-1 font-mono text-xs font-semibold text-success">
+                <span class="h-2 w-2 rounded-full bg-success"></span>
+                <span>Free Forever • No Credit Card Required</span>
+              </span>
+
+              <h2 class="font-display text-3xl sm:text-4xl font-bold text-foreground">
+                Ready to set up your shop?
+              </h2>
+
+              <p class="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed">
+                Start giving your customers live repair updates and clean thermal receipts today without paying monthly software fees.
+              </p>
+
+              <!-- Bottom Quick-Start Input -->
+              <div class="mx-auto max-w-md pt-2">
+                <div class="panel p-2 flex flex-col sm:flex-row items-center gap-2 shadow-panel bg-card border border-border">
+                  <div class="relative flex-1 w-full flex items-center">
+                    <i data-lucide="store" class="absolute left-3.5 h-4 w-4 text-muted-foreground pointer-events-none"></i>
+                    <input
+                      id="bottom-shop-name"
+                      type="text"
+                      placeholder="Enter your shop name..."
+                      class="w-full rounded-lg border-0 bg-transparent py-2.5 pl-10 pr-3 text-sm text-foreground outline-none placeholder:text-muted-foreground/70"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    id="bottom-create-btn"
+                    class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer shrink-0"
+                  >
+                    <span>Create your shop</span>
+                    <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-center gap-4 text-xs">
+                <a
+                  href="store.html?demo=true"
+                  class="inline-flex items-center gap-1.5 font-semibold text-accent hover:underline transition-colors"
+                >
+                  <i data-lucide="external-link" class="h-3.5 w-3.5"></i>
+                  <span>Explore Live Demo Store</span>
+                </a>
+              </div>
             </div>
           </div>
         </section>
       </main>
 
-      <footer class="border-t border-border bg-surface">
-        <div class="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-3">
-          <div>
-            <h3 class="text-base font-bold" data-bind="shopName"></h3>
-            <p class="mt-3 max-w-xs text-sm text-muted-foreground" data-bind="tagline"></p>
-          </div>
-          <div>
-            <h4 class="text-sm font-semibold">Store Contact &amp; Hours</h4>
-            <ul class="mt-3 space-y-2 text-sm text-muted-foreground">
-              <li>
-                <div class="flex items-center gap-2">
-                  <i data-lucide="clock" class="h-4 w-4 shrink-0"></i> <span data-bind="hours"></span>
-                </div>
-              </li>
-              <li>
-                <a data-bind-href="email" href="#" class="flex items-center gap-2 hover:text-foreground transition-colors">
-                  <i data-lucide="mail" class="h-4 w-4 shrink-0"></i> <span data-bind="email"></span>
-                </a>
-              </li>
-              <li>
-                <a data-bind-href="phone" href="#" class="flex items-center gap-2 hover:text-foreground transition-colors">
-                  <i data-lucide="phone" class="h-4 w-4 shrink-0"></i> <span data-bind="phone"></span>
-                </a>
-              </li>
-              <li>
-                <a data-bind-href="mapsUrl" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-foreground transition-colors">
-                  <i data-lucide="map-pin" class="h-4 w-4 shrink-0"></i> <span data-bind="address"></span>
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="text-sm font-semibold">Legal &amp; Social</h4>
-            <ul class="mt-3 space-y-1 text-sm text-muted-foreground">
-              <li><a href="about.html" class="hover:underline">About &amp; The Team</a></li>
-              <li><a href="privacy.html" class="hover:underline">Privacy Policy</a></li>
-              <li><a href="terms.html" class="hover:underline">Terms of Service</a></li>
-            </ul>
-            <div class="mt-4 flex gap-3 text-muted-foreground">
-              <a data-bind-href="twitter" href="#" aria-label="Twitter" class="hover:text-foreground transition-colors"><i data-lucide="twitter" class="h-4 w-4"></i></a>
-              <a data-bind-href="instagram" href="#" aria-label="Instagram" class="hover:text-foreground transition-colors"><i data-lucide="instagram" class="h-4 w-4"></i></a>
-              <a data-bind-href="facebook" href="#" aria-label="Facebook" class="hover:text-foreground transition-colors"><i data-lucide="facebook" class="h-4 w-4"></i></a>
+      <!-- 13. Footer -->
+      <footer class="border-t border-border bg-surface py-12 text-xs text-muted-foreground">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+          <!-- Col 1: Brand Info -->
+          <div class="space-y-3 md:col-span-1">
+            <div class="flex items-center gap-2">
+              <img src="logo.svg" alt="FixTrack Logo" class="h-6 w-6" />
+              <span class="font-display text-base font-bold text-foreground">FixTrack</span>
+            </div>
+            <p class="text-xs text-muted-foreground leading-relaxed">
+              Free website and repair tracking software for independent gadget and device repair shops.
+            </p>
+            <div class="flex items-center gap-1.5 font-mono text-[11px] text-success">
+              <span class="h-2 w-2 rounded-full bg-success"></span>
+              <span>Running locally on your network</span>
             </div>
           </div>
-        </div>
-        <div class="border-t border-border py-5 text-center text-xs text-muted-foreground">
-          © <span id="year"></span> <span data-bind="shopName"></span>. All rights reserved. • Powered by <span class="font-bold text-foreground" data-bind="vendorName"></span>
+
+          <!-- Col 2: Features -->
+          <div class="space-y-2">
+            <h4 class="font-display text-xs font-bold uppercase tracking-wider text-foreground">Tools</h4>
+            <ul class="space-y-1.5">
+              <li><a href="signup.html" class="hover:text-foreground transition-colors">Create a Shop</a></li>
+              <li><a href="portal-login.html" class="hover:text-foreground transition-colors">Shop Owner Login</a></li>
+              <li><a href="login.html" class="hover:text-foreground transition-colors">Staff Dashboard</a></li>
+              <li><a href="customize.html" class="hover:text-foreground transition-colors">Shop Customizer</a></li>
+            </ul>
+          </div>
+
+          <!-- Col 3: Demo Pages -->
+          <div class="space-y-2">
+            <h4 class="font-display text-xs font-bold uppercase tracking-wider text-foreground">Demo Pages</h4>
+            <ul class="space-y-1.5">
+              <li><a href="store.html?demo=true" class="hover:text-foreground transition-colors text-accent">Demo Storefront</a></li>
+              <li><a href="status.html?ticket=FIX-7K9P-4M2W" class="hover:text-foreground transition-colors">Demo Status Tracker</a></li>
+              <li><a href="request.html" class="hover:text-foreground transition-colors">Repair Booking Form</a></li>
+              <li><a href="about.html" class="hover:text-foreground transition-colors">About FixTrack</a></li>
+            </ul>
+          </div>
+
+          <!-- Col 4: Policies -->
+          <div class="space-y-2">
+            <h4 class="font-display text-xs font-bold uppercase tracking-wider text-foreground">Policies</h4>
+            <ul class="space-y-1.5">
+              <li><a href="privacy.html" class="hover:text-foreground transition-colors">Privacy Policy</a></li>
+              <li><a href="terms.html" class="hover:text-foreground transition-colors">Terms of Service</a></li>
+              <li><span class="text-muted-foreground/70">© <span id="year"></span> FixTrack</span></li>
+            </ul>
+          </div>
         </div>
       </footer>
     </div>
+
+    <!-- Interactive Scripts: Shop Intake, CLI Copy, Milestone Simulator, Tour Tabs -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+      // Downward Rotating Headline Ticker
+        const rotatingPhrases = [
+          "monthly software fees.",
+          "endless status calls.",
+          "lost paper slips.",
+          "cloud server downtime.",
+          "complicated tools."
+        ];
+
+        let phraseIndex = 0;
+        const tickerEl = document.getElementById("headline-ticker");
+
+        if (tickerEl) {
+          setInterval(() => {
+            // 1. Slide current text down and fade out
+            tickerEl.style.transition = "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease-out";
+            tickerEl.style.transform = "translateY(100%)";
+            tickerEl.style.opacity = "0";
+
+            setTimeout(() => {
+              // 2. Cycle to next phrase and reset position up top instantly without transition
+              phraseIndex = (phraseIndex + 1) % rotatingPhrases.length;
+              tickerEl.textContent = rotatingPhrases[phraseIndex];
+              tickerEl.style.transition = "none";
+              tickerEl.style.transform = "translateY(-100%)";
+
+              // 3. Force DOM reflow so the transition re-triggers
+              void tickerEl.offsetHeight;
+
+              // 4. Slide into center from above
+              tickerEl.style.transition = "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease-out";
+              tickerEl.style.transform = "translateY(0)";
+              tickerEl.style.opacity = "1";
+            }, 400);
+          }, 2800);
+        }
+        // Year stamp
+        const yearEl = document.getElementById("year");
+        if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+        // Mobile menu toggle
+        const menuBtn = document.getElementById("mobile-menu-btn");
+        const mobileMenu = document.getElementById("mobile-menu");
+        if (menuBtn && mobileMenu) {
+          menuBtn.addEventListener("click", () => {
+            mobileMenu.classList.toggle("hidden");
+          });
+        }
+
+        // Quick-Start Button Handlers (Hero and Bottom)
+        function setupShopIntake(inputId, btnId) {
+          const input = document.getElementById(inputId);
+          const btn = document.getElementById(btnId);
+          const handle = () => {
+            const val = input ? input.value.trim() : "";
+            if (val) {
+              window.location.href = `signup.html?shop=${encodeURIComponent(val)}`;
+            } else {
+              window.location.href = "signup.html";
+            }
+          };
+          if (btn) btn.addEventListener("click", handle);
+          if (input) {
+            input.addEventListener("keydown", (e) => {
+              if (e.key === "Enter") handle();
+            });
+          }
+        }
+        setupShopIntake("hero-shop-name", "hero-create-btn");
+        setupShopIntake("bottom-shop-name", "bottom-create-btn");
+
+        // CLI Quick-Start Copy Button
+        const copyBtn = document.getElementById("copy-cli-btn");
+        if (copyBtn) {
+          copyBtn.addEventListener("click", () => {
+            const cmd = "git clone https://github.com/fixtrack/fixtrack-web.git && python3 server.py";
+            navigator.clipboard.writeText(cmd).then(() => {
+              const orig = copyBtn.innerHTML;
+              copyBtn.innerHTML = '<i data-lucide="check" class="h-3 w-3 text-success"></i><span>Copied!</span>';
+              if (window.lucide) window.lucide.createIcons();
+              setTimeout(() => {
+                copyBtn.innerHTML = orig;
+                if (window.lucide) window.lucide.createIcons();
+              }, 2000);
+            });
+          });
+        }
+
+        // Live Interactive Milestone Ticket Widget
+        const milestones = {
+          "Received": {
+            progress: "25%",
+            percent: "25%",
+            color: "text-muted-foreground",
+            bg: "bg-surface",
+            border: "border-border",
+            dot: "bg-muted-foreground",
+            timestamp: "Today • 09:30 AM",
+            log: "Front desk: Phone dropped off for screen replacement and battery check."
+          },
+          "Diagnostic": {
+            progress: "50%",
+            percent: "50%",
+            color: "text-warning",
+            bg: "bg-warning/10",
+            border: "border-warning/30",
+            dot: "bg-warning",
+            timestamp: "Today • 11:15 AM",
+            log: "Bench tech: Tested display and battery. Screen is cracked and battery health is at 71%. New parts ready."
+          },
+          "Active Repair": {
+            progress: "75%",
+            percent: "75%",
+            color: "text-accent",
+            bg: "bg-accent/15",
+            border: "border-accent/30",
+            dot: "bg-accent",
+            timestamp: "Today • 02:15 PM",
+            log: "Tech Alex Rivera: Screen replaced and new battery installed. Running display touch test."
+          },
+          "Ready for Pickup": {
+            progress: "100%",
+            percent: "100%",
+            color: "text-success",
+            bg: "bg-success/15",
+            border: "border-success/30",
+            dot: "bg-success",
+            timestamp: "Today • 03:45 PM",
+            log: "Front desk: Repair finished and all checks passed. Ready for pickup at the counter."
+          }
+        };
+
+        const pills = document.querySelectorAll(".demo-milestone-pill");
+        const badgeText = document.getElementById("demo-status-text");
+        const badgeEl = document.getElementById("demo-status-badge");
+        const progressFill = document.getElementById("demo-progress-fill");
+        const progressPercent = document.getElementById("demo-progress-percent");
+        const logTimestamp = document.getElementById("demo-log-timestamp");
+        const logText = document.getElementById("demo-log-text");
+
+        pills.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const m = btn.dataset.milestone;
+            const data = milestones[m];
+            if (!data) return;
+
+            pills.forEach((p) => {
+              p.className = "demo-milestone-pill text-xs font-semibold py-1.5 px-2 rounded-lg border border-border bg-surface text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors cursor-pointer text-center";
+            });
+            btn.className = "demo-milestone-pill text-xs font-semibold py-1.5 px-2 rounded-lg border border-accent bg-accent/15 text-accent font-bold cursor-pointer text-center";
+
+            if (badgeText) {
+              const displayNames = {
+                "Received": "Received",
+                "Diagnostic": "Diagnosing",
+                "Active Repair": "Repairing",
+                "Ready for Pickup": "Ready"
+              };
+              badgeText.textContent = displayNames[m] || m;
+            }
+            if (badgeEl) {
+              badgeEl.className = `inline-flex items-center gap-1.5 rounded-full border ${data.border} ${data.bg} px-3 py-1 font-mono text-xs font-bold ${data.color}`;
+              const dot = badgeEl.querySelector("span");
+              if (dot) dot.className = `h-1.5 w-1.5 rounded-full ${data.dot} animate-pulse`;
+            }
+
+            if (progressFill) progressFill.style.width = data.progress;
+            if (progressPercent) progressPercent.textContent = data.percent;
+
+            if (logTimestamp) logTimestamp.textContent = data.timestamp;
+            if (logText) logText.textContent = data.log;
+          });
+        });
+
+        // Interactive Tour Tab Switching
+        const tourTabs = document.querySelectorAll(".tour-tab-btn");
+        const tourPanels = document.querySelectorAll(".tour-panel");
+
+        tourTabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            const target = tab.dataset.tour;
+
+            tourTabs.forEach((t) => {
+              t.className = "tour-tab-btn rounded-lg px-4 py-2 text-xs font-semibold border border-border bg-card text-muted-foreground hover:bg-secondary hover:text-foreground transition-all duration-150 cursor-pointer";
+            });
+            tab.className = "tour-tab-btn rounded-lg px-4 py-2 text-xs font-semibold border border-primary bg-primary text-primary-foreground shadow-sm transition-all duration-150 cursor-pointer";
+
+            tourPanels.forEach((p) => {
+              p.classList.add("hidden");
+            });
+            const activePanel = document.getElementById(`tour-panel-${target}`);
+            if (activePanel) {
+              activePanel.classList.remove("hidden");
+            }
+          });
+        });
+
+        // Initialize Lucide Icons
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      });
+    </script>
   </body>
 </html>

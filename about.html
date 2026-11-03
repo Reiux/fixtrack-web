@@ -3,6 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("fixtrack-theme");
+          if (t === "dark" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+            document.documentElement.classList.add("dark");
+          } else {
+            document.documentElement.classList.remove("dark");
+          }
+        } catch (_) {}
+      })();
+    </script>
     <title>About & The Team | FixTrack</title>
     <meta name="description" content="About FixTrack and our IT-WS02 student group." />
 
@@ -18,7 +30,7 @@
       <!-- Top Navigation Bar -->
       <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
         <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <a href="index.html" class="flex min-w-0 items-center gap-2 group">
+          <a href="store.html" class="flex min-w-0 items-center gap-2 group">
             <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground transition-transform duration-200 group-hover:scale-105">
               <i data-lucide="wrench" class="h-4 w-4"></i>
             </span>
@@ -33,7 +45,7 @@
           </div>
 
           <nav id="mobile-menu" class="hidden w-full flex-col items-stretch gap-2 border-t border-border pt-4 pb-2 md:order-2 md:flex md:w-auto md:flex-row md:gap-2 md:border-0 md:p-0">
-            <a href="index.html" class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-muted-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-md active:translate-y-0 md:w-auto">
+            <a href="store.html" class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-muted-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-md active:translate-y-0 md:w-auto">
               <i data-lucide="home" class="h-4 w-4"></i> Home
             </a>
             <a href="about.html" class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-secondary px-3 py-2 text-sm font-semibold text-foreground shadow-sm transition-all duration-200 md:w-auto" aria-current="page">
@@ -119,10 +131,10 @@
               <div class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/15 text-primary">
                 <i data-lucide="store" class="h-5 w-5"></i>
               </div>
-              <h2 class="text-xl font-bold"><span data-bind="shopName">Demo Repair Shop</span> (Our Test Shop)</h2>
+              <h2 class="text-xl font-bold"><span data-bind="shopName">NorthPoint Device Lab</span> (Our Test Shop)</h2>
               <p class="text-xs font-mono text-muted-foreground">Sample Shop for Presentation</p>
               <p class="text-sm text-muted-foreground leading-relaxed">
-                To test and demonstrate FixTrack for our presentation, we set up the site for "Demo Repair Shop", a fictional repair shop in Cabanatuan City that fixes smartphones, laptops, tablets, and smartwatches.
+                To test and demonstrate FixTrack for our presentation, we set up the site for "NorthPoint Device Lab", a fictional repair shop in Cabanatuan City that fixes smartphones, laptops, tablets, and smartwatches.
               </p>
               <ul class="space-y-2 pt-2 text-xs text-muted-foreground">
                 <li class="flex items-center gap-2"><i data-lucide="check" class="h-3.5 w-3.5 text-success"></i> Handles walk-in repairs and courier drop-offs</li>

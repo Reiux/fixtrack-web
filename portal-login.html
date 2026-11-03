@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("fixtrack-theme");
+          if (t === "dark" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+            document.documentElement.classList.add("dark");
+          } else {
+            document.documentElement.classList.remove("dark");
+          }
+        } catch (_) {}
+      })();
+    </script>
+    <title>Shop Owner Portal Login | FixTrack</title>
+    <meta name="description" content="Log in to manage and customize your white-label device repair shop on FixTrack." />
+
+    <link rel="icon" href="logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="config.js"></script>
+    <script src="lucide.min.js"></script>
+    <script src="tailwind.browser.js"></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body class="bg-background text-foreground antialiased selection:bg-accent/20">
+    <div class="flex min-h-screen flex-col">
+      <!-- Mobile Top Navigation Header -->
+      <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur lg:hidden">
+        <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <a href="index.html" class="flex min-w-0 items-center gap-2 group">
+            <img src="logo.svg" alt="FixTrack Logo" class="h-8 w-8 rounded-lg shadow-sm transition-transform duration-200 group-hover:scale-105" />
+            <span class="truncate font-display text-lg font-bold">FixTrack</span>
+          </a>
+          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer"></button>
+        </div>
+      </header>
+
+      <div class="flex flex-1">
+        <!-- Left Pane: Form Container -->
+        <div class="flex w-full flex-col justify-center px-4 py-12 sm:px-6 lg:w-1/2 lg:flex-none lg:px-20 xl:px-24">
+          <div class="mx-auto w-full max-w-sm lg:w-96">
+            <a href="index.html" class="hidden lg:flex items-center gap-2.5 group w-fit">
+              <img src="logo.svg" alt="FixTrack Logo" class="h-8 w-8 rounded-lg shadow-sm transition-transform duration-200 group-hover:scale-105" />
+              <div class="flex items-baseline gap-1.5">
+                <span class="font-display text-xl font-bold tracking-tight text-foreground">FixTrack</span>
+                <span class="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[10px] font-semibold text-muted-foreground uppercase">Platform</span>
+              </div>
+            </a>
+
+            <h1 class="mt-8 text-2xl font-bold leading-9 tracking-tight">Shop Owner Login</h1>
+            <p class="mt-2 text-sm text-muted-foreground">
+              Log in to update your shop name, logo, repair prices, and store hours.
+            </p>
+
+            <div class="mt-6">
+              <form id="owner-login-form" class="space-y-4" novalidate>
+                <div>
+                  <label for="portal-email" class="block text-xs font-semibold mb-1">Email Address</label>
+                  <input
+                    id="portal-email"
+                    name="email"
+                    type="email"
+                    placeholder="owner@northpointdevice.ph"
+                    required
+                    class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  />
+                </div>
+
+                <div>
+                  <label for="portal-password" class="block text-xs font-semibold mb-1">Password</label>
+                  <div class="relative">
+                    <input
+                      id="portal-password"
+                      name="password"
+                      type="password"
+                      placeholder="••••••••"
+                      required
+                      class="block w-full rounded-lg border border-input bg-card py-2.5 pr-9 pl-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                    <button
+                      type="button"
+                      id="secret-demo-portal"
+                      class="absolute top-1/2 right-2.5 -translate-y-1/2 h-6 w-6 rounded opacity-0 hover:opacity-40 transition-opacity cursor-pointer text-muted-foreground flex items-center justify-center"
+                      title="Demo Autofill (Alt+D)"
+                      aria-label="Demo Autofill"
+                    >
+                      <i data-lucide="sparkles" class="h-3.5 w-3.5"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div id="portal-error" class="hidden rounded-lg border border-destructive/30 bg-destructive/10 p-2.5 text-xs font-semibold text-destructive"></div>
+
+                <div class="pt-2">
+                  <button
+                    type="submit"
+                    class="flex w-full justify-center items-center gap-2 rounded-lg bg-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer"
+                  >
+                    <span>Log In to Settings</span>
+                    <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                  </button>
+                </div>
+              </form>
+
+              <p class="mt-6 text-center text-sm text-muted-foreground">
+                Need to create a shop?
+                <a href="signup.html" class="font-semibold text-foreground hover:underline">Start here</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="mx-auto mt-10 w-full max-w-sm lg:w-96">
+            <a href="index.html" class="inline-flex items-center gap-2 text-sm text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:text-foreground active:translate-y-0">
+              ← Back to Home
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Pane: Hero Visual for LG screens -->
+        <div class="relative hidden w-0 flex-1 lg:block bg-muted">
+          <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1200&q=80" alt="Technician working on electronics" />
+          <div class="absolute inset-0 bg-primary/25 backdrop-blur-[2px]"></div>
+
+          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="absolute top-4 right-4 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer"></button>
+
+          <div class="absolute bottom-8 left-8 right-8 panel p-6 backdrop-blur-md bg-card/90 max-w-md shadow-panel">
+            <div class="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-accent mb-2">
+              <i data-lucide="sliders" class="h-4 w-4"></i> Simple Settings
+            </div>
+            <h3 class="font-display text-lg font-bold text-foreground">No Coding Required</h3>
+            <p class="text-xs text-muted-foreground mt-1 leading-relaxed">
+              Change your diagnostic fee, store phone, warranty days, and receipt layout, and preview how it looks right away.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <footer class="border-t border-border bg-surface py-4 text-center text-xs text-muted-foreground mt-auto">
+        © <span id="year"></span> FixTrack • Free repair shop website and tracking
+      </footer>
+    </div>
+
+    <!-- Client-side Portal Authentication Script -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const demoSecretBtn = document.getElementById("secret-demo-portal");
+        const emailInput = document.getElementById("portal-email");
+        const passwordInput = document.getElementById("portal-password");
+        const form = document.getElementById("owner-login-form");
+        const errorEl = document.getElementById("portal-error");
+
+        const DEMO_OWNERS = [
+          {
+            shopName: "NorthPoint Device Lab",
+            ownerName: "Demo Owner",
+            email: "owner@northpointdevice.ph",
+            password: "demo"
+          },
+          {
+            shopName: "TechSpot Mobile & Laptop Care",
+            ownerName: "Mark Santos",
+            email: "mark.santos@techspotcare.ph",
+            password: "demo"
+          },
+          {
+            shopName: "ReviveTech Electronics",
+            ownerName: "Elena Reyes",
+            email: "elena.reyes@revivetech.ph",
+            password: "demo"
+          },
+          {
+            shopName: "FixLogic Board & Screen Lab",
+            ownerName: "Ben Morales",
+            email: "ben.morales@fixlogic.ph",
+            password: "demo"
+          }
+        ];
+
+        let demoOwnerIdx = 0;
+        const fillDemoPortal = () => {
+          const acc = DEMO_OWNERS[demoOwnerIdx % DEMO_OWNERS.length];
+          demoOwnerIdx++;
+          if (emailInput) emailInput.value = acc.email;
+          if (passwordInput) passwordInput.value = acc.password;
+          if (errorEl) errorEl.classList.add("hidden");
+        };
+
+        if (demoSecretBtn) {
+          demoSecretBtn.addEventListener("click", fillDemoPortal);
+        }
+
+        window.addEventListener("keydown", (e) => {
+          if (e.altKey && (e.key === "d" || e.key === "D")) {
+            e.preventDefault();
+            fillDemoPortal();
+          }
+        });
+
+        if (form) {
+          form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            errorEl.classList.add("hidden");
+            errorEl.textContent = "";
+
+            const email = (emailInput ? emailInput.value : "").trim().toLowerCase();
+            const password = passwordInput ? passwordInput.value : "";
+
+            if (!email || !password) {
+              errorEl.textContent = "Please enter both your email address and password.";
+              errorEl.classList.remove("hidden");
+              return;
+            }
+
+            // 1. Check against predefined demo owner accounts
+            const matchedDemo = DEMO_OWNERS.find(
+              (o) => o.email.toLowerCase() === email && o.password === password
+            );
+
+            if (matchedDemo) {
+              const session = {
+                shopName: matchedDemo.shopName,
+                ownerName: matchedDemo.ownerName,
+                email: matchedDemo.email
+              };
+              localStorage.setItem("fixtrack_owner_session", JSON.stringify(session));
+              window.location.href = "customize.html";
+              return;
+            }
+
+            // 2. Check against persistent user-registered owners
+            let registeredOwners = [];
+            try {
+              registeredOwners = JSON.parse(localStorage.getItem("fixtrack_registered_owners") || "[]");
+            } catch (err) {
+              console.warn("Failed to parse registered owners:", err);
+            }
+
+            const matchedRegistered = registeredOwners.find(
+              (o) => o.email && o.email.toLowerCase() === email && o.password === password
+            );
+
+            if (matchedRegistered) {
+              const session = {
+                shopName: matchedRegistered.shopName || "My Repair Shop",
+                ownerName: matchedRegistered.ownerName || "Shop Owner",
+                email: matchedRegistered.email
+              };
+              localStorage.setItem("fixtrack_owner_session", JSON.stringify(session));
+              window.location.href = "customize.html";
+              return;
+            }
+
+            // 3. If credentials do not match demo accounts or registered accounts, reject
+            errorEl.textContent = "Incorrect email or password. Please try again or create an account.";
+            errorEl.classList.remove("hidden");
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

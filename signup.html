@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("fixtrack-theme");
+          if (t === "dark" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+            document.documentElement.classList.add("dark");
+          } else {
+            document.documentElement.classList.remove("dark");
+          }
+        } catch (_) {}
+      })();
+    </script>
+    <title>Claim Your Free Repair Shop | FixTrack</title>
+    <meta name="description" content="Create and rebrand your free device repair shop operating system on FixTrack." />
+
+    <link rel="icon" href="logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="config.js"></script>
+    <script src="lucide.min.js"></script>
+    <script src="tailwind.browser.js"></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body class="bg-background text-foreground antialiased selection:bg-accent/20">
+    <div class="flex min-h-screen flex-col">
+      <!-- Mobile Top Navigation Header -->
+      <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur lg:hidden">
+        <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <a href="index.html" class="flex min-w-0 items-center gap-2 group">
+            <img src="logo.svg" alt="FixTrack Logo" class="h-8 w-8 rounded-lg shadow-sm transition-transform duration-200 group-hover:scale-105" />
+            <span class="truncate font-display text-lg font-bold">FixTrack</span>
+          </a>
+          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer"></button>
+        </div>
+      </header>
+
+      <div class="flex flex-1">
+        <!-- Left Pane: Form Container -->
+        <div class="flex w-full flex-col justify-center px-4 py-10 sm:px-6 lg:w-1/2 lg:flex-none lg:px-20 xl:px-24">
+          <div class="mx-auto w-full max-w-sm lg:w-96">
+            <a href="index.html" class="hidden lg:flex items-center gap-2.5 group w-fit">
+              <img src="logo.svg" alt="FixTrack Logo" class="h-8 w-8 rounded-lg shadow-sm transition-transform duration-200 group-hover:scale-105" />
+              <div class="flex items-baseline gap-1.5">
+                <span class="font-display text-xl font-bold tracking-tight text-foreground">FixTrack</span>
+                <span class="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[10px] font-semibold text-muted-foreground uppercase">Platform</span>
+              </div>
+            </a>
+
+            <h1 class="mt-8 text-2xl font-bold leading-9 tracking-tight">Create Your Shop</h1>
+            <p class="mt-2 text-sm text-muted-foreground">
+              Set up your repair shop website and tracking in under a minute.
+            </p>
+
+            <div class="mt-6">
+              <form id="owner-signup-form" class="space-y-4" novalidate>
+                <div>
+                  <label for="shop_name" class="block text-xs font-semibold mb-1">Repair Shop Name</label>
+                  <input
+                    id="shop_name"
+                    name="shopName"
+                    type="text"
+                    placeholder="e.g. TechSpot Mobile &amp; Laptop Care"
+                    required
+                    class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  />
+                  <div class="mt-1.5 flex items-center justify-between text-xs text-muted-foreground">
+                    <span>Shop address:</span>
+                    <span id="subdomain-preview" class="font-mono font-semibold text-accent text-[11px]">techspotcare.fixtrack.ph</span>
+                  </div>
+                </div>
+
+                <div>
+                  <label for="signup-owner-name" class="block text-xs font-semibold mb-1">Your Full Name</label>
+                  <input
+                    id="signup-owner-name"
+                    name="ownerName"
+                    type="text"
+                    placeholder="e.g. Mark Santos"
+                    required
+                    class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  />
+                </div>
+
+                <div>
+                  <label for="signup-email" class="block text-xs font-semibold mb-1">Email Address</label>
+                  <input
+                    id="signup-email"
+                    name="email"
+                    type="email"
+                    placeholder="e.g. mark.santos@techspotcare.ph"
+                    required
+                    class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  />
+                </div>
+
+                <div>
+                  <label for="signup-password" class="block text-xs font-semibold mb-1">Password (at least 6 characters)</label>
+                  <div class="relative">
+                    <input
+                      id="signup-password"
+                      name="password"
+                      type="password"
+                      placeholder="••••••••"
+                      required
+                      minlength="6"
+                      class="block w-full rounded-lg border border-input bg-card py-2.5 pr-9 pl-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                    <button
+                      type="button"
+                      id="secret-demo-signup"
+                      class="absolute top-1/2 right-2.5 -translate-y-1/2 h-6 w-6 rounded opacity-0 hover:opacity-40 transition-opacity cursor-pointer text-muted-foreground flex items-center justify-center"
+                      title="Demo Autofill (Alt+D)"
+                      aria-label="Demo Autofill"
+                    >
+                      <i data-lucide="sparkles" class="h-3.5 w-3.5"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div id="signup-error" class="hidden rounded-lg border border-destructive/30 bg-destructive/10 p-2.5 text-xs font-semibold text-destructive"></div>
+
+                <div class="pt-2">
+                  <button
+                    type="submit"
+                    class="flex w-full justify-center items-center gap-2 rounded-lg bg-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer"
+                  >
+                    <span>Create Shop &amp; Open Settings</span>
+                    <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                  </button>
+                </div>
+              </form>
+
+              <p class="mt-6 text-center text-sm text-muted-foreground">
+                Already have an account?
+                <a href="portal-login.html" class="font-semibold text-foreground hover:underline">Log in</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="mx-auto mt-8 w-full max-w-sm lg:w-96">
+            <a href="index.html" class="inline-flex items-center gap-2 text-sm text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:text-foreground active:translate-y-0">
+              ← Back to Home
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Pane: Hero Visual for LG screens -->
+        <div class="relative hidden w-0 flex-1 lg:block bg-muted">
+          <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1200&q=80" alt="Technician working on electronics" />
+          <div class="absolute inset-0 bg-primary/25 backdrop-blur-[2px]"></div>
+
+          <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="absolute top-4 right-4 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer"></button>
+
+          <div class="absolute bottom-8 left-8 right-8 panel p-6 backdrop-blur-md bg-card/90 max-w-md shadow-panel">
+            <div class="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-accent mb-2">
+              <i data-lucide="shield-check" class="h-4 w-4"></i> Free To Use
+            </div>
+            <h3 class="font-display text-lg font-bold text-foreground">No Monthly Fees or Servers</h3>
+            <p class="text-xs text-muted-foreground mt-1 leading-relaxed">
+              All your repair tickets and settings stay saved right on your computer. You can change your shop name, logo, fees, and receipt layout anytime.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <footer class="border-t border-border bg-surface py-4 text-center text-xs text-muted-foreground mt-auto">
+        © <span id="year"></span> FixTrack • Free repair shop website and tracking
+      </footer>
+    </div>
+
+    <!-- Client-side validation & registration script -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const shopInput = document.getElementById("shop_name") || document.getElementById("signup-shop-name");
+        const subPreview = document.getElementById("subdomain-preview");
+        const form = document.getElementById("owner-signup-form");
+        const errorEl = document.getElementById("signup-error");
+        const demoSignupBtn = document.getElementById("secret-demo-signup");
+
+        function updateSubdomain(val) {
+          if (!subPreview) return;
+          const clean = val.trim().toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 20);
+          subPreview.textContent = (clean || "your-shop") + ".fixtrack.ph";
+        }
+
+        const fillDemoSignup = () => {
+          if (shopInput) {
+            shopInput.value = "TechSpot Mobile & Laptop Care";
+            updateSubdomain("TechSpot Mobile & Laptop Care");
+          }
+          const ownerInput = document.getElementById("signup-owner-name");
+          const emailEl = document.getElementById("signup-email");
+          const passEl = document.getElementById("signup-password");
+          if (ownerInput) ownerInput.value = "Mark Santos";
+          if (emailEl) emailEl.value = "mark.santos@techspotcare.ph";
+          if (passEl) passEl.value = "password123";
+          if (errorEl) errorEl.classList.add("hidden");
+        };
+
+        if (demoSignupBtn) {
+          demoSignupBtn.addEventListener("click", fillDemoSignup);
+        }
+
+        window.addEventListener("keydown", (e) => {
+          if (e.altKey && (e.key === "d" || e.key === "D")) {
+            e.preventDefault();
+            fillDemoSignup();
+          }
+        });
+
+        // Inspect URL parameters for ?shop= quick-start
+        const urlParams = new URLSearchParams(window.location.search);
+        const shopParam = urlParams.get("shop");
+        if (shopParam && shopInput) {
+          shopInput.value = shopParam;
+          updateSubdomain(shopParam);
+        }
+
+        if (shopInput && subPreview) {
+          shopInput.addEventListener("input", (e) => {
+            updateSubdomain(e.target.value);
+          });
+        }
+
+        if (form) {
+          form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            errorEl.classList.add("hidden");
+            errorEl.textContent = "";
+
+            const shopName = (shopInput ? shopInput.value : "").trim();
+            const ownerName = document.getElementById("signup-owner-name").value.trim();
+            const email = document.getElementById("signup-email").value.trim();
+            const password = document.getElementById("signup-password").value;
+
+            if (shopName.length < 2) {
+              errorEl.textContent = "Please enter a valid shop name (minimum 2 characters).";
+              errorEl.classList.remove("hidden");
+              return;
+            }
+
+            if (!ownerName) {
+              errorEl.textContent = "Please enter your full name.";
+              errorEl.classList.remove("hidden");
+              return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+              errorEl.textContent = "Please provide a valid email address.";
+              errorEl.classList.remove("hidden");
+              return;
+            }
+
+            if (password.length < 6) {
+              errorEl.textContent = "Password must be at least 6 characters long.";
+              errorEl.classList.remove("hidden");
+              return;
+            }
+
+            // Save registered owner record in persistent storage
+            try {
+              const registered = JSON.parse(localStorage.getItem("fixtrack_registered_owners") || "[]");
+              const existingIdx = registered.findIndex((o) => o.email && o.email.toLowerCase() === email.toLowerCase());
+              const newRecord = {
+                shopName,
+                ownerName,
+                email: email.toLowerCase(),
+                password
+              };
+              if (existingIdx >= 0) {
+                registered[existingIdx] = newRecord;
+              } else {
+                registered.push(newRecord);
+              }
+              localStorage.setItem("fixtrack_registered_owners", JSON.stringify(registered));
+            } catch (err) {
+              console.warn("Failed to save registered owner:", err);
+            }
+
+            // Save active owner session
+            localStorage.setItem("fixtrack_owner_session", JSON.stringify({ shopName, ownerName, email: email.toLowerCase() }));
+
+            // Seed initial shop name into localStorage active config override
+            try {
+              const existingConfig = JSON.parse(localStorage.getItem("fixtrack_active_config") || "{}");
+              existingConfig.shopName = shopName;
+              localStorage.setItem("fixtrack_active_config", JSON.stringify(existingConfig));
+            } catch (err) {
+              console.warn("Failed to seed active config:", err);
+            }
+
+            // Redirect to settings
+            window.location.href = "customize.html";
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

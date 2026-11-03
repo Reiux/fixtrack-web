@@ -3,7 +3,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Terms of Service | Demo Repair Shop</title>
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("fixtrack-theme");
+          if (t === "dark" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+            document.documentElement.classList.add("dark");
+          } else {
+            document.documentElement.classList.remove("dark");
+          }
+        } catch (_) {}
+      })();
+    </script>
+    <title>Terms of Service | NorthPoint Device Lab</title>
     <meta name="description" content="Terms of service and repair warranty policies." />
     
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
@@ -17,7 +29,7 @@
     <div class="flex min-h-screen flex-col">
       <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
         <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <a href="index.html" class="flex min-w-0 items-center gap-2 group">
+          <a href="store.html" class="flex min-w-0 items-center gap-2 group">
             <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground transition-transform duration-200 group-hover:scale-105">
               <i data-lucide="wrench" class="h-4 w-4"></i>
             </span>
@@ -25,7 +37,7 @@
           </a>
           <div class="flex items-center gap-3">
             <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer"></button>
-            <a href="index.html" class="text-sm text-muted-foreground hover:text-foreground transition-colors">← Back to Home</a>
+            <a href="store.html" class="text-sm text-muted-foreground hover:text-foreground transition-colors">← Back to Home</a>
           </div>
         </div>
       </header>

@@ -1,6 +1,18 @@
 /* ==========================================================================
- *  FixTrack — Client Engine & Reactive State Store
+ *  FixTrack - Client Engine & Reactive State Store
  *  ========================================================================== */
+
+(function initThemeImmediately() {
+  try {
+    const t = localStorage.getItem("fixtrack-theme");
+    const dark = t === "dark" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    if (dark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  } catch (_) {}
+})();
 
 (function injectTailwindTheme() {
   const style = document.createElement("style");
@@ -45,6 +57,31 @@
   `;
   document.head.appendChild(style);
 })();
+
+const ORIGINAL_CONFIG = typeof CONFIG !== "undefined" ? JSON.parse(JSON.stringify(CONFIG)) : {};
+
+function loadActiveConfig() {
+  if (typeof CONFIG === "undefined") return;
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("demo") === "true" || urlParams.get("demo") === "1") {
+      window.IS_DEMO_MODE = true;
+      if (typeof ORIGINAL_CONFIG !== "undefined") {
+        Object.assign(CONFIG, JSON.parse(JSON.stringify(ORIGINAL_CONFIG)));
+      }
+      return;
+    }
+
+    window.IS_DEMO_MODE = false;
+    const saved = localStorage.getItem("fixtrack_active_config");
+    if (saved) {
+      Object.assign(CONFIG, JSON.parse(saved));
+    }
+  } catch (err) {
+    console.warn("Failed to load active config override:", err);
+  }
+}
+loadActiveConfig();
 
 const STORE_KEY_TICKETS = "fixtrack_tickets_store";
 const STORE_KEY_VERSION = "fixtrack_data_version";
@@ -502,7 +539,40 @@ const DataStore = {
   clearSession() {
     sessionStorage.removeItem(STORE_KEY_SESSION);
   },
+  saveConfigOverride(newConfig) {
+    try {
+      if (newConfig && typeof newConfig === "object") {
+        localStorage.setItem("fixtrack_active_config", JSON.stringify(newConfig));
+        if (typeof CONFIG !== "undefined") {
+          Object.assign(CONFIG, newConfig);
+        }
+        if (typeof hydrateWhiteLabelConfig === "function") {
+          hydrateWhiteLabelConfig();
+        }
+      }
+    } catch (err) {
+      console.warn("Failed to persist config override:", err);
+    }
+  },
+  resetConfigOverride() {
+    try {
+      localStorage.removeItem("fixtrack_active_config");
+      if (typeof ORIGINAL_CONFIG !== "undefined" && typeof CONFIG !== "undefined") {
+        for (const key of Object.keys(CONFIG)) {
+          delete CONFIG[key];
+        }
+        Object.assign(CONFIG, JSON.parse(JSON.stringify(ORIGINAL_CONFIG)));
+      }
+      if (typeof hydrateWhiteLabelConfig === "function") {
+        hydrateWhiteLabelConfig();
+      }
+    } catch (err) {
+      console.warn("Failed to reset config override:", err);
+    }
+  },
 };
+
+window.DataStore = DataStore;
 
 function getSelfContainedTrackingUrl(ticket) {
   if (!ticket || !ticket.id) return "";
@@ -558,35 +628,99 @@ window.addEventListener("afterprint", () => {
 function hydrateWhiteLabelConfig() {
   document.querySelectorAll("[data-bind]").forEach((el) => {
     const key = el.dataset.bind;
+    if (key === "heroTitle" || key === "heroSubtitle") return;
     if (CONFIG[key] !== undefined) {
       el.textContent = CONFIG[key];
     }
   });
 
+  // Hero Copy Dynamic Customization
+  const heroHeadline = document.getElementById("store-hero-headline");
+  if (heroHeadline) {
+    if (CONFIG.heroTitle && typeof CONFIG.heroTitle === "string" && CONFIG.heroTitle.trim().length > 0) {
+      heroHeadline.textContent = CONFIG.heroTitle;
+    } else {
+      heroHeadline.innerHTML = `Track Your Device Repair<br class="hidden sm:block" /> In Real Time`;
+    }
+  }
+
+  const heroSubtitle = document.getElementById("store-hero-subtitle");
+  if (heroSubtitle) {
+    if (CONFIG.heroSubtitle && typeof CONFIG.heroSubtitle === "string" && CONFIG.heroSubtitle.trim().length > 0) {
+      heroSubtitle.textContent = CONFIG.heroSubtitle;
+    } else {
+      heroSubtitle.textContent = "Want to see how your repair is going? Enter your ticket number or phone number below for live updates.";
+    }
+  }
+
   document.querySelectorAll("[data-bind-href]").forEach(el => {
     const key = el.dataset.bindHref;
-    if (key === "phone") el.href = "tel:" + CONFIG.phone.replace(/\s+/g,'');
-    else if (key === "email") el.href = "mailto:" + CONFIG.email;
-    else if (key === "mapsUrl") el.href = CONFIG.mapsUrl;
-    else if (CONFIG.socials && CONFIG.socials[key]) el.href = CONFIG.socials[key];
+    if (key === "phone") el.href = "tel:" + (CONFIG.phone ? CONFIG.phone.replace(/\s+/g,'') : "");
+    else if (key === "email") el.href = "mailto:" + (CONFIG.email || "");
+    else if (key === "mapsUrl") el.href = CONFIG.mapsUrl || "#";
+    else if (["facebook", "instagram", "twitter"].includes(key)) {
+      if (CONFIG.socials && CONFIG.socials[key]) {
+        el.href = CONFIG.socials[key];
+        el.target = "_blank";
+        el.rel = "noopener noreferrer";
+      } else {
+        el.href = "#";
+      }
+    } else if (CONFIG.socials && CONFIG.socials[key]) {
+      el.href = CONFIG.socials[key];
+    }
   });
 
-    if (document.title.includes("|")) {
-      const parts = document.title.split("|");
-      document.title = `${parts[0].trim()} | ${CONFIG.shopName}`;
-    }
-
-    document.querySelectorAll("#year").forEach((el) => {
-      el.textContent = new Date().getFullYear();
+  // Shop Logo Rendering & Sync
+  const hasCustomLogo = !window.IS_DEMO_MODE && CONFIG.shopLogo && typeof CONFIG.shopLogo === "string" && CONFIG.shopLogo.trim().length > 0;
+  const logoContainers = document.querySelectorAll("[data-shop-logo-container]");
+  if (logoContainers.length > 0) {
+    logoContainers.forEach((container) => {
+      if (hasCustomLogo) {
+        container.innerHTML = `<img src="${CONFIG.shopLogo}" alt="${CONFIG.shopName} Logo" class="h-8 w-8 rounded-lg object-contain" />`;
+      } else {
+        container.innerHTML = `<span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground"><i data-lucide="wrench" class="h-4 w-4"></i></span>`;
+      }
     });
+    if (window.lucide) window.lucide.createIcons();
+  } else if (hasCustomLogo) {
+    const fallbackBadges = document.querySelectorAll(".group > span.rounded-lg.bg-primary");
+    fallbackBadges.forEach((badge) => {
+      const wrapper = document.createElement("span");
+      wrapper.setAttribute("data-shop-logo-container", "");
+      wrapper.className = "shrink-0 flex items-center justify-center";
+      wrapper.innerHTML = `<img src="${CONFIG.shopLogo}" alt="${CONFIG.shopName} Logo" class="h-8 w-8 rounded-lg object-contain" />`;
+      badge.replaceWith(wrapper);
+    });
+  }
 
-    const brandsList = document.getElementById("brands-list-text");
-    if (brandsList) {
-      const b = CONFIG.supportedBrands.filter(x => x.toLowerCase() !== "other");
-      brandsList.textContent = b.length > 1
-      ? `We repair ${b.slice(0, -1).join(", ")}, and ${b[b.length - 1]}.`
-      : `We repair ${b[0]}.`;
+  if (document.title.includes("|")) {
+    const parts = document.title.split("|");
+    document.title = `${parts[0].trim()} | ${CONFIG.shopName}`;
+  }
+
+  document.querySelectorAll("#year").forEach((el) => {
+    el.textContent = new Date().getFullYear();
+  });
+
+  const brandsList = document.getElementById("brands-list-text");
+  if (brandsList) {
+    const b = CONFIG.supportedBrands.filter(x => x.toLowerCase() !== "other");
+    brandsList.textContent = b.length > 1
+    ? `We repair ${b.slice(0, -1).join(", ")}, and ${b[b.length - 1]}.`
+    : `We repair ${b[0]}.`;
+  }
+
+  const demoBanner = document.getElementById("demo-mode-banner");
+  if (demoBanner) {
+    if (window.IS_DEMO_MODE === true) {
+      demoBanner.classList.remove("hidden");
+      demoBanner.innerHTML = `<div class="bg-accent/15 border-b border-accent/30 px-4 py-2 text-center text-xs text-foreground flex items-center justify-center gap-2"><span>Viewing FixTrack Sample Store (NorthPoint Device Lab)</span> • <a href="store.html" class="font-bold underline hover:text-accent">Open Your Customized Store →</a></div>`;
+    } else {
+      demoBanner.classList.add("hidden");
+      demoBanner.innerHTML = "";
     }
+  }
 }
 
 function escapeHtml(value) {
@@ -647,7 +781,7 @@ function renderThermalReceipt(ticket) {
 
   receiptEl.innerHTML = `
     <div style="text-align: center; margin-bottom: 6px;">
-      <div style="font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">${escapeHtml(CONFIG.shopName || "Demo Repair Shop")}</div>
+      <div style="font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">${escapeHtml(CONFIG.shopName || "NorthPoint Device Lab")}</div>
       <div style="font-size: 10px; margin-top: 2px;">${escapeHtml(CONFIG.address || "")}</div>
       <div style="font-size: 10px;">Tel: ${escapeHtml(CONFIG.phone || "")}</div>
       <div style="font-size: 10px;">${escapeHtml(CONFIG.email || "")}</div>
@@ -717,8 +851,51 @@ function renderThermalReceipt(ticket) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  loadActiveConfig();
   applyTheme(isDark());
   hydrateWhiteLabelConfig();
+
+  // Iframe Preview Navigation Guard & Storefront Routing Safeguard
+  const isIframePreview = window.self !== window.top || new URLSearchParams(window.location.search).get("preview") === "1";
+  if (isIframePreview) {
+    document.addEventListener("click", (e) => {
+      const anchor = e.target.closest("a");
+      if (!anchor) return;
+      const href = anchor.getAttribute("href");
+      if (!href) return;
+      if (href.startsWith("#") || href.startsWith("tel:") || href.startsWith("mailto:") || href.startsWith("javascript:")) return;
+
+      const path = href.split("?")[0].split("#")[0];
+      if (path === "store.html" && !href.includes("preview=1")) {
+        e.preventDefault();
+        window.location.href = "store.html?preview=1";
+        return;
+      }
+
+      const outsidePages = ["index.html", "landing.html", "signup.html", "portal-login.html", "customize.html"];
+      if (outsidePages.includes(path)) {
+        e.preventDefault();
+        window.location.href = "store.html?preview=1";
+      }
+    });
+  }
+
+  // Global Storefront Safeguard: intercept any header/home links to index.html and redirect to store.html
+  document.addEventListener("click", (e) => {
+    const anchor = e.target.closest("a");
+    if (!anchor) return;
+    const href = anchor.getAttribute("href");
+    if (!href) return;
+    if (href.startsWith("#") || href.startsWith("tel:") || href.startsWith("mailto:") || href.startsWith("javascript:")) return;
+
+    const path = href.split("?")[0].split("#")[0];
+    const isStorefrontContext = ["store.html", "about.html", "status.html", "request.html", "login.html", "register.html", "dashboard.html", "privacy.html", "terms.html", "404.html"].some(p => window.location.pathname.endsWith(p));
+
+    if (isStorefrontContext && (path === "index.html" || path === "landing.html")) {
+      e.preventDefault();
+      window.location.href = "store.html";
+    }
+  });
 
   const isLocalHost = ["localhost", "127.0.0.1", ""].includes(window.location.hostname) || window.location.protocol === "file:";
   if (isLocalHost) {
@@ -1878,11 +2055,62 @@ function initDashboard() {
 }
 
 function initAuthForms() {
+  const DEMO_STAFF_ACCOUNTS = [
+    {
+      name: "Alex Rivera",
+      email: "alex.rivera@northpointdevice.ph",
+      password: "demo",
+      role: "Lead Technician"
+    },
+    {
+      name: "Sarah Chen",
+      email: "sarah.chen@northpointdevice.ph",
+      password: "demo",
+      role: "Technician"
+    },
+    {
+      name: "Mike Torres",
+      email: "mike.torres@northpointdevice.ph",
+      password: "demo",
+      role: "Diagnostic Specialist"
+    },
+    {
+      name: "Front Desk",
+      email: "reception@northpointdevice.ph",
+      password: "demo",
+      role: "Front Desk Receptionist"
+    }
+  ];
+
   const loginForm = document.getElementById("staff-login-form");
   if (loginForm) {
+    const demoStaffBtn = document.getElementById("secret-demo-login");
+    let demoStaffIdx = 0;
+    const fillDemoStaff = () => {
+      const emailEl = document.getElementById("login-email");
+      const passEl = document.getElementById("login-password");
+      const errorEl = document.getElementById("login-error");
+      const account = DEMO_STAFF_ACCOUNTS[demoStaffIdx % DEMO_STAFF_ACCOUNTS.length];
+      demoStaffIdx++;
+      if (emailEl) emailEl.value = account.email;
+      if (passEl) passEl.value = account.password;
+      if (errorEl) errorEl.classList.add("hidden");
+    };
+
+    if (demoStaffBtn) {
+      demoStaffBtn.addEventListener("click", fillDemoStaff);
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (e.altKey && (e.key === "d" || e.key === "D")) {
+        e.preventDefault();
+        fillDemoStaff();
+      }
+    });
+
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const email = document.getElementById("login-email")?.value.trim();
+      const email = document.getElementById("login-email")?.value.trim().toLowerCase();
       const pass = document.getElementById("login-password")?.value;
       const errorEl = document.getElementById("login-error");
 
@@ -1894,19 +2122,36 @@ function initAuthForms() {
         return;
       }
 
-      const staffMatch = CONFIG.staff.find(s => s.email === email && s.password === pass);
+      // Check predefined demo staff accounts
+      const allDemoStaff = (CONFIG && CONFIG.staff && CONFIG.staff.length) ? CONFIG.staff : DEMO_STAFF_ACCOUNTS;
+      const staffMatch = allDemoStaff.find(
+        (s) => s.email && s.email.toLowerCase() === email && s.password === pass
+      );
 
-      if (staffMatch) {
+      // Check persistent registered staff accounts
+      let registeredStaff = [];
+      try {
+        registeredStaff = JSON.parse(localStorage.getItem("fixtrack_registered_staff") || "[]");
+      } catch (err) {
+        console.warn("Failed to read registered staff:", err);
+      }
+      const registeredMatch = registeredStaff.find(
+        (s) => s.email && s.email.toLowerCase() === email && s.password === pass
+      );
+
+      const matchedUser = staffMatch || registeredMatch;
+
+      if (matchedUser) {
         DataStore.setSession({
-          name: staffMatch.name,
-          role: staffMatch.role,
-          email: staffMatch.email,
-          shopCode: CONFIG.shopCode,
+          name: matchedUser.name,
+          role: matchedUser.role,
+          email: matchedUser.email,
+          shopCode: matchedUser.shopCode || (CONFIG && CONFIG.shopCode) || "DEMO-01",
         });
         window.location.href = "dashboard.html";
       } else {
         if (errorEl) {
-          errorEl.textContent = "Invalid email or password. Please try again.";
+          errorEl.textContent = "Incorrect email or password. Please check your credentials or register an account.";
           errorEl.classList.remove("hidden");
         }
       }
@@ -1926,6 +2171,33 @@ function initAuthForms() {
       });
     }
 
+    const demoRegBtn = document.getElementById("secret-demo-register");
+    const fillDemoReg = () => {
+      const nameEl = document.getElementById("reg_fullname");
+      const emailEl = document.getElementById("reg_email");
+      const passEl = document.getElementById("reg_password");
+      const codeEl = document.getElementById("shop_code");
+      const roleEl = document.getElementById("staff_role");
+      const errEl = document.getElementById("reg-error");
+      if (codeEl) codeEl.value = (CONFIG && CONFIG.shopCode) || "DEMO-01";
+      if (nameEl) nameEl.value = "Carlos Mendoza";
+      if (emailEl) emailEl.value = "carlos.mendoza@northpointdevice.ph";
+      if (roleEl) roleEl.value = "Technician";
+      if (passEl) passEl.value = "password123";
+      if (errEl) errEl.classList.add("hidden");
+    };
+
+    if (demoRegBtn) {
+      demoRegBtn.addEventListener("click", fillDemoReg);
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (e.altKey && (e.key === "d" || e.key === "D")) {
+        e.preventDefault();
+        fillDemoReg();
+      }
+    });
+
     regForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const fullname = document.getElementById("reg_fullname")?.value.trim();
@@ -1943,6 +2215,23 @@ function initAuthForms() {
         return;
       }
 
+      if (!fullname) {
+        if (errEl) {
+          errEl.textContent = "Please enter your full name.";
+          errEl.classList.remove("hidden");
+        }
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        if (errEl) {
+          errEl.textContent = "Please provide a valid email address.";
+          errEl.classList.remove("hidden");
+        }
+        return;
+      }
+
       if (pass.length < 6) {
         if (errEl) {
           errEl.textContent = "Password must be at least 6 characters.";
@@ -1953,11 +2242,35 @@ function initAuthForms() {
 
       if (errEl) errEl.classList.add("hidden");
 
+      // Save new staff member into persistent localStorage
+      try {
+        const registered = JSON.parse(localStorage.getItem("fixtrack_registered_staff") || "[]");
+        const existingIdx = registered.findIndex((s) => s.email && s.email.toLowerCase() === email.toLowerCase());
+        const newRecord = {
+          name: fullname,
+          email: email.toLowerCase(),
+          password: pass,
+          role: (roleSelect && roleSelect.value) || "Technician",
+          shopCode: code
+        };
+        if (existingIdx >= 0) {
+          registered[existingIdx] = newRecord;
+        } else {
+          registered.push(newRecord);
+        }
+        localStorage.setItem("fixtrack_registered_staff", JSON.stringify(registered));
+      } catch (err) {
+        console.warn("Failed to save registered staff:", err);
+      }
+
       if (alertEl) {
         alertEl.classList.remove("hidden");
         alertEl.innerHTML = `
-        <p class="font-bold text-success">Registration Request Received!</p>
-        <p class="text-xs text-muted-foreground mt-1">Your request to join <strong>${escapeHtml(code)}</strong> has been routed to the Owner/Admin. You will be notified once reviewed.</p>
+        <p class="font-bold text-success">Staff Account Created!</p>
+        <p class="text-xs text-muted-foreground mt-1">Your account for <strong>${escapeHtml(code)}</strong> is ready. You can now log in.</p>
+        <div class="mt-3">
+          <a href="login.html" class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:opacity-90">Go to Staff Login →</a>
+        </div>
         `;
         regForm.reset();
         if (roleSelect) roleSelect.value = "Technician";

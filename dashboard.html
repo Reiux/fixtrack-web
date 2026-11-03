@@ -3,7 +3,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Repair Dashboard | Demo Repair Shop</title>
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("fixtrack-theme");
+          if (t === "dark" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+            document.documentElement.classList.add("dark");
+          } else {
+            document.documentElement.classList.remove("dark");
+          }
+        } catch (_) {}
+      })();
+    </script>
+    <title>Repair Dashboard | NorthPoint Device Lab</title>
     <meta name="description" content="Manage repairs and update customer tickets." />
 
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
@@ -45,7 +57,10 @@
           <button class="staff-logout-btn mt-2 flex w-full items-center gap-2 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-destructive hover:bg-destructive/10 cursor-pointer">
             <i data-lucide="log-out" class="h-3.5 w-3.5"></i> Sign Out
           </button>
-          <a href="index.html" class="block text-xs text-muted-foreground hover:text-foreground transition-colors pt-2">
+          <a href="customize.html" class="block text-xs font-semibold text-accent hover:underline transition-colors pt-3">
+            ⚙ Store Settings &amp; Branding
+          </a>
+          <a href="store.html" class="block text-xs text-muted-foreground hover:text-foreground transition-colors pt-1">
             ← Back to public site
           </a>
         </div>
@@ -53,7 +68,7 @@
 
       <div class="flex min-w-0 flex-1 flex-col">
         <header class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-4 py-3 sm:px-6 md:grid-cols-[auto_1fr_auto]">
-          <a href="index.html" class="order-1 flex min-w-0 items-center gap-2 group">
+          <a href="store.html" class="order-1 flex min-w-0 items-center gap-2 group">
             <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground transition-transform duration-200 group-hover:scale-105">
               <i data-lucide="wrench" class="h-4 w-4"></i>
             </span>
@@ -96,7 +111,7 @@
               <span class="flex-1 text-left">Sign Out</span>
             </button>
 
-            <a href="index.html" class="mt-4 block border-t border-border pt-4 text-xs text-muted-foreground hover:text-foreground">
+            <a href="store.html" class="mt-4 block border-t border-border pt-4 text-xs text-muted-foreground hover:text-foreground">
               ← Back to public site
             </a>
           </nav>

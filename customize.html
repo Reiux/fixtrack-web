@@ -1,0 +1,1037 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("fixtrack-theme");
+          if (t === "dark" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+            document.documentElement.classList.add("dark");
+          } else {
+            document.documentElement.classList.remove("dark");
+          }
+        } catch (_) {}
+      })();
+    </script>
+    <title>Store Customizer &amp; Branding | FixTrack</title>
+    <meta name="description" content="In-browser visual configuration and white-label branding editor for FixTrack repair shops." />
+
+    <link rel="icon" href="logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="config.js"></script>
+    <script src="lucide.min.js"></script>
+    <script src="tailwind.browser.js"></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body class="bg-background text-foreground antialiased selection:bg-accent/20">
+    <div class="flex min-h-screen flex-col">
+      <!-- Top Navigation Bar -->
+      <header class="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
+        <div class="mx-auto flex max-w-7xl items-center justify-between gap-2 sm:gap-4 px-3 sm:px-6 py-2.5 sm:py-3">
+          <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+            <a href="store.html" class="flex shrink-0 items-center gap-1.5 sm:gap-2 group" title="Return to Storefront">
+              <img src="logo.svg" alt="FixTrack Logo" class="h-7 w-7 sm:h-8 sm:w-8 rounded-lg shadow-sm transition-transform duration-200 group-hover:scale-105" />
+              <span class="font-display text-base sm:text-lg font-bold hidden xs:inline">FixTrack</span>
+            </a>
+            <span class="text-muted-foreground/40 hidden xs:inline">/</span>
+            <div class="flex items-center min-w-0">
+              <span class="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2 py-0.5 sm:px-2.5 sm:py-1 font-mono text-[11px] sm:text-xs font-semibold text-foreground whitespace-nowrap truncate max-w-[140px] sm:max-w-xs">
+                <span class="h-2 w-2 rounded-full bg-success shrink-0"></span>
+                <span id="active-shop-badge" class="truncate">Loading...</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <button
+              type="button"
+              id="btn-demo-preset"
+              class="inline-flex items-center gap-1.5 rounded-lg border border-accent/40 bg-accent/10 px-2 sm:px-3 py-1.5 text-xs font-semibold text-accent transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent hover:text-accent-foreground cursor-pointer"
+              title="Load sample shop preset (Alt+D)"
+            >
+              <i data-lucide="sparkles" class="h-3.5 w-3.5 shrink-0"></i>
+              <span class="hidden sm:inline">Load Demo Preset</span>
+              <span class="sm:hidden text-[11px]">Preset</span>
+            </button>
+
+            <a
+              href="dashboard.html"
+              class="hidden md:inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary active:translate-y-0"
+            >
+              <i data-lucide="layout-dashboard" class="h-3.5 w-3.5 text-accent"></i>
+              <span>Staff Dashboard</span>
+            </a>
+
+            <a
+              href="store.html"
+              target="_blank"
+              id="btn-open-external"
+              class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-card p-1.5 sm:px-3 sm:py-1.5 text-xs font-semibold text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground active:translate-y-0 cursor-pointer"
+              title="Open storefront in new tab"
+            >
+              <i data-lucide="external-link" class="h-3.5 w-3.5 text-accent shrink-0"></i>
+              <span class="hidden md:inline">Open Store</span>
+            </a>
+
+            <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="inline-flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground hover:shadow-sm active:translate-y-0 cursor-pointer"></button>
+
+            <button
+              type="button"
+              id="owner-signout-btn"
+              class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-card p-1.5 sm:px-3 sm:py-1.5 text-xs font-semibold text-destructive transition-all duration-200 hover:-translate-y-0.5 hover:bg-destructive/10 active:translate-y-0 cursor-pointer"
+              title="Sign Out"
+            >
+              <i data-lucide="log-out" class="h-3.5 w-3.5 shrink-0"></i>
+              <span class="hidden md:inline">Sign Out</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Split-Screen Workspace -->
+      <main class="flex-1 max-w-[1700px] w-full mx-auto px-4 sm:px-6 py-6">
+        <div class="flex flex-col lg:flex-row gap-6 items-start">
+          
+          <!-- LEFT COLUMN: Form Customization Controls (~45% on lg) -->
+          <div class="w-full lg:w-[45%] xl:w-[42%] space-y-6 pb-24">
+            <!-- Header Intro Panel -->
+            <div class="panel p-5 sm:p-6 bg-surface/50 border border-border">
+              <div class="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-accent mb-1.5">
+                <i data-lucide="sliders" class="h-4 w-4"></i> Shop Settings
+              </div>
+              <h1 class="font-display text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+                Shop Settings &amp; Branding
+              </h1>
+              <p class="text-xs sm:text-sm text-muted-foreground mt-1 leading-relaxed">
+                Update your shop details, logo, colors, and fees. All changes show up in the live preview on the right.
+              </p>
+            </div>
+
+            <form id="customizer-form" class="space-y-6" onsubmit="return false;">
+              <!-- Section 1: Brand & Identity -->
+              <div class="panel p-5 sm:p-6 space-y-4">
+                <div class="font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 border-b border-border pb-3">
+                  <i data-lucide="store" class="h-4 w-4 text-accent"></i>
+                  <span>Section 1: Brand &amp; Identity</span>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                  <!-- Custom Logo Controls -->
+                  <div class="sm:col-span-2 rounded-lg border border-border bg-surface/50 p-4 space-y-3">
+                    <label class="block text-xs font-semibold">Store Brand Logo (<code class="font-mono text-[11px]">shopLogo</code>)</label>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                      <div id="logo-preview-box" class="h-16 w-16 shrink-0 rounded-lg border border-border bg-card flex items-center justify-center overflow-hidden shadow-sm">
+                        <span class="grid h-10 w-10 place-items-center rounded-lg bg-primary text-primary-foreground">
+                          <i data-lucide="wrench" class="h-5 w-5"></i>
+                        </span>
+                      </div>
+
+                      <div class="flex-1 space-y-2.5 w-full">
+                        <div class="flex flex-wrap items-center gap-2">
+                          <input type="file" id="cfg-logo-file" accept="image/*" class="text-xs file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-primary-foreground hover:file:opacity-90 cursor-pointer" />
+                          <button
+                            type="button"
+                            id="btn-remove-logo"
+                            class="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-destructive shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-destructive/10 active:translate-y-0 cursor-pointer"
+                          >
+                            <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
+                            <span>Remove Custom Logo</span>
+                          </button>
+                        </div>
+
+                        <div>
+                          <input
+                            type="url"
+                            id="cfg-logo-url"
+                            placeholder="Or paste an image URL (https://...)"
+                            class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-xs outline-none focus:ring-2 focus:ring-ring"
+                          />
+                        </div>
+                        <p class="text-[11px] text-muted-foreground">Upload a logo directly from your device (converted to Base64 data URL) or paste an image URL.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="sm:col-span-2">
+                    <label for="cfg-shopName" class="block text-xs font-semibold mb-1">Repair Shop Name (<code class="font-mono text-[11px]">shopName</code>)</label>
+                    <input
+                      id="cfg-shopName"
+                      type="text"
+                      required
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                    <p class="mt-1 text-[11px] text-muted-foreground">Displayed on the public website header, title, and thermal print receipts.</p>
+                  </div>
+
+                  <div>
+                    <label for="cfg-tagline" class="block text-xs font-semibold mb-1">Tagline (<code class="font-mono text-[11px]">tagline</code>)</label>
+                    <input
+                      id="cfg-tagline"
+                      type="text"
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="cfg-vendorName" class="block text-xs font-semibold mb-1">Vendor / Platform Name (<code class="font-mono text-[11px]">vendorName</code>)</label>
+                    <input
+                      id="cfg-vendorName"
+                      type="text"
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Section 2: Hero Section Content -->
+              <div class="panel p-5 sm:p-6 space-y-4">
+                <div class="font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 border-b border-border pb-3">
+                  <i data-lucide="layout" class="h-4 w-4 text-accent"></i>
+                  <span>Section 2: Hero Section Content</span>
+                </div>
+
+                <div class="space-y-4">
+                  <div>
+                    <label for="cfg-heroTitle" class="block text-xs font-semibold mb-1">
+                      Hero Headline (<code class="font-mono text-[11px]">heroTitle</code>)
+                    </label>
+                    <input
+                      id="cfg-heroTitle"
+                      type="text"
+                      placeholder="Track Your Device Repair In Real Time"
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                    <p class="mt-1 text-[11px] text-muted-foreground">Main headline displayed prominently at the top of your repair storefront.</p>
+                  </div>
+
+                  <div>
+                    <label for="cfg-heroSubtitle" class="block text-xs font-semibold mb-1">
+                      Hero Subtitle (<code class="font-mono text-[11px]">heroSubtitle</code>)
+                    </label>
+                    <textarea
+                      id="cfg-heroSubtitle"
+                      rows="3"
+                      placeholder="Want to see how your repair is going? Enter your ticket number or phone number below for live updates."
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring resize-y"
+                    ></textarea>
+                    <p class="mt-1 text-[11px] text-muted-foreground">Subtitle text shown right below the main headline.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Section 3: Contact & Hours -->
+              <div class="panel p-5 sm:p-6 space-y-4">
+                <div class="font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 border-b border-border pb-3">
+                  <i data-lucide="map-pin" class="h-4 w-4 text-accent"></i>
+                  <span>Section 3: Contact &amp; Hours</span>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label for="cfg-phone" class="block text-xs font-semibold mb-1">Phone Number (<code class="font-mono text-[11px]">phone</code>)</label>
+                    <input
+                      id="cfg-phone"
+                      type="text"
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="cfg-email" class="block text-xs font-semibold mb-1">Support Email (<code class="font-mono text-[11px]">email</code>)</label>
+                    <input
+                      id="cfg-email"
+                      type="email"
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+
+                  <div class="sm:col-span-2">
+                    <label for="cfg-address" class="block text-xs font-semibold mb-1">Physical Address (<code class="font-mono text-[11px]">address</code>)</label>
+                    <input
+                      id="cfg-address"
+                      type="text"
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="cfg-hours" class="block text-xs font-semibold mb-1">Operating Hours (<code class="font-mono text-[11px]">hours</code>)</label>
+                    <input
+                      id="cfg-hours"
+                      type="text"
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="cfg-mapsUrl" class="block text-xs font-semibold mb-1">Google Maps Link (<code class="font-mono text-[11px]">mapsUrl</code>)</label>
+                    <input
+                      id="cfg-mapsUrl"
+                      type="url"
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Section 4: Pricing & Warranty -->
+              <div class="panel p-5 sm:p-6 space-y-4">
+                <div class="font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 border-b border-border pb-3">
+                  <i data-lucide="badge-percent" class="h-4 w-4 text-accent"></i>
+                  <span>Section 4: Pricing &amp; Warranty</span>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-3">
+                  <div>
+                    <label for="cfg-currencySymbol" class="block text-xs font-semibold mb-1">Currency (<code class="font-mono text-[11px]">currencySymbol</code>)</label>
+                    <input
+                      id="cfg-currencySymbol"
+                      type="text"
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm font-mono outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="cfg-defaultDiagnosticFee" class="block text-xs font-semibold mb-1">Diagnostic Fee (<code class="font-mono text-[11px]">defaultDiagnosticFee</code>)</label>
+                    <input
+                      id="cfg-defaultDiagnosticFee"
+                      type="number"
+                      step="any"
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm font-mono outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="cfg-taxLabel" class="block text-xs font-semibold mb-1">Tax Label (<code class="font-mono text-[11px]">taxLabel</code>)</label>
+                    <input
+                      id="cfg-taxLabel"
+                      type="text"
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="cfg-taxRate" class="block text-xs font-semibold mb-1">Tax Rate (<code class="font-mono text-[11px]">taxRate</code>, e.g. 0.12)</label>
+                    <input
+                      id="cfg-taxRate"
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      max="1"
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm font-mono outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="cfg-warrantyDays" class="block text-xs font-semibold mb-1">Warranty Days (<code class="font-mono text-[11px]">warrantyDays</code>)</label>
+                    <input
+                      id="cfg-warrantyDays"
+                      type="number"
+                      min="0"
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm font-mono outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="cfg-turnaroundTime" class="block text-xs font-semibold mb-1">Turnaround Time (<code class="font-mono text-[11px]">turnaroundTime</code>)</label>
+                    <input
+                      id="cfg-turnaroundTime"
+                      type="text"
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Section 5: Catalog Categories -->
+              <div class="panel p-5 sm:p-6 space-y-4">
+                <div class="font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 border-b border-border pb-3">
+                  <i data-lucide="layers" class="h-4 w-4 text-accent"></i>
+                  <span>Section 5: Catalog Categories</span>
+                </div>
+
+                <div class="space-y-4">
+                  <div>
+                    <label for="cfg-supportedBrands" class="block text-xs font-semibold mb-1">
+                      Supported Brands (<code class="font-mono text-[11px]">supportedBrands</code>, comma-separated)
+                    </label>
+                    <input
+                      id="cfg-supportedBrands"
+                      type="text"
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                    <p class="mt-1 text-[11px] text-muted-foreground">Appears in customer repair intake dropdowns and brand badges.</p>
+                  </div>
+
+                  <div>
+                    <label for="cfg-deviceCategories" class="block text-xs font-semibold mb-1">
+                      Device Categories (<code class="font-mono text-[11px]">deviceCategories</code>, comma-separated)
+                    </label>
+                    <input
+                      id="cfg-deviceCategories"
+                      type="text"
+                      class="block w-full rounded-lg border border-input bg-card py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                    <p class="mt-1 text-[11px] text-muted-foreground">Device types serviced by your shop (e.g. Smartphone, Laptop, Tablet).</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Section 6: Social Media Links -->
+              <div class="panel p-5 sm:p-6 space-y-4">
+                <div class="font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 border-b border-border pb-3">
+                  <i data-lucide="share-2" class="h-4 w-4 text-accent"></i>
+                  <span>Section 6: Social Media Links</span>
+                </div>
+
+                <div class="space-y-4">
+                  <div>
+                    <label for="cfg-social-facebook" class="block text-xs font-semibold mb-1">
+                      Facebook Page URL (<code class="font-mono text-[11px]">socials.facebook</code>)
+                    </label>
+                    <input
+                      id="cfg-social-facebook"
+                      type="url"
+                      placeholder="https://facebook.com/yourshop"
+                      class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="cfg-social-instagram" class="block text-xs font-semibold mb-1">
+                      Instagram Profile URL (<code class="font-mono text-[11px]">socials.instagram</code>)
+                    </label>
+                    <input
+                      id="cfg-social-instagram"
+                      type="url"
+                      placeholder="https://instagram.com/yourshop"
+                      class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="cfg-social-twitter" class="block text-xs font-semibold mb-1">
+                      Twitter / X Profile URL (<code class="font-mono text-[11px]">socials.twitter</code>)
+                    </label>
+                    <input
+                      id="cfg-social-twitter"
+                      type="url"
+                      placeholder="https://x.com/yourshop"
+                      class="block w-full rounded-lg border border-input bg-card py-2.5 px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Visual Separator for Mobile Stacking (< lg) -->
+          <div class="lg:hidden w-full flex items-center justify-center py-2" aria-hidden="true">
+            <div class="w-full border-t border-dashed border-border relative flex justify-center">
+              <span class="bg-surface border border-border px-3 py-1 rounded-full text-[11px] font-mono text-muted-foreground flex items-center gap-1.5 -translate-y-1/2 shadow-xs">
+                <i data-lucide="eye" class="h-3 w-3 text-accent"></i> Live Storefront Preview
+              </span>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: Sticky Live Preview Viewport (~55% on lg) -->
+          <div class="w-full lg:w-[55%] xl:w-[58%] lg:sticky lg:top-20 lg:h-[calc(100vh-6rem)] flex flex-col space-y-3">
+            <!-- Browser Frame Window -->
+            <div class="panel border border-border rounded-xl shadow-panel bg-card overflow-hidden flex flex-col flex-1 h-[540px] sm:h-[640px] lg:h-full">
+              <!-- Window Chrome Header -->
+              <div class="border-b border-border bg-surface/80 px-4 py-2.5 flex items-center justify-between gap-3 shrink-0">
+                <!-- Window Dots -->
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <span class="h-2.5 w-2.5 rounded-full bg-destructive/60"></span>
+                  <span class="h-2.5 w-2.5 rounded-full bg-warning/60"></span>
+                  <span class="h-2.5 w-2.5 rounded-full bg-success/60"></span>
+                </div>
+
+                <!-- Address Pill -->
+                <div class="flex-1 max-w-sm mx-auto flex items-center justify-between gap-2 rounded-md border border-border bg-card px-2.5 py-1 text-xs text-muted-foreground">
+                  <div class="flex items-center gap-1.5 truncate">
+                    <i data-lucide="lock" class="h-3 w-3 text-success shrink-0"></i>
+                    <span class="font-mono text-[11px] text-foreground truncate">store.html</span>
+                  </div>
+                  <button
+                    type="button"
+                    id="btn-reload-frame"
+                    title="Reload Preview Frame"
+                    class="hover:text-foreground transition-colors cursor-pointer"
+                  >
+                    <i data-lucide="rotate-cw" class="h-3 w-3"></i>
+                  </button>
+                </div>
+
+                <!-- Viewport Responsive Switcher -->
+                <div class="flex items-center gap-1 bg-surface rounded-lg p-0.5 border border-border shrink-0">
+                  <button
+                    type="button"
+                    id="btn-view-desktop"
+                    class="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold bg-secondary text-foreground shadow-xs transition-all cursor-pointer"
+                    title="Desktop Preview View"
+                  >
+                    <i data-lucide="monitor" class="h-3 w-3"></i>
+                    <span class="hidden sm:inline text-[11px]">Desktop</span>
+                  </button>
+                  <button
+                    type="button"
+                    id="btn-view-mobile"
+                    class="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold text-muted-foreground hover:text-foreground transition-all cursor-pointer"
+                    title="Mobile View (390px)"
+                  >
+                    <i data-lucide="smartphone" class="h-3 w-3"></i>
+                    <span class="hidden sm:inline text-[11px]">Mobile</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Iframe Viewport Container -->
+              <div class="flex-1 bg-surface/30 p-2 sm:p-3 flex items-center justify-center overflow-hidden">
+                <div id="preview-viewport-wrapper" class="w-full h-full transition-all duration-300 flex flex-col items-center justify-center">
+                  <iframe id="store-preview-frame" src="store.html?preview=1" class="w-full flex-1 border-0" title="Live Store Preview"></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Sticky Action Bar -->
+      <aside aria-label="Customizer Actions" class="sticky bottom-3 sm:bottom-4 z-40 mx-auto w-full max-w-5xl px-3 sm:px-6">
+        <div class="panel p-3 sm:p-4 shadow-panel bg-card/95 backdrop-blur flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 border border-border">
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+            <button
+              type="button"
+              id="btn-save-config"
+              class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 cursor-pointer w-full sm:w-auto"
+            >
+              <i data-lucide="check" class="h-3.5 w-3.5"></i>
+              <span>Save &amp; Apply Changes</span>
+            </button>
+
+            <a
+              href="store.html"
+              target="_blank"
+              id="btn-preview-store"
+              class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-xs font-semibold text-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary active:translate-y-0 cursor-pointer w-full sm:w-auto"
+            >
+              <i data-lucide="external-link" class="h-3.5 w-3.5 text-accent"></i>
+              <span>Open Standalone Store</span>
+            </a>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto border-t sm:border-t-0 border-border pt-2 sm:pt-0">
+            <button
+              type="button"
+              id="btn-reset-config"
+              class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:text-foreground active:translate-y-0 cursor-pointer w-full sm:w-auto"
+            >
+              <i data-lucide="rotate-ccw" class="h-3.5 w-3.5"></i>
+              <span>Reset to Demo Defaults</span>
+            </button>
+
+            <button
+              type="button"
+              id="btn-export-config"
+              class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-accent/40 bg-accent/10 px-3.5 py-2 text-xs font-bold text-accent shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent hover:text-accent-foreground active:translate-y-0 cursor-pointer w-full sm:w-auto"
+            >
+              <i data-lucide="download" class="h-3.5 w-3.5"></i>
+              <span>Export config.js</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Toast Confirmation Notification -->
+      <div
+        id="toast-notification"
+        class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 hidden items-center gap-2 rounded-full border border-success/40 bg-card px-4 py-2 text-xs font-semibold text-success shadow-panel transition-all"
+      >
+        <i data-lucide="check-circle-2" class="h-4 w-4"></i>
+        <span id="toast-message">Configuration saved and applied!</span>
+      </div>
+
+      <footer class="border-t border-border bg-surface py-4 text-center text-xs text-muted-foreground mt-auto">
+        © <span id="year"></span> FixTrack Platform • The Free White-Label OS for Device Repair Shops
+      </footer>
+    </div>
+
+    <!-- In-Browser Visual Customizer Engine -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        let currentLogoData = (typeof CONFIG !== "undefined" && CONFIG.shopLogo) ? CONFIG.shopLogo : "";
+        const logoPreviewBox = document.getElementById("logo-preview-box");
+        const logoFileInput = document.getElementById("cfg-logo-file");
+        const logoUrlInput = document.getElementById("cfg-logo-url");
+        const removeLogoBtn = document.getElementById("btn-remove-logo");
+
+        function renderLogoPreview(src) {
+          if (!logoPreviewBox) return;
+          if (src && typeof src === "string" && src.trim().length > 0) {
+            logoPreviewBox.innerHTML = `<img src="${src}" alt="Logo Preview" class="h-full w-full object-contain p-1" />`;
+          } else {
+            logoPreviewBox.innerHTML = `<span class="grid h-10 w-10 place-items-center rounded-lg bg-primary text-primary-foreground"><i data-lucide="wrench" class="h-5 w-5"></i></span>`;
+            if (window.lucide) window.lucide.createIcons();
+          }
+        }
+
+        // 1. Populate Active Shop Badge
+        const activeShopBadge = document.getElementById("active-shop-badge");
+        function updateBadge() {
+          if (activeShopBadge && typeof CONFIG !== "undefined") {
+            const name = document.getElementById("cfg-shopName")?.value.trim() || CONFIG.shopName || "NorthPoint Device Lab";
+            activeShopBadge.textContent = name;
+          }
+        }
+
+        // 2. Pre-populate all input fields from active CONFIG
+        function populateInputs() {
+          if (typeof CONFIG === "undefined") return;
+
+          const setVal = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.value = val !== undefined && val !== null ? val : "";
+          };
+
+          currentLogoData = (typeof CONFIG !== "undefined" && CONFIG.shopLogo) ? CONFIG.shopLogo : "";
+          if (logoUrlInput) {
+            logoUrlInput.value = (currentLogoData && !currentLogoData.startsWith("data:")) ? currentLogoData : "";
+          }
+          if (logoFileInput) {
+            logoFileInput.value = "";
+          }
+          renderLogoPreview(currentLogoData);
+
+          setVal("cfg-shopName", CONFIG.shopName);
+          setVal("cfg-tagline", CONFIG.tagline);
+          setVal("cfg-vendorName", CONFIG.vendorName);
+
+          setVal("cfg-heroTitle", CONFIG.heroTitle || "");
+          setVal("cfg-heroSubtitle", CONFIG.heroSubtitle || "");
+
+          setVal("cfg-phone", CONFIG.phone);
+          setVal("cfg-email", CONFIG.email);
+          setVal("cfg-address", CONFIG.address);
+          setVal("cfg-hours", CONFIG.hours);
+          setVal("cfg-mapsUrl", CONFIG.mapsUrl);
+
+          setVal("cfg-currencySymbol", CONFIG.currencySymbol || "₱");
+          setVal("cfg-defaultDiagnosticFee", CONFIG.defaultDiagnosticFee || 500);
+          setVal("cfg-taxLabel", CONFIG.taxLabel || "VAT (12%)");
+          setVal("cfg-taxRate", CONFIG.taxRate !== undefined ? CONFIG.taxRate : 0.12);
+          setVal("cfg-warrantyDays", CONFIG.warrantyDays || 90);
+          setVal("cfg-turnaroundTime", CONFIG.turnaroundTime || "3-5 business days");
+
+          if (Array.isArray(CONFIG.supportedBrands)) {
+            setVal("cfg-supportedBrands", CONFIG.supportedBrands.join(", "));
+          }
+          if (Array.isArray(CONFIG.deviceCategories)) {
+            setVal("cfg-deviceCategories", CONFIG.deviceCategories.join(", "));
+          }
+
+          setVal("cfg-social-facebook", (CONFIG.socials && CONFIG.socials.facebook) || "");
+          setVal("cfg-social-instagram", (CONFIG.socials && CONFIG.socials.instagram) || "");
+          setVal("cfg-social-twitter", (CONFIG.socials && CONFIG.socials.twitter) || "");
+
+          updateBadge();
+        }
+
+        populateInputs();
+
+        // 3. Show Toast Helper
+        function showToast(msg) {
+          const toast = document.getElementById("toast-notification");
+          const msgEl = document.getElementById("toast-message");
+          if (!toast || !msgEl) return;
+          msgEl.textContent = msg || "Configuration saved and applied!";
+          toast.classList.remove("hidden");
+          toast.classList.add("flex");
+          setTimeout(() => {
+            toast.classList.add("hidden");
+            toast.classList.remove("flex");
+          }, 2500);
+        }
+
+        // 4. Gather form values into an updatedConfig object
+        function getFormValues() {
+          const getVal = (id) => document.getElementById(id)?.value.trim();
+
+          const brandsRaw = getVal("cfg-supportedBrands") || "";
+          const supportedBrands = brandsRaw
+            ? brandsRaw.split(",").map((s) => s.trim()).filter(Boolean)
+            : CONFIG.supportedBrands;
+
+          const categoriesRaw = getVal("cfg-deviceCategories") || "";
+          const deviceCategories = categoriesRaw
+            ? categoriesRaw.split(",").map((s) => s.trim()).filter(Boolean)
+            : CONFIG.deviceCategories;
+
+          return {
+            shopName: getVal("cfg-shopName") || CONFIG.shopName,
+            tagline: getVal("cfg-tagline") || CONFIG.tagline,
+            vendorName: getVal("cfg-vendorName") || CONFIG.vendorName,
+            shopLogo: currentLogoData || null,
+            heroTitle: getVal("cfg-heroTitle") || "",
+            heroSubtitle: getVal("cfg-heroSubtitle") || "",
+            phone: getVal("cfg-phone") || CONFIG.phone,
+            email: getVal("cfg-email") || CONFIG.email,
+            address: getVal("cfg-address") || CONFIG.address,
+            hours: getVal("cfg-hours") || CONFIG.hours,
+            mapsUrl: getVal("cfg-mapsUrl") || CONFIG.mapsUrl,
+            currencySymbol: getVal("cfg-currencySymbol") || CONFIG.currencySymbol,
+            defaultDiagnosticFee: Number(getVal("cfg-defaultDiagnosticFee")) || CONFIG.defaultDiagnosticFee,
+            taxLabel: getVal("cfg-taxLabel") || CONFIG.taxLabel,
+            taxRate: Number(getVal("cfg-taxRate")) || CONFIG.taxRate,
+            warrantyDays: Number(getVal("cfg-warrantyDays")) || CONFIG.warrantyDays,
+            turnaroundTime: getVal("cfg-turnaroundTime") || CONFIG.turnaroundTime,
+            supportedBrands,
+            deviceCategories,
+            socials: {
+              facebook: getVal("cfg-social-facebook") || (CONFIG.socials && CONFIG.socials.facebook) || "",
+              instagram: getVal("cfg-social-instagram") || (CONFIG.socials && CONFIG.socials.instagram) || "",
+              twitter: getVal("cfg-social-twitter") || (CONFIG.socials && CONFIG.socials.twitter) || ""
+            }
+          };
+        }
+
+        // 5. Real-Time Iframe Communication (Instant Feedback)
+        function syncPreviewIframe() {
+          const tempValues = getFormValues();
+          const frame = document.getElementById("store-preview-frame");
+          if (frame && frame.contentWindow && frame.contentWindow.CONFIG) {
+            Object.assign(frame.contentWindow.CONFIG, tempValues);
+            if (typeof frame.contentWindow.hydrateWhiteLabelConfig === "function") {
+              frame.contentWindow.hydrateWhiteLabelConfig();
+            }
+          }
+          updateBadge();
+        }
+
+        // Attach input listeners to form controls for keystroke-level updates
+        const customizerForm = document.getElementById("customizer-form");
+        if (customizerForm) {
+          customizerForm.addEventListener("input", syncPreviewIframe);
+          customizerForm.addEventListener("change", syncPreviewIframe);
+        }
+
+        // Logo File Picker Handler
+        if (logoFileInput) {
+          logoFileInput.addEventListener("change", (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = (evt) => {
+                const base64 = evt.target.result;
+                currentLogoData = base64;
+                if (logoUrlInput) logoUrlInput.value = "";
+                renderLogoPreview(currentLogoData);
+                syncPreviewIframe();
+              };
+              reader.readAsDataURL(file);
+            }
+          });
+        }
+
+        // Logo URL Handler
+        if (logoUrlInput) {
+          logoUrlInput.addEventListener("input", (e) => {
+            const val = e.target.value.trim();
+            currentLogoData = val;
+            if (logoFileInput) logoFileInput.value = "";
+            renderLogoPreview(currentLogoData);
+            syncPreviewIframe();
+          });
+        }
+
+        // Remove Logo Handler
+        if (removeLogoBtn) {
+          removeLogoBtn.addEventListener("click", () => {
+            currentLogoData = "";
+            if (logoFileInput) logoFileInput.value = "";
+            if (logoUrlInput) logoUrlInput.value = "";
+            renderLogoPreview("");
+            syncPreviewIframe();
+          });
+        }
+
+        // Iframe Load Handler - initialize live frame with current values
+        const storeFrame = document.getElementById("store-preview-frame");
+        if (storeFrame) {
+          storeFrame.addEventListener("load", () => {
+            syncPreviewIframe();
+          });
+        }
+
+        // Reload button inside browser chrome
+        const btnReloadFrame = document.getElementById("btn-reload-frame");
+        if (btnReloadFrame && storeFrame) {
+          btnReloadFrame.addEventListener("click", () => {
+            storeFrame.src = "store.html?preview=1";
+          });
+        }
+
+        // 6. Responsive Viewport Switcher
+        const btnDesktop = document.getElementById("btn-view-desktop");
+        const btnMobile = document.getElementById("btn-view-mobile");
+        const viewportWrapper = document.getElementById("preview-viewport-wrapper");
+
+        if (btnDesktop && viewportWrapper) {
+          btnDesktop.addEventListener("click", () => {
+            viewportWrapper.style.width = "100%";
+            viewportWrapper.style.maxWidth = "100%";
+            btnDesktop.classList.add("bg-secondary", "text-foreground");
+            btnDesktop.classList.remove("text-muted-foreground");
+            if (btnMobile) {
+              btnMobile.classList.remove("bg-secondary", "text-foreground");
+              btnMobile.classList.add("text-muted-foreground");
+            }
+          });
+        }
+
+        if (btnMobile && viewportWrapper) {
+          btnMobile.addEventListener("click", () => {
+            viewportWrapper.style.width = "390px";
+            viewportWrapper.style.maxWidth = "100%";
+            btnMobile.classList.add("bg-secondary", "text-foreground");
+            btnMobile.classList.remove("text-muted-foreground");
+            if (btnDesktop) {
+              btnDesktop.classList.remove("bg-secondary", "text-foreground");
+              btnDesktop.classList.add("text-muted-foreground");
+            }
+          });
+        }
+
+        // 7. Action: Save & Apply Changes
+        function handleSave(e) {
+          if (e) e.preventDefault();
+          const updated = getFormValues();
+          if (window.DataStore && typeof window.DataStore.saveConfigOverride === "function") {
+            window.DataStore.saveConfigOverride(updated);
+          }
+          syncPreviewIframe();
+          showToast("Settings saved! Changes are live on your storefront.");
+        }
+
+        const saveBtn = document.getElementById("btn-save-config");
+        if (saveBtn) {
+          saveBtn.addEventListener("click", handleSave);
+        }
+
+        // 8. Action: Open Standalone Store
+        const previewBtn = document.getElementById("btn-preview-store");
+        if (previewBtn && !previewBtn.getAttribute("href")) {
+          previewBtn.addEventListener("click", () => {
+            window.open("store.html", "_blank");
+          });
+        }
+
+        const externalBtn = document.getElementById("btn-open-external");
+        if (externalBtn && !externalBtn.getAttribute("href")) {
+          externalBtn.addEventListener("click", () => {
+            window.open("store.html", "_blank");
+          });
+        }
+
+        // 9. Action: Reset to Demo Defaults
+        const resetBtn = document.getElementById("btn-reset-config");
+        if (resetBtn) {
+          resetBtn.addEventListener("click", () => {
+            if (confirm("Are you sure you want to reset all store settings back to original demo defaults?")) {
+              if (window.DataStore && typeof window.DataStore.resetConfigOverride === "function") {
+                window.DataStore.resetConfigOverride();
+              }
+              currentLogoData = "";
+              populateInputs();
+              if (storeFrame) {
+                storeFrame.src = "store.html?preview=1";
+              }
+              showToast("Reset to demo defaults!");
+            }
+          });
+        }
+
+        // 10. Action: Export config.js
+        const exportBtn = document.getElementById("btn-export-config");
+        if (exportBtn) {
+          exportBtn.addEventListener("click", () => {
+            const updated = getFormValues();
+            const fullConfig = Object.assign({}, CONFIG, updated);
+            const content = `const CONFIG = ${JSON.stringify(fullConfig, null, 2)};\n`;
+
+            const blob = new Blob([content], { type: "application/javascript;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "config.js";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast("Exported config.js successfully!");
+          });
+        }
+
+        // 11. Sign Out Button
+        const signoutBtn = document.getElementById("owner-signout-btn");
+        if (signoutBtn) {
+          signoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("fixtrack_owner_session");
+            window.location.href = "index.html";
+          });
+        }
+
+        // 12. Quick-Fill Demo Presets
+        const DEMO_PRESETS = [
+          {
+            shopName: "TechSpot Mobile & Laptop Care",
+            tagline: "Phone screens, batteries, and laptop repairs",
+            heroTitle: "Check your repair status online",
+            heroSubtitle: "Type your ticket number or phone number below to see if your device is ready.",
+            phone: "+63 917 555 0192",
+            email: "techspot.care@gmail.com",
+            address: "Burgos Ave, Cabanatuan City, Nueva Ecija",
+            hours: "Mon-Sat, 8:30 AM - 6:30 PM",
+            currencySymbol: "₱",
+            defaultDiagnosticFee: 500,
+            taxRate: 0.12,
+            taxLabel: "VAT (12%)",
+            warrantyDays: 90,
+            turnaroundTime: "1-2 business days",
+            supportedBrands: ["Apple", "Samsung", "Xiaomi", "Oppo", "Vivo", "Realme", "Other"],
+            deviceCategories: ["Smartphone", "Laptop", "Tablet"],
+            socials: {
+              facebook: "https://facebook.com/TechSpotCare",
+              instagram: "https://instagram.com/techspotcare",
+              twitter: "https://x.com/techspotcare"
+            }
+          },
+          {
+            shopName: "ReviveTech Electronics",
+            tagline: "Quick phone screen and battery replacement",
+            heroTitle: "Track your phone repair in real time",
+            heroSubtitle: "Enter your ticket number to see live technician updates and pickup times.",
+            phone: "+63 928 444 8811",
+            email: "revivetech.ph@gmail.com",
+            address: "Bayan-Bayanan Ave, Marikina City",
+            hours: "Mon-Sun, 9:00 AM - 7:00 PM",
+            currencySymbol: "₱",
+            defaultDiagnosticFee: 400,
+            taxRate: 0.12,
+            taxLabel: "VAT (12%)",
+            warrantyDays: 60,
+            turnaroundTime: "Same day or next day",
+            supportedBrands: ["Apple", "Samsung", "Xiaomi", "Huawei", "Other"],
+            deviceCategories: ["Smartphone", "Tablet", "Smartwatch"],
+            socials: {
+              facebook: "https://facebook.com/ReviveTechPH",
+              instagram: "https://instagram.com/revivetechph",
+              twitter: "https://x.com/revivetechph"
+            }
+          },
+          {
+            shopName: "FixLogic Board & Screen Lab",
+            tagline: "Reliable cellphone and laptop board repair",
+            heroTitle: "See how your repair is going",
+            heroSubtitle: "Enter your repair slip number or phone number below for updates.",
+            phone: "+63 999 333 1234",
+            email: "fixlogic.lab@gmail.com",
+            address: "Poblacion, San Miguel, Bulacan",
+            hours: "Mon-Fri, 9:00 AM - 6:00 PM",
+            currencySymbol: "₱",
+            defaultDiagnosticFee: 600,
+            taxRate: 0.12,
+            taxLabel: "VAT (12%)",
+            warrantyDays: 90,
+            turnaroundTime: "2-3 business days",
+            supportedBrands: ["Apple", "Samsung", "Google", "Infinix", "Tecno", "Other"],
+            deviceCategories: ["Smartphone", "Laptop", "Tablet"],
+            socials: {
+              facebook: "https://facebook.com/FixLogicLab",
+              instagram: "https://instagram.com/fixlogiclab",
+              twitter: "https://x.com/fixlogiclab"
+            }
+          },
+          {
+            shopName: "ByteWorks Mobile & Parts",
+            tagline: "Same-day screen replacements and charging port fixes",
+            heroTitle: "Check your device repair status",
+            heroSubtitle: "Look up your ticket number below for real-time bench updates.",
+            phone: "+63 932 777 9900",
+            email: "byteworks.cebu@gmail.com",
+            address: "Colon St, Cebu City",
+            hours: "Mon-Sat, 9:00 AM - 7:00 PM",
+            currencySymbol: "₱",
+            defaultDiagnosticFee: 450,
+            taxRate: 0.12,
+            taxLabel: "VAT (12%)",
+            warrantyDays: 60,
+            turnaroundTime: "1-2 business days",
+            supportedBrands: ["Apple", "Samsung", "Xiaomi", "Realme", "Other"],
+            deviceCategories: ["Smartphone", "Tablet", "Laptop"],
+            socials: {
+              facebook: "https://facebook.com/ByteWorksCebu",
+              instagram: "https://instagram.com/byteworkscebu",
+              twitter: "https://x.com/byteworkscebu"
+            }
+          }
+        ];
+
+        let currentPresetIdx = 0;
+        function loadDemoPreset() {
+          const preset = DEMO_PRESETS[currentPresetIdx % DEMO_PRESETS.length];
+          currentPresetIdx++;
+
+          const setInputVal = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) {
+              el.value = val !== undefined && val !== null ? val : "";
+              el.dispatchEvent(new Event("input", { bubbles: true }));
+            }
+          };
+
+          setInputVal("cfg-shopName", preset.shopName);
+          setInputVal("cfg-tagline", preset.tagline);
+          if (preset.heroTitle) setInputVal("cfg-heroTitle", preset.heroTitle);
+          if (preset.heroSubtitle) setInputVal("cfg-heroSubtitle", preset.heroSubtitle);
+          setInputVal("cfg-phone", preset.phone);
+          setInputVal("cfg-email", preset.email);
+          setInputVal("cfg-address", preset.address);
+          setInputVal("cfg-hours", preset.hours);
+          setInputVal("cfg-currencySymbol", preset.currencySymbol);
+          setInputVal("cfg-defaultDiagnosticFee", preset.defaultDiagnosticFee);
+          setInputVal("cfg-taxLabel", preset.taxLabel);
+          setInputVal("cfg-taxRate", preset.taxRate);
+          setInputVal("cfg-warrantyDays", preset.warrantyDays);
+          setInputVal("cfg-turnaroundTime", preset.turnaroundTime);
+          setInputVal("cfg-supportedBrands", preset.supportedBrands.join(", "));
+          setInputVal("cfg-deviceCategories", preset.deviceCategories.join(", "));
+
+          if (preset.socials) {
+            setInputVal("cfg-social-facebook", preset.socials.facebook || "");
+            setInputVal("cfg-social-instagram", preset.socials.instagram || "");
+            setInputVal("cfg-social-twitter", preset.socials.twitter || "");
+          }
+
+          syncPreviewIframe();
+          updateBadge();
+          showToast("Demo preset loaded into customizer!");
+        }
+
+        const btnDemoPreset = document.getElementById("btn-demo-preset");
+        if (btnDemoPreset) {
+          btnDemoPreset.addEventListener("click", loadDemoPreset);
+        }
+
+        window.addEventListener("keydown", (e) => {
+          if (e.altKey && (e.key === "d" || e.key === "D")) {
+            e.preventDefault();
+            loadDemoPreset();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
