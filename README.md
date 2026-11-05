@@ -2,7 +2,7 @@
 
 FixTrack is a modern, front-end web application that works like Shopify, but for gadget repair shops. It gives repair shops a turnkey website where customers can book repairs, receive authentic printable receipts, and track their device's repair progress step-by-step in real time. Shop staff and technicians get a built-in workbench dashboard to manage active repair queues.
 
-This project was built as an academic case study for IT-WS02. The current deployment is configured for a fictional shop called "Demo Repair Shop" based in Cabanatuan City.
+This project was built as an academic case study for IT-WS02. The current deployment is configured for a fictional shop called "Demo Repair Shop".
 
 ## Key Features
 
