@@ -44,28 +44,36 @@ All demo accounts share the password: `demo`
 
 ```text
 fixtrack-web/
-├── images/                   # Visual assets & diagrams
-│   ├── devices/              # Sample device photos
-│   ├── sitemap.png           # Architecture & routing hierarchy diagram
-│   ├── wireframe.png         # Landing page wireframe layout
-│   └── technician-repair.jpg # Stock hero repair asset
-├── index.html                # Main landing page with ticket search & FAQs
-├── request.html              # Customer repair booking intake form & success modal
-├── status.html               # Live multi-stage tracker & printable receipt
-├── dashboard.html            # Staff workbench console & ticket manager
-├── about.html                # About FixTrack & development team roster
-├── login.html                # Staff authentication portal
-├── register.html             # Staff account access request form
-├── privacy.html              # Customer privacy policy
-├── terms.html                # Terms of service
-├── 404.html                  # Custom error route
-├── config.js                 # Master configuration, branding, pricing & seed data
-├── qrcode.min.js             # Standalone QR code rendering library
-├── script.js                 # Core application logic, data store & event handlers
-├── styles.css                # Custom theme variables, animations & print stylesheet
-├── favicon.svg               # SVG Wrench Favicon
-├── banner.png                # OpenGraph fallback social banner
-└── LICENSE                   # MIT License
+├── images/                     # Visual assets & diagrams
+│   ├── devices/                # Sample device photos
+│   ├── sitemap.png             # Architecture & routing hierarchy diagram
+│   ├── wireframe.png           # Landing page wireframe layout
+│   ├── wireframe_store.png     # Customer storefront wireframe layout
+│   ├── wireframe_request.png   # Repair booking intake wireframe layout
+│   ├── wireframe_status.png    # Live repair status tracker wireframe layout
+│   ├── wireframe_customize.png # Store customizer wireframe layout
+│   └── technician-repair.jpg   # Stock hero repair asset
+├── index.html                  # Main landing page with ticket search & FAQs
+├── store.html                  # White-label customer storefront
+├── request.html                # Customer repair booking intake form & success modal
+├── status.html                 # Live multi-stage tracker & printable receipt
+├── customize.html              # Interactive theme, branding & store customizer
+├── dashboard.html              # Staff workbench console & ticket manager
+├── about.html                  # About FixTrack & development team roster
+├── login.html                  # Staff authentication portal
+├── portal-login.html           # Customer portal login
+├── register.html               # Staff account access request form
+├── signup.html                 # Customer sign-up page
+├── privacy.html                # Customer privacy policy
+├── terms.html                  # Terms of service
+├── 404.html                    # Custom error route
+├── config.js                   # Master configuration, branding, pricing & seed data
+├── qrcode.min.js               # Standalone QR code rendering library
+├── script.js                   # Core application logic, data store & event handlers
+├── styles.css                  # Custom theme variables, animations & print stylesheet
+├── favicon.svg                 # SVG Wrench Favicon
+├── banner.png                  # OpenGraph fallback social banner
+└── LICENSE                     # MIT License
 ```
 
 ## Project Planning
@@ -73,5 +81,19 @@ fixtrack-web/
 ### Sitemap
 ![Fixtrack Sitemap](images/sitemap.png)
 
-### Wireframe
+### Wireframes
+
+#### Landing Page
 ![Fixtrack Wireframe](images/wireframe.png)
+
+#### Customer Storefront
+![Fixtrack Store Wireframe](images/wireframe_store.png)
+
+#### Repair Request Intake
+![Fixtrack Request Wireframe](images/wireframe_request.png)
+
+#### Live Repair Status & Thermal Slip
+![Fixtrack Status Wireframe](images/wireframe_status.png)
+
+#### Store Customizer
+![Fixtrack Customize Wireframe](images/wireframe_customize.png)
